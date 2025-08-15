@@ -1,1619 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JD Evaluation AI - Code Export</title>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JD Evaluation AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #d1d5db;
-            background-color: #111827;
-            margin: 0;
-            padding: 2rem;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #1f2937;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #374151;
-        }
-        h1 {
-            color: #f9fafb;
-            text-align: center;
-            border-bottom: 2px solid #374151;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-        .file-container {
-            margin-bottom: 2.5rem;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #111827;
-        }
-        h2 {
-            background-color: #374151;
-            padding: 1rem 1.5rem;
-            margin: 0;
-            font-size: 1.25rem;
-            font-family: 'Menlo', 'Consolas', monospace;
-            color: #e5e7eb;
-            border-bottom: 1px solid #4b5563;
-        }
-        pre {
-            background: #1f2937;
-            color: #d1d5db;
-            padding: 1.5rem;
-            margin: 0;
-            overflow-x: auto;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-        code {
-            font-family: 'Menlo', 'Consolas', monospace;
-            white-space: pre;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>JD Evaluation AI - Code Export</h1>
-
-        <div class="file-container">
-            <h2>index.html</h2>
-            <pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-  &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot; /&gt;
-    &lt;link rel=&quot;icon&quot; type=&quot;image/svg+xml&quot; href=&quot;/favicon.svg&quot; /&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
-    &lt;title&gt;JD Evaluation AI&lt;/title&gt;
-    &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
-    &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
-    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
-    &lt;style&gt;
         body {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            font-family: &#39;Montserrat&#39;, sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
-    &lt;/style&gt;
-  &lt;script type=&quot;importmap&quot;&gt;
+    </style>
+  <script type="importmap">
 {
-  &quot;imports&quot;: {
-    &quot;@google/genai&quot;: &quot;https://esm.sh/@google/genai@^1.13.0&quot;,
-    &quot;react/&quot;: &quot;https://esm.sh/react@^19.1.1/&quot;,
-    &quot;react&quot;: &quot;https://esm.sh/react@^19.1.1&quot;,
-    &quot;react-dom/&quot;: &quot;https://esm.sh/react-dom@^19.1.1/&quot;,
-    &quot;mammoth&quot;: &quot;https://esm.sh/mammoth@1.7.0&quot;,
-    &quot;xlsx&quot;: &quot;https://esm.sh/xlsx@0.18.5&quot;
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.13.0",
+    "react/": "https://esm.sh/react@^19.1.1/",
+    "react": "https://esm.sh/react@^19.1.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
+    "mammoth": "https://esm.sh/mammoth@1.7.0",
+    "xlsx": "https://esm.sh/xlsx@0.18.5"
   }
 }
-&lt;/script&gt;
-&lt;/head&gt;
-  &lt;body class=&quot;bg-[#111827] text-gray-300&quot;&gt;
-    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
-    &lt;script type=&quot;module&quot; src=&quot;/index.tsx&quot;&gt;&lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+</script>
+</head>
+  <body class="bg-[#111827] text-gray-300">
+    <div id="root">
+        <div class="min-h-screen bg-[#111827] flex flex-col">
+            <main class="flex-grow container mx-auto p-4 sm:p-6 lg:p-8">
+                <div class="w-full max-w-7xl mx-auto">
+                    <!-- Main Tab Navigation -->
+                    <div class="flex border-b border-gray-700 mb-8">
+                        <button id="main-tab-evaluation" data-view="evaluation" class="main-tab-button px-4 py-3 text-base font-semibold border-b-2 transition-colors duration-200 border-emerald-500 text-emerald-400">Đánh giá giá trị công việc</button>
+                        <button id="main-tab-sgrade" data-view="sGrade" class="main-tab-button px-4 py-3 text-base font-semibold border-b-2 transition-colors duration-200 border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Tra cứu S-Grade</button>
+                    </div>
+
+                    <!-- Evaluation View -->
+                    <div id="view-evaluation">
+                        <div class="w-full max-w-4xl mx-auto space-y-8">
+                            <!-- JdInput Section -->
+                            <div class="space-y-8">
+                                <div class="text-center">
+                                    <h1 class="text-3xl font-extrabold text-gray-100 tracking-tight flex items-center justify-center">
+                                        <span role="img" aria-label="clipboard" class="text-4xl mr-3">📋</span>
+                                        Đánh giá mô tả công việc theo 12 yếu tố PwC
+                                    </h1>
+                                    <p class="text-gray-400 mt-2 max-w-2xl mx-auto">
+                                        Hãy tải lên file mô tả công việc để được hệ thống đánh giá tự động.
+                                    </p>
+                                </div>
+                                <div class="max-w-xl mx-auto space-y-6">
+                                    <div>
+                                        <label for="job-title-input" class="flex items-center gap-2 text-md font-bold text-gray-300 mb-2">
+                                            <span class="text-blue-300 font-mono text-sm bg-blue-900/50 px-2 py-1 rounded">abc</span>
+                                            Nhập tên vị trí công việc
+                                        </label>
+                                        <input type="text" id="job-title-input" placeholder="e.g., Deputy Sorting Centers Manager" class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 ease-in-out">
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center gap-2 text-md font-bold text-gray-300 mb-2">
+                                            <span class="text-emerald-300 font-mono text-sm bg-emerald-900/50 px-2 py-1 rounded">docx</span>
+                                            Tải lên JD (.docx, .txt)
+                                        </label>
+                                        <div id="file-drop-zone" class="relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-200 border-gray-600 hover:border-gray-500">
+                                            <input type="file" id="file-input" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" class="hidden">
+                                            <div id="file-drop-prompt">
+                                                <div class="text-center text-gray-400">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                    <p class="mt-2"><span class="font-semibold text-emerald-400">Click to upload</span> or drag and drop</p>
+                                                    <p class="text-xs mt-1">DOCX or TXT (max 200MB)</p>
+                                                </div>
+                                            </div>
+                                            <div id="file-reading-indicator" class="hidden">
+                                                <svg class="animate-spin h-8 w-8 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <p class="mt-2 text-gray-400">Đang đọc file...</p>
+                                            </div>
+                                            <div id="file-info" class="hidden text-center text-gray-300">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <p id="file-name" class="mt-2 font-semibold"></p>
+                                                <p id="file-size" class="text-sm text-gray-500"></p>
+                                                <button id="remove-file-button" class="mt-3 text-sm text-red-400 hover:text-red-300 font-semibold">Remove File</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-center">
+                                        <button id="evaluate-button" class="flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-emerald-600 text-white font-bold rounded-lg shadow-lg hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 transform hover:scale-105 disabled:scale-100 focus:outline-none focus:ring-4 focus:ring-emerald-500/50">
+                                            <svg id="evaluate-button-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <svg id="evaluate-button-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                            </svg>
+                                            <span id="evaluate-button-text">Đánh giá JD</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- EvaluationDisplay Section -->
+                            <div id="results-container" class="bg-[#1f2937] p-6 rounded-2xl shadow-lg border border-gray-700 mt-8 min-h-[400px] hidden">
+                                <div id="loader-container" class="flex flex-col items-center justify-center h-full text-center hidden">
+                                    <svg class="animate-spin h-12 w-12 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <h3 class="mt-4 text-lg font-semibold text-gray-300">AI is Evaluating...</h3>
+                                    <p class="mt-1 text-gray-400">This may take a few moments. Please wait.</p>
+                                </div>
+                                <div id="error-container" class="flex-col items-center justify-center h-full text-center text-red-400 bg-red-900/50 p-6 rounded-lg hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-bold">Evaluation Failed</h3>
+                                    <p id="error-message" class="mt-1 text-sm"></p>
+                                </div>
+                                <div id="initial-message-container" class="flex flex-col items-center justify-center h-full text-center text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-300">Awaiting Evaluation</h3>
+                                    <p class="mt-1 max-w-sm text-gray-400">Your AI-powered job description analysis will appear here once you submit a JD for evaluation.</p>
+                                </div>
+                                <div id="evaluation-content-container" class="flex-col h-full hidden">
+                                    <div class="flex space-x-2 border-b border-gray-700 pb-3 mb-4">
+                                        <button id="result-tab-evaluation" data-tab="evaluation" class="result-tab-button px-4 py-2 text-sm font-semibold rounded-lg flex items-center space-x-2 transition-colors duration-200 bg-emerald-500 text-white">
+                                            <span>Current Evaluation</span>
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-white text-emerald-600">1</span>
+                                        </button>
+                                        <button id="result-tab-history" data-tab="history" class="result-tab-button px-4 py-2 text-sm font-semibold rounded-lg flex items-center space-x-2 transition-colors duration-200 text-gray-300 hover:bg-gray-700">
+                                            <span>History</span>
+                                            <span id="history-count" class="px-2 py-0.5 rounded-full text-xs font-bold bg-gray-600 text-gray-200">0</span>
+                                        </button>
+                                    </div>
+                                    <div class="flex-grow overflow-y-auto pr-2 -mr-4">
+                                        <div id="evaluation-result-view"></div>
+                                        <div id="history-view" class="hidden space-y-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- S-Grade View -->
+                    <div id="view-sgrade" class="hidden">
+                        <div class="bg-[#1f2937] p-6 rounded-2xl shadow-lg border border-gray-700 w-full">
+                            <div class="flex flex-wrap gap-4 justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-100">Tra cứu S-Grade</h2>
+                                <div class="flex items-center space-x-2">
+                                    <button id="sgrade-download-template" class="flex items-center space-x-2 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white hover:bg-gray-700 transition text-sm" title="Tải file mẫu định dạng XLSX">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.172-5.172a1 1 0 011.414 0L10 14.172l2.414-2.414a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v10a1 1 0 11-2 0V3a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                        <span>Tải file mẫu</span>
+                                    </button>
+                                    <button id="sgrade-import-button" class="flex items-center space-x-2 px-3 py-2 bg-emerald-600 border border-emerald-500 rounded-lg text-white hover:bg-emerald-700 transition text-sm" title="Nhập dữ liệu S-Grade từ file XLSX">
+                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                                        <span id="sgrade-import-button-text">Nhập S-Grade</span>
+                                    </button>
+                                    <input type="file" id="sgrade-file-input" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="hidden">
+                                    <div class="relative" id="sgrade-filter-container">
+                                        <button id="sgrade-filter-toggle" class="flex items-center space-x-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white hover:bg-gray-700 transition" aria-haspopup="true" aria-expanded="false">
+                                            <span>Lọc hiển thị</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                        </button>
+                                        <div id="sgrade-filter-popup" class="absolute top-full right-0 mt-2 w-72 bg-[#2d3748] border border-gray-600 rounded-lg shadow-xl p-4 z-10 hidden">
+                                            <div class="space-y-4">
+                                                <div>
+                                                    <label for="sgrade-search-term" class="block text-sm font-medium text-gray-300 mb-1">Mã/Tên vị trí</label>
+                                                    <input type="text" id="sgrade-search-term" placeholder="Nhập mã/tên vị trí..." class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                </div>
+                                                <div>
+                                                    <label for="sgrade-rank-filter" class="block text-sm font-medium text-gray-300 mb-1">Cấp bậc</label>
+                                                    <select id="sgrade-rank-filter" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                        <option value="all">Tất cả</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="sgrade-import-success" class="bg-green-900/50 text-green-300 border border-green-700 p-3 rounded-md mb-4 text-sm hidden" role="alert"></div>
+                            <div id="sgrade-import-error" class="bg-red-900/50 text-red-300 border border-red-700 p-3 rounded-md mb-4 text-sm hidden" role="alert"></div>
+
+                            <div class="overflow-x-auto rounded-lg border border-gray-700">
+                                <table class="min-w-full divide-y divide-gray-700">
+                                    <thead class="bg-gray-800/50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Tên vị trí</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Tên Tiếng Việt</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Loại vị trí</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Cấp bậc</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sgrade-table-body" class="bg-[#1f2937] divide-y divide-gray-700">
+                                        <!-- Rows will be injected by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="bg-[#111827] py-6 border-t border-gray-800">
+                <div class="container mx-auto text-center text-gray-400 px-4">
+                    <p>&copy; 2024 JD Evaluation AI. All Rights Reserved.</p>
+                    <p class="text-sm mt-1">A tool for internal job evaluation based on the PwC methodology.</p>
+                </div>
+            </footer>
         </div>
-        
-        <div class="file-container">
-            <h2>metadata.json</h2>
-            <pre><code>{
-  &quot;name&quot;: &quot;JD Evaluation AI&quot;,
-  &quot;description&quot;: &quot;An AI-powered application to evaluate job descriptions based on a standardized framework. Paste a job description to receive a detailed analysis of its requirements and scope.&quot;,
-  &quot;requestFramePermissions&quot;: []
-}</code></pre>
-        </div>
-        
-        <div class="file-container">
-            <h2>index.tsx</h2>
-            <pre><code>import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error(&quot;Could not find root element to mount to&quot;);
-}
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  &lt;React.StrictMode&gt;
-    &lt;App /&gt;
-  &lt;/React.StrictMode&gt;
-);</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>App.tsx</h2>
-            <pre><code>import React, { useState, useCallback } from 'react';
-import { EvaluationResult, HistoryItem, SGradeJob } from './types';
-import { evaluateJd } from './services/geminiService';
-import JdInput from './components/JdInput';
-import EvaluationDisplay from './components/EvaluationDisplay';
-import Footer from './components/Footer';
-import SGradeLookup from './components/SGradeLookup';
-
-const MainTabButton: React.FC&lt;{ title: string, isActive: boolean, onClick: () =&gt; void }&gt; = ({ title, isActive, onClick }) =&gt; (
-    &lt;button
-        onClick={onClick}
-        className={`px-4 py-3 text-base font-semibold border-b-2 transition-colors duration-200 ${
-            isActive
-                ? 'border-emerald-500 text-emerald-400'
-                : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500'
-        }`}
-        aria-current={isActive ? 'page' : undefined}
-    &gt;
-        {title}
-    &lt;/button&gt;
-);
-
-
-function App() {
-  const [mainView, setMainView] = useState&lt;'evaluation' | 'sGrade'&gt;('evaluation');
-
-  // State for evaluation tab
-  const [jobTitle, setJobTitle] = useState&lt;string&gt;('');
-  const [jdText, setJdText] = useState&lt;string&gt;('');
-  const [isLoading, setIsLoading] = useState&lt;boolean&gt;(false);
-  const [error, setError] = useState&lt;string | null&gt;(null);
-  const [evaluationResult, setEvaluationResult] = useState&lt;EvaluationResult | null&gt;(null);
-  const [history, setHistory] = useState&lt;HistoryItem[]&gt;([]);
-  const [activeTab, setActiveTab] = useState&lt;'evaluation' | 'history'&gt;('evaluation');
-  
-  // State for S-Grade tab
-  const [sGradeJobs, setSGradeJobs] = useState&lt;SGradeJob[]&gt;([]);
-
-  const handleEvaluate = useCallback(async () =&gt; {
-    if (!jobTitle.trim()) {
-      setError('Please provide a job title.');
-      return;
-    }
-    if (!jdText.trim()) {
-      setError('Please upload a job description file.');
-      return;
-    }
-    if (!process.env.API_KEY) {
-        setError(&quot;API key is not configured. Please ensure the API_KEY environment variable is set.&quot;);
-        return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    setEvaluationResult(null);
-    setActiveTab('evaluation');
-
-    try {
-      const pastEvaluations = history.map(h =&gt; ({
-          jobTitle: h.result.jobTitle,
-          summary: h.result.summary
-      }));
-
-      const result = await evaluateJd(jobTitle, jdText, pastEvaluations);
-      
-      const finalResult = {...result, jobTitle: result.jobTitle || jobTitle };
-
-      setEvaluationResult(finalResult);
-      setHistory(prevHistory =&gt; [...prevHistory, { jd: jdText, result: finalResult }]);
-      
-    } catch (e: unknown) {
-      console.error(e);
-      setError(e instanceof Error ? e.message : 'An unknown error occurred during evaluation.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [jobTitle, jdText, history]);
-
-  return (
-    &lt;div className=&quot;min-h-screen bg-[#111827] flex flex-col&quot;&gt;
-      &lt;main className=&quot;flex-grow container mx-auto p-4 sm:p-6 lg:p-8&quot;&gt;
-        &lt;div className=&quot;w-full max-w-7xl mx-auto&quot;&gt;
-          {/* Main Tab Navigation */}
-          &lt;div className=&quot;flex border-b border-gray-700 mb-8&quot;&gt;
-              &lt;MainTabButton title=&quot;Đánh giá giá trị công việc&quot; isActive={mainView === 'evaluation'} onClick={() =&gt; setMainView('evaluation')} /&gt;
-              &lt;MainTabButton title=&quot;Tra cứu S-Grade&quot; isActive={mainView === 'sGrade'} onClick={() =&gt; setMainView('sGrade')} /&gt;
-          &lt;/div&gt;
-
-          {/* Conditional Content */}
-          {mainView === 'evaluation' &amp;&amp; (
-            &lt;div className=&quot;w-full max-w-4xl mx-auto space-y-8&quot;&gt;
-              &lt;JdInput
-                  jobTitle={jobTitle}
-                  setJobTitle={setJobTitle}
-                  setJdText={setJdText}
-                  onEvaluate={handleEvaluate}
-                  isLoading={isLoading}
-                  error={error}
-                  setError={setError}
-              /&gt;
-              {(error || evaluationResult || isLoading) &amp;&amp; (
-                  &lt;div className=&quot;bg-[#1f2937] p-6 rounded-2xl shadow-lg border border-gray-700 mt-8 min-h-[400px]&quot;&gt;
-                      &lt;EvaluationDisplay
-                          isLoading={isLoading &amp;&amp; !evaluationResult}
-                          error={error}
-                          evaluationResult={evaluationResult}
-                          history={history}
-                          activeTab={activeTab}
-                          setActiveTab={setActiveTab}
-                      /&gt;
-                  &lt;/div&gt;
-              )}
-            &lt;/div&gt;
-          )}
-          {mainView === 'sGrade' &amp;&amp; &lt;SGradeLookup jobs={sGradeJobs} setJobs={setSGradeJobs} /&gt;}
-        &lt;/div&gt;
-      &lt;/main&gt;
-      &lt;Footer /&gt;
-    &lt;/div&gt;
-  );
-}
-
-export default App;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>types.ts</h2>
-            <pre><code>export interface Level {
-  grade: string;
-  description: string;
-}
-
-export interface Factor {
-  name: string;
-  levels: Level[];
-}
-
-export interface EvaluationItem {
-  factor: string;
-  grade: string;
-  reason: string;
-  evidence: string;
-}
-
-export interface SimilarJob {
-  jobTitle: string;
-  similarityPercentage: number;
-  reason:string;
-}
-
-export interface JobSummary {
-    scope: string;
-    complexity: string;
-    impact: string;
-}
-
-export interface EvaluationResult {
-  jobTitle: string;
-  evaluations: EvaluationItem[];
-  summary: JobSummary;
-  similarJobs?: SimilarJob[];
-  similarJobsComparison: string;
-  overallSummary: string;
-}
-
-export interface HistoryItem {
-    jd: string;
-    result: EvaluationResult;
-}
-
-export interface PastEvaluation {
-    jobTitle: string;
-    summary: JobSummary;
-}
-
-export interface SGradeJob {
-  id: number;
-  positionName: string;
-  vietnameseName: string;
-  positionType: string;
-  rank: string;
-}</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>services/geminiService.ts</h2>
-            <pre><code>import { GoogleGenAI, Type } from &quot;@google/genai&quot;;
-import { JOB_EVALUATION_FACTORS, SYSTEM_PROMPT_CONTEXT, OUTPUT_FORMAT, STEPS } from &quot;../constants&quot;;
-import { EvaluationResult, PastEvaluation } from &quot;../types&quot;;
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
-
-function constructPrompt(jobTitle: string, jdText: string, history: PastEvaluation[]): string {
-  const factorsString = JOB_EVALUATION_FACTORS.map(factor =&gt; 
-    `&lt;factor name=&quot;${factor.name}&quot;&gt;\n${factor.levels.map(level =&gt; 
-      `  &lt;level grade=&quot;${level.grade}&quot;&gt;${level.description}&lt;/level&gt;`
-    ).join('\n')}\n&lt;/factor&gt;`
-  ).join('\n\n');
-
-  let historySection = '';
-  if (history.length &gt; 0) {
-    historySection = `
-&lt;previous_evaluations&gt;
-  Dưới đây là các bản tóm tắt của các JD đã được phân tích trước đó. Hãy sử dụng thông tin này để so sánh JD hiện tại.
-  ${history.map(h =&gt; `
-  &lt;jd&gt;
-    &lt;title&gt;${h.jobTitle}&lt;/title&gt;
-    &lt;summary&gt;
-      &lt;scope&gt;${h.summary.scope}&lt;/scope&gt;
-      &lt;complexity&gt;${h.summary.complexity}&lt;/complexity&gt;
-      &lt;impact&gt;${h.summary.impact}&lt;/impact&gt;
-    &lt;/summary&gt;
-  &lt;/jd&gt;
-  `).join('')}
-&lt;/previous_evaluations&gt;
-    `;
-  }
-
-  const fullPrompt = `
-${SYSTEM_PROMPT_CONTEXT}
-
-&lt;evaluation_framework&gt;
-${factorsString}
-&lt;/evaluation_framework&gt;
-
-${historySection}
-
-${STEPS}
-
-${OUTPUT_FORMAT}
-
-Bây giờ, hãy phân tích Mô tả công việc (JD) sau đây cho vị trí có tiêu đề: &quot;${jobTitle}&quot;. Trích xuất tên vị trí chính xác từ nội dung JD.
-
-&lt;job_description&gt;
-${jdText}
-&lt;/job_description&gt;
-`;
-
-  return fullPrompt;
-}
-
-const responseSchema = {
-  type: Type.OBJECT,
-  properties: {
-    jobTitle: {
-      type: Type.STRING,
-      description: &quot;Chức danh công việc được trích xuất từ JD.&quot;
-    },
-    evaluations: {
-      type: Type.ARRAY,
-      description: &quot;Danh sách đánh giá cho từng yếu tố.&quot;,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          factor: { type: Type.STRING, description: &quot;Tên của yếu tố được đánh giá.&quot; },
-          grade: { type: Type.STRING, description: &quot;Mức xếp loại được chọn cho yếu tố.&quot; },
-          reason: { type: Type.STRING, description: &quot;Lý do chi tiết cho việc chọn mức xếp loại.&quot; },
-          evidence: { type: Type.STRING, description: &quot;Dẫn chứng cụ thể từ JD để hỗ trợ lý do.&quot; },
-        },
-        required: [&quot;factor&quot;, &quot;grade&quot;, &quot;reason&quot;, &quot;evidence&quot;]
-      },
-    },
-    summary: {
-      type: Type.OBJECT,
-      description: &quot;Dữ liệu tóm tắt có cấu trúc về công việc để sử dụng cho các so sánh trong tương lai.&quot;,
-      properties: {
-        scope: { type: Type.STRING, description: &quot;Nhận xét về phạm vi công việc.&quot; },
-        complexity: { type: Type.STRING, description: &quot;Nhận xét về độ phức tạp.&quot; },
-        impact: { type: Type.STRING, description: &quot;Nhận xét về mức độ ảnh hưởng.&quot; },
-      },
-      required: [&quot;scope&quot;, &quot;complexity&quot;, &quot;impact&quot;]
-    },
-    similarJobs: {
-      type: Type.ARRAY,
-      description: &quot;Danh sách các công việc tương đồng từ lịch sử (nếu có).&quot;,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          jobTitle: { type: Type.STRING, description: &quot;Tên vị trí công việc tương đồng.&quot; },
-          similarityPercentage: { type: Type.NUMBER, description: &quot;Mức độ tương đồng (%).&quot; },
-          reason: { type: Type.STRING, description: &quot;Lý do cho sự tương đồng.&quot; },
-        },
-        required: [&quot;jobTitle&quot;, &quot;similarityPercentage&quot;, &quot;reason&quot;]
-      },
-    },
-    similarJobsComparison: {
-        type: Type.STRING,
-        description: &quot;Một đoạn văn bản mô tả so sánh với các JD tương đồng đã cung cấp trong lịch sử, bao gồm giải thích lý do tương đồng. Nếu không có lịch sử hoặc không có JD tương đồng, hãy trả về một câu giải thích ngắn gọn.&quot;
-    },
-    overallSummary: {
-        type: Type.STRING,
-        description: &quot;Một đoạn văn bản nhận xét tổng quan, súc tích về vị trí công việc dựa trên phân tích, bao gồm cả các đề xuất để cải thiện JD nếu cần.&quot;
-    },
-  },
-  required: [&quot;jobTitle&quot;, &quot;evaluations&quot;, &quot;summary&quot;, &quot;similarJobsComparison&quot;, &quot;overallSummary&quot;]
-};
-
-export const evaluateJd = async (jobTitle: string, jdText: string, history: PastEvaluation[]): Promise&lt;EvaluationResult&gt; =&gt; {
-  const prompt = constructPrompt(jobTitle, jdText, history);
-
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: responseSchema,
-        temperature: 0.2,
-      },
-    });
-
-    const responseText = response.text;
-    if (!responseText) {
-        throw new Error(&quot;API returned an empty response. The model may have refused to answer.&quot;);
-    }
-
-    // Sanitize response text by removing potential markdown backticks
-    const sanitizedText = responseText.replace(/^&#96;&#96;&#96;json\s*|&#96;&#96;&#96;\s*$/g, '').trim();
-
-    const result = JSON.parse(sanitizedText);
-    return result as EvaluationResult;
-
-  } catch (error: unknown) {
-    console.error(&quot;Error calling Gemini API:&quot;, error);
-    if (error instanceof Error) {
-        throw new Error(`Failed to evaluate JD: ${error.message}`);
-    }
-    throw new Error(&quot;An unknown error occurred while communicating with the AI model.&quot;);
-  }
-};</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>constants.ts</h2>
-            <pre><code>import { Factor } from './types';
-
-export const SYSTEM_PROMPT_CONTEXT = `
-&lt;context&gt;
-  Bạn là chuyên gia đánh giá công việc chuyên sâu, sử dụng phương pháp PwC đã được chuẩn hóa nội bộ tại GHN.
-  Phương pháp bao gồm 12 yếu tố đánh giá giá trị công việc, mỗi yếu tố có các mức phân loại cụ thể (A, B, C, D...) đi kèm mô tả chi tiết.
-  Tài liệu gốc từ GHN đã được cung cấp, bạn có trách nhiệm ghi nhớ toàn bộ phương pháp này để áp dụng vĩnh viễn.
-&lt;/context&gt;
-`;
-
-export const STEPS = `
-&lt;steps&gt;
-  &lt;step&gt;Phân tích đầy đủ 12 yếu tố theo JD người dùng cung cấp&lt;/step&gt;
-  &lt;step&gt;Xác định mức xếp loại phù hợp (A/B/C/D...) cho từng yếu tố&lt;/step&gt;
-  &lt;step&gt;Giải thích lý do chọn mức xếp loại đó&lt;/step&gt;
-  &lt;step&gt;Trích dẫn dẫn chứng cụ thể từ nội dung JD&lt;/step&gt;
-  &lt;step&gt;Nếu có JD đã phân tích trước đó (trong thẻ &lt;previous_evaluations&gt;), hãy so sánh phạm vi công việc (scope)&lt;/step&gt;
-  &lt;step&gt;Liệt kê các JD có phạm vi tương đồng: tên vị trí, mức độ tương đồng (%), và lý do&lt;/step&gt;
-&lt;/steps&gt;
-`;
-
-export const OUTPUT_FORMAT = `
-&lt;output_format&gt;
-  - Phải trả về một đối tượng JSON hợp lệ, tuân thủ nghiêm ngặt schema đã được cung cấp.
-  - Cung cấp nhận xét tổng quan về phạm vi, độ phức tạp và mức độ ảnh hưởng của công việc.
-&lt;/output_format&gt;
-`;
-
-
-export const JOB_EVALUATION_FACTORS: Factor[] = [
-  {
-    name: &quot;Trình độ học vấn&quot;,
-    levels: [
-      { grade: &quot;A&quot;, description: &quot;Không yêu cầu kiến thức phổ thông và khả năng đọc/viết. Có thể cần được đào tạo cho các công việc chân tay, thủ công, đơn giản.&quot; },
-      { grade: &quot;B&quot;, description: &quot;Hoàn thành cấp tiểu học, có kiến thức phổ thông cơ bản với kỹ năng đọc, viết và thực hiện các phép tính đơn giản, ví dụ: cộng, trừ, nhân, chia.&quot; },
-      { grade: &quot;C&quot;, description: &quot;Hoàn thành cấp THCS và có khả năng viết văn bản hoặc thực hiện các phép tính nâng cao hơn, ví dụ: phân số, phần trăm và thập phân.&quot; },
-      { grade: &quot;D&quot;, description: &quot;Hoàn thành cấp THPT và có khả năng gõ văn bản, tài liệu bằng máy tính,...&quot; },
-      { grade: &quot;E&quot;, description: &quot;Hoàn thành (các) khóa học/ khóa đào tạo nghề từ 03 tháng đến dưới 01 năm&quot; },
-      { grade: &quot;F1&quot;, description: &quot;Tốt nghiệp Trung cấp nghề chuyên ngành bất kỳ&quot; },
-      { grade: &quot;F2&quot;, description: &quot;Tốt nghiệp Trung cấp nghề (các) chuyên ngành cụ thể&quot; },
-      { grade: &quot;G1&quot;, description: &quot;Tốt nghiệp Cao đẳng chuyên ngành bất kỳ&quot; },
-      { grade: &quot;G2&quot;, description: &quot;Tốt nghiệp Cao đẳng (các) chuyên ngành cụ thể&quot; },
-      { grade: &quot;H1&quot;, description: &quot;Tốt nghiệp Đại học chuyên ngành bất kỳ&quot; },
-      { grade: &quot;H2&quot;, description: &quot;Tốt nghiệp Đại học (các) chuyên ngành cụ thể&quot; },
-      { grade: &quot;I1&quot;, description: &quot;Tốt nghiệp đại học và lớp bồi dưỡng, nâng cao nghiệp vụ/văn bằng 2 của ngành khác&quot; },
-      { grade: &quot;I2&quot;, description: &quot;Có bằng thạc sĩ chuyên ngành bất kỳ&quot; },
-      { grade: &quot;I3&quot;, description: &quot;Có bằng thạc sĩ (các) chuyên ngành cụ thể&quot; },
-      { grade: &quot;J&quot;, description: &quot;Đào tạo sau cao học, có bằng Tiến sĩ và có kiến thức vô cùng chuyên sâu.&quot; },
-    ]
-  },
-  {
-    name: &quot;Kinh nghiệm&quot;,
-    levels: [
-      { grade: &quot;A&quot;, description: &quot;Các công việc cơ bản không đòi hỏi kinh nghiệm làm việc trước đây. Có thể đào tạo để thực hiện công việc trong một vài giờ.&quot; },
-      { grade: &quot;B&quot;, description: &quot;Các công việc đơn giản, có thể học trong một tháng. Trong quá trình làm việc được hướng dẫn bằng lời nói và có thể có các quy trình chi tiết bằng văn bản. (không cần kinh nghiệm, công việc có thể thành thạo sau 1 tháng)&quot; },
-      { grade: &quot;C&quot;, description: &quot;Quen thuộc với các công việc không phức tạp, đã được chuẩn hóa, với yêu cầu sử dụng thiết bị và máy móc đơn giản. (3 tháng kinh nghiệm)&quot; },
-      { grade: &quot;D&quot;, description: &quot;Công việc có tính chất thường lệ, nhưng cần có kinh nghiệm giải quyết các trường hợp ngoại lệ và tình huống đặc biệt. (6 tháng kinh nghiệm)&quot; },
-      { grade: &quot;E&quot;, description: &quot;Có kinh nghiệm thực hành thành thạo về một kỹ năng, có thể liên quan đến các hoạt động hoặc thiết bị cụ thể, hoặc các hoạt động tổng hợp yêu cầu tối thiểu 12 tháng kinh nghiệm tương đương. (12 tháng kinh nghiệm)&quot; },
-      { grade: &quot;F&quot;, description: &quot;Có kinh nghiệm liên quan trong một lĩnh vực cụ thể, thường yêu cầu đào tạo chuyên ngành và có sự khéo léo/khả năng làm chủ công việc cao. (1 - 2 năm kinh nghiệm)&quot; },
-      { grade: &quot;G1&quot;, description: &quot;Tối thiểu 3 năm kinh nghiệm chuyên môn, không có kinh nghiệm giám sát nhóm&quot; },
-      { grade: &quot;G2&quot;, description: &quot;Tối thiểu 5 năm kinh nghiệm chuyên môn HOẶC 1 năm kinh nghiệm giám sát nhóm&quot; },
-      { grade: &quot;G3&quot;, description: &quot;Tối thiểu 2-3 năm kinh nghiệm giám sát nhóm&quot; },
-      { grade: &quot;H1&quot;, description: &quot;Tối thiểu 6 năm kinh nghiệm chuyên môn&quot; },
-      { grade: &quot;H2&quot;, description: &quot;Tối thiểu 8 năm kinh nghiệm chuyên môn VÀ/HOẶC 1 năm kinh nghiệm quản lý cấp phòng&quot; },
-      { grade: &quot;H3&quot;, description: &quot;Tối thiểu 2-3 năm kinh nghiệm quản lý cấp phòng&quot; },
-      { grade: &quot;I1&quot;, description: &quot;Tối thiểu 10 năm kinh nghiệm trong lĩnh vực chuyên môn&quot; },
-      { grade: &quot;I2&quot;, description: &quot;Có kinh nghiệm quản lý đồng thời nhiều phòng ban&quot; },
-      { grade: &quot;I3&quot;, description: &quot;Kinh nghiệm tương đương ở cấp điều hành mảng chức năng chủ chốt của tổ chức (giám đốc khối/phó Tổng giám đốc)&quot; },
-      { grade: &quot;J&quot;, description: &quot;Tổng giám đốc của một tổ chức nhỏ/vừa hoạt động tập trung trong một lĩnh vực.&quot; },
-      { grade: &quot;K&quot;, description: &quot;Tổng giám đốc của một tổ chức lớn hoạt động trong nhiều lĩnh vực, hoặc hoạt động trong một lĩnh vực ở nhiều hơn một quốc gia.&quot; },
-      { grade: &quot;L&quot;, description: &quot;Tổng giám đốc của một tổ chức lớn hoạt động trong nhiều lĩnh vực, ở nhiều quốc gia trên thế giới.&quot; },
-    ]
-  },
-  {
-    name: &quot;Mức độ phức tạp của công việc&quot;,
-    levels: [
-        { grade: &quot;A1&quot;, description: &quot;Những công việc đơn giản, lặp đi lặp lại, đã được mô tả cụ thể, dễ học và không đòi hỏi suy nghĩ độc lập hoặc đưa ra quyết định quan trọng.&quot; },
-        { grade: &quot;B1&quot;, description: &quot;Ứng dụng các kiến thức và kỹ năng đã có để thực hiện công việc, công việc cụ thể, rõ ràng, không cần đưa ra nhiều quyết định cá nhân.&quot; },
-        { grade: &quot;C1&quot;, description: &quot;Công việc có yêu cầu rõ ràng về kết quả cần đạt, cũng như đã có chính sách và thủ tục quy định chi tiết, tuy nhiên thỉnh thoảng cần đưa ra ý kiến độc lập.&quot; },
-        { grade: &quot;D1&quot;, description: &quot;Công việc có yêu cầu tương đối rõ ràng về kết quả cần đạt, nhưng chưa có cách thức thực hiện. Cần liên tục dung hòa các yêu cầu khác nhau từ các bên liên quan, cũng như giải quyết nhiều tình huống đa dạng, khó đoán trước.&quot; },
-        { grade: &quot;E1&quot;, description: &quot;Công việc yêu cầu cao về khả năng sáng tạo và thích nghi nhằm phản ứng nhanh với sự thay đổi liên tục. Công việc cần kiểm soát, kết nối và thúc đẩy mạng chức năng hoặc các chức năng có tính liên kết trong tổ chức.&quot; },
-        { grade: &quot;F1&quot;, description: &quot;Điều phối và quản lý nhiều chức năng chuyên môn hóa cao, hoạt động của các chức năng này có thể ảnh hưởng đáng kể đến sự tồn tại của tổ chức trong tương lai dài.&quot; },
-    ]
-  },
-  {
-    name: &quot;Phạm vi công việc&quot;,
-    levels: [
-        { grade: &quot;A&quot;, description: &quot;Thực hiện các công việc, nhiệm vụ cụ thể, không cần giám sát hay liên hệ chặt chẽ với những bộ phận, cá nhân khác. (không giám sát, không phối hợp với cá nhân khác)&quot; },
-        { grade: &quot;B&quot;, description: &quot;Không cần giám sát, nhưng cần liên hệ chặt chẽ với các bộ phận, cá nhân khác để hoàn thành được phạm vi công việc của mình. (không giám sát, có phối hợp với đơn vị cá nhân khác)&quot; },
-        { grade: &quot;C&quot;, description: &quot;Công việc yêu cầu giám sát các cá nhân khác nhằm đạt được những mục tiêu cụ thể, có thể cần cộng tác, phối hợp với các bộ phận khác trong các hoạt động cụ thể. (Trưởng nhóm)&quot; },
-        { grade: &quot;D&quot;, description: &quot;Quản lý một phần hoạt động của một chức năng trong tổ chức. Yêu cầu tham gia lập kế hoạch, chỉ đạo và kiểm soát một số hoạt động trong tổ chức. (Trưởng phòng)&quot; },
-        { grade: &quot;E&quot;, description: &quot;Quản lý toàn bộ một mảng chức năng trong tổ chức, trong đó bao gồm việc lập kế hoạch, chỉ đạo và kiểm soát tất cả các hoạt động của chức năng đó. (Giám đốc ban/ trung tâm)&quot; },
-        { grade: &quot;F&quot;, description: &quot;Phối hợp và quản lý nhiều chức năng có tính liên kết trong một tổ chức. (Giám đốc Khối/ Phó Tổng giám đốc)&quot; },
-        { grade: &quot;G&quot;, description: &quot;Kiểm soát, định hướng hoạt động toàn bộ tổ chức trực thuộc tập đoàn, có thể có ảnh hưởng tới định hướng chiến lược dài hạn của tập đoàn. (Tổng giám đốc – công ty con của tập đoàn)&quot; },
-        { grade: &quot;H&quot;, description: &quot;Tổng giám đốc của một tổ chức lớn, với ảnh hưởng kiểm soát tới tất cả các định hướng chiến lược dài hạn ở tất cả quốc gia. (Tổng giám đốc – công ty mẹ hoặc doanh nghiệp đa quốc gia)&quot; },
-    ]
-  },
-  {
-      name: &quot;Mức độ giải quyết vấn đề&quot;,
-      levels: [
-          { grade: &quot;A1&quot;, description: &quot;Công việc đơn giản, lặp đi lặp lại. Các vấn đề nhỏ và được giải quyết bằng cách lựa chọn đơn giản giữa những điều đã được học, hoặc có quy định và hướng dẫn cụ thể về cách giải quyết vấn đề.&quot; },
-          { grade: &quot;B1&quot;, description: &quot;Phần lớn công việc có tính thường lệ nhưng các vấn đề thường phức tạp hơn, yêu cầu vận dụng kiến thức tiền lệ trước đó và/hoặc diễn giải các hướng dẫn để giải quyết.&quot; },
-          { grade: &quot;C1&quot;, description: &quot;Các vấn đề thường đa dạng, yêu cầu nghiên cứu các trường hợp khác nhau hoặc các tình huống mẫu thuẫn nhằm đưa ra giải pháp. Cần có sự sáng tạo và khả năng nhận định, đánh giá khi nghiên cứu và phân tích vấn đề.&quot; },
-          { grade: &quot;D1&quot;, description: &quot;Các vấn đề trong 1 nhóm hoặc phòng ban, có một vài yếu tố bất thường, có thể chưa từng xảy ra. Cần nghiên cứu và phân tích để đưa ra giải pháp. Các hướng dẫn và chính sách có thể đưa ra một phần giải quyết, cần sáng tạo và có khả năng phản đoán để giải quyết vấn đề.&quot; },
-          { grade: &quot;E1&quot;, description: &quot;Các vấn đề phức tạp ở quy mô một chức năng, cần đánh giá một vài giải pháp khác nhau. Có thể có khung chung hướng dẫn cách giải quyết vấn đề, tuy nhiên đòi hỏi sự sáng tạo và khả năng nhận định, đánh giá để tìm ra giải pháp phù hợp nhất.&quot; },
-          { grade: &quot;F1&quot;, description: &quot;Các vấn đề phức tạp, nhiều khi cần ở quy mô nhiều chức năng, yêu cầu nghiên cứu sâu về nguyên nhân và tác động. Chính sách công ty có thể hướng dẫn chung về cách giải quyết, nhưng giải pháp đưa ra có thể sẽ làm thay đổi các chính sách hiện hữu.&quot; },
-          { grade: &quot;G1&quot;, description: &quot;Các vấn đề mới lạ, mỗi vấn đề yêu cầu cách tiếp cận hoàn toàn độc lập. Cần ứng dụng những phương pháp nghiên cứu và phân tích phức tạp. Giải pháp tạo ra các chính sách và chiến lược mới cho công ty&quot; },
-          { grade: &quot;H1&quot;, description: &quot;Các vấn đề và loại giải pháp đưa ra có thể tạo ảnh hưởng sâu rộng đến toàn bộ tổ chức hoặc xã hội. Giải pháp có thể phát triển những khái niệm và phương pháp tiếp cận mới, đóng góp những phát hiện về mặt chính sách, nâng cấp kiến thức và suy nghĩ xã hội.&quot; },
-      ]
-  },
-  {
-      name: &quot;Mức độ cần được chỉ dẫn/giám sát&quot;,
-      levels: [
-          { grade: &quot;A1&quot;, description: &quot;Nhiệm vụ đơn giản, công việc cần giám sát chặt chẽ, tất cả các công việc đều được kiểm tra chi tiết.&quot; },
-          { grade: &quot;B1&quot;, description: &quot;Có chỉ dẫn chi tiết cho các nhiệm vụ nhưng người đảm nhiệm công việc được tự do sắp xếp thứ tự thực hiện nhiệm vụ. Công việc được giám sát chặt chẽ và hầu hết các công việc được kiểm tra.&quot; },
-          { grade: &quot;C1&quot;, description: &quot;Công việc cá nhân cần tuân thủ các quy định, thủ tục, cũng như cần đạt được các mục tiêu đã đặt ra. Công việc được hướng dẫn và hỗ trợ, ra soát định kỳ.&quot; },
-          { grade: &quot;D1&quot;, description: &quot;Công việc đã rõ những mục tiêu cần hoàn thành, người đảm nhận công việc được chỉ dẫn chung, không được kiểm tra thường xuyên trong quá trình thực hiện nhiệm vụ, nhưng được quản lý trực tiếp hỗ trợ nếu cần.&quot; },
-          { grade: &quot;E1&quot;, description: &quot;Người đảm nhận công việc cần lên kế hoạch làm việc cho phòng ban để đạt mục tiêu. Việc hướng dẫn, kiểm tra trong quá trình thực hiện rất ít, không chính thức. Người đảm nhiệm công việc cần độc lập làm việc nhưng có thể được hướng dẫn nếu cần.&quot; },
-          { grade: &quot;F1&quot;, description: &quot;Người đảm nhận công việc được tham gia thảo luận các mục tiêu của mảng và cần lên kế hoạch làm việc để đạt được các mục tiêu đó.&quot; },
-          { grade: &quot;G1&quot;, description: &quot;Đưa ra mục tiêu cho nhóm các chức năng có tính liên kết để đạt được những mục tiêu, định hướng chung của tổ chức. Công việc thường không có hướng dẫn mà chỉ có ý kiến cố vấn, yêu cầu ra quyết định một cách độc lập.&quot; },
-          { grade: &quot;H1&quot;, description: &quot;Trách nhiệm chỉ giới hạn ở phạm vi các chính sách của công ty do HĐQT quyết định. Tự đưa ra mục tiêu, hành động cho cả tổ chức.&quot; },
-      ]
-  },
-  {
-    name: &quot;Mức độ liên lạc khi thực hiện công việc&quot;,
-    levels: [
-      { grade: &quot;A1&quot;, description: &quot;Liên hệ chỉ cho mục đích xã giao. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;A2&quot;, description: &quot;Liên hệ chỉ cho mục đích xã giao. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;A3&quot;, description: &quot;Liên hệ chỉ cho mục đích xã giao. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;A4&quot;, description: &quot;Liên hệ chỉ cho mục đích xã giao. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;A5&quot;, description: &quot;Liên hệ chỉ cho mục đích xã giao. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;B1&quot;, description: &quot;Trao đổi công việc và nhiệm vụ trong nội bộ tổ chức, ví dụ trao đổi thông tin với các bộ phận khác trong tổ chức. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;B2&quot;, description: &quot;Trao đổi công việc và nhiệm vụ trong nội bộ tổ chức, ví dụ trao đổi thông tin với các bộ phận khác trong tổ chức. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;B3&quot;, description: &quot;Trao đổi công việc và nhiệm vụ trong nội bộ tổ chức, ví dụ trao đổi thông tin với các bộ phận khác trong tổ chức. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;B4&quot;, description: &quot;Trao đổi công việc và nhiệm vụ trong nội bộ tổ chức, ví dụ trao đổi thông tin với các bộ phận khác trong tổ chức. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;B5&quot;, description: &quot;Trao đổi công việc và nhiệm vụ trong nội bộ tổ chức, ví dụ trao đổi thông tin với các bộ phận khác trong tổ chức. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;C1&quot;, description: &quot;Cần cộng tác với các bộ phận khác trong tổ chức để đạt mục đích chung. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;C2&quot;, description: &quot;Cần cộng tác với các bộ phận khác trong tổ chức để đạt mục đích chung. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;C3&quot;, description: &quot;Cần cộng tác với các bộ phận khác trong tổ chức để đạt mục đích chung. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;C4&quot;, description: &quot;Cần cộng tác với các bộ phận khác trong tổ chức để đạt mục đích chung. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;C5&quot;, description: &quot;Cần cộng tác với các bộ phận khác trong tổ chức để đạt mục đích chung. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;D11&quot;, description: &quot;Giám sát cấp nhóm. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;D12&quot;, description: &quot;Giám sát cấp nhóm. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;D13&quot;, description: &quot;Giám sát cấp nhóm. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;D14&quot;, description: &quot;Giám sát cấp nhóm. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;D15&quot;, description: &quot;Giám sát cấp nhóm. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;D21&quot;, description: &quot;Quản lý cấp phòng. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;D22&quot;, description: &quot;Quản lý cấp phòng. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;D23&quot;, description: &quot;Quản lý cấp phòng. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;D24&quot;, description: &quot;Quản lý cấp phòng. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;D25&quot;, description: &quot;Quản lý cấp phòng. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;D31&quot;, description: &quot;Quản lý cấp ban/trung tâm. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;D32&quot;, description: &quot;Quản lý cấp ban/trung tâm. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;D33&quot;, description: &quot;Quản lý cấp ban/trung tâm. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;D34&quot;, description: &quot;Quản lý cấp ban/trung tâm. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;D35&quot;, description: &quot;Quản lý cấp ban/trung tâm. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;E1&quot;, description: &quot;Liên hệ ở phạm vi rộng với phần lớn các chức năng trong tổ chức, cần lãnh đạo, thúc đẩy và điều phối các cá nhân viên trong các vấn đề nhạy cảm. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;E2&quot;, description: &quot;Liên hệ ở phạm vi rộng với phần lớn các chức năng trong tổ chức, cần lãnh đạo, thúc đẩy và điều phối các cá nhân viên trong các vấn đề nhạy cảm. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;E3&quot;, description: &quot;Liên hệ ở phạm vi rộng với phần lớn các chức năng trong tổ chức, cần lãnh đạo, thúc đẩy và điều phối các cá nhân viên trong các vấn đề nhạy cảm. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;E4&quot;, description: &quot;Liên hệ ở phạm vi rộng với phần lớn các chức năng trong tổ chức, cần lãnh đạo, thúc đẩy và điều phối các cá nhân viên trong các vấn đề nhạy cảm. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;E5&quot;, description: &quot;Liên hệ ở phạm vi rộng với phần lớn các chức năng trong tổ chức, cần lãnh đạo, thúc đẩy và điều phối các cá nhân viên trong các vấn đề nhạy cảm. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-
-      { grade: &quot;F1&quot;, description: &quot;Liên hệ ở cấp quốc tế của tổ chức để điều phối các lĩnh vực chức năng chiến lược. Cần liên hệ ngoài tổ chức ở mức tối thiểu.&quot; },
-      { grade: &quot;F2&quot;, description: &quot;Liên hệ ở cấp quốc tế của tổ chức để điều phối các lĩnh vực chức năng chiến lược. Đảm nhận nhỏ và liên hệ tương đối nhiều để giải quyết những khó khăn và vấn đề thông thường.&quot; },
-      { grade: &quot;F3&quot;, description: &quot;Liên hệ ở cấp quốc tế của tổ chức để điều phối các lĩnh vực chức năng chiến lược. Liên hệ tương đối nhiều để quảng bá tổ chức và để đạt được những mục tiêu đã định sẵn.&quot; },
-      { grade: &quot;F4&quot;, description: &quot;Liên hệ ở cấp quốc tế của tổ chức để điều phối các lĩnh vực chức năng chiến lược. Liên hệ đáng kể và các vấn đề nhạy cảm, đòi hỏi có quan hệ và đảm phán ở cấp cao để giải quyết những khác biệt dạng tồn tại.&quot; },
-      { grade: &quot;F5&quot;, description: &quot;Liên hệ ở cấp quốc tế của tổ chức để điều phối các lĩnh vực chức năng chiến lược. Những đàm phán then chốt, liên quan đến những vấn đề tối quan trọng đối với tổ chức.&quot; },
-    ]
-  },
-  {
-    name: &quot;Trách nhiệm giám sát &amp; quản lý&quot;,
-    levels: [
-        { grade: &quot;A&quot;, description: &quot;Không quản lý nhân viên – Không áp dụng.&quot; },
-        { grade: &quot;B1&quot;, description: &quot;Trách nhiệm giám sát ở mức thấp, nhưng hỗ trợ nhân viên mới trong đơn vị (hoặc giám sát/quản lý 1 nhân viên) – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;B2&quot;, description: &quot;Trách nhiệm giám sát ở mức thấp, nhưng hỗ trợ nhân viên mới trong đơn vị (hoặc giám sát/quản lý 1 nhân viên) – Vị trí chuyên môn.&quot; },
-        { grade: &quot;B3&quot;, description: &quot;Trách nhiệm giám sát ở mức thấp, nhưng hỗ trợ nhân viên mới trong đơn vị (hoặc giám sát/quản lý 1 nhân viên) – Vị trí quản lý.&quot; },
-        { grade: &quot;C11&quot;, description: &quot;Giám sát/quản lý 2 – 4 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;C12&quot;, description: &quot;Giám sát/quản lý 2 – 4 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;C13&quot;, description: &quot;Giám sát/quản lý 2 – 4 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;C21&quot;, description: &quot;Giám sát/quản lý 5 – 7 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;C22&quot;, description: &quot;Giám sát/quản lý 5 – 7 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;C23&quot;, description: &quot;Giám sát/quản lý 5 – 7 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;C31&quot;, description: &quot;Giám sát/quản lý 8 – 10 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;C32&quot;, description: &quot;Giám sát/quản lý 8 – 10 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;C33&quot;, description: &quot;Giám sát/quản lý 8 – 10 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;D11&quot;, description: &quot;Giám sát/quản lý 11 – 16 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;D12&quot;, description: &quot;Giám sát/quản lý 11 – 16 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;D13&quot;, description: &quot;Giám sát/quản lý 11 – 16 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;D21&quot;, description: &quot;Giám sát/quản lý 17 – 24 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;D22&quot;, description: &quot;Giám sát/quản lý 17 – 24 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;D23&quot;, description: &quot;Giám sát/quản lý 17 – 24 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;D31&quot;, description: &quot;Giám sát/quản lý 25 – 30 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;D32&quot;, description: &quot;Giám sát/quản lý 25 – 30 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;D33&quot;, description: &quot;Giám sát/quản lý 25 – 30 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;E11&quot;, description: &quot;Giám sát/quản lý 31 – 53 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;E12&quot;, description: &quot;Giám sát/quản lý 31 – 53 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;E13&quot;, description: &quot;Giám sát/quản lý 31 – 53 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;E21&quot;, description: &quot;Giám sát/quản lý 54 – 77 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;E22&quot;, description: &quot;Giám sát/quản lý 54 – 77 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;E23&quot;, description: &quot;Giám sát/quản lý 54 – 77 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;E31&quot;, description: &quot;Giám sát/quản lý 78 – 100 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;E32&quot;, description: &quot;Giám sát/quản lý 78 – 100 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;E33&quot;, description: &quot;Giám sát/quản lý 78 – 100 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;F11&quot;, description: &quot;Giám sát/quản lý 101 – 233 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;F12&quot;, description: &quot;Giám sát/quản lý 101 – 233 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;F13&quot;, description: &quot;Giám sát/quản lý 101 – 233 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;F21&quot;, description: &quot;Giám sát/quản lý 234 – 367 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;F22&quot;, description: &quot;Giám sát/quản lý 234 – 367 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;F23&quot;, description: &quot;Giám sát/quản lý 234 – 367 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;F31&quot;, description: &quot;Giám sát/quản lý 368 – 500 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;F32&quot;, description: &quot;Giám sát/quản lý 368 – 500 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;F33&quot;, description: &quot;Giám sát/quản lý 368 – 500 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;G11&quot;, description: &quot;Giám sát/quản lý 501 – 1000 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;G12&quot;, description: &quot;Giám sát/quản lý 501 – 1000 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;G13&quot;, description: &quot;Giám sát/quản lý 501 – 1000 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;G21&quot;, description: &quot;Giám sát/quản lý 1001 – 1500 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;G22&quot;, description: &quot;Giám sát/quản lý 1001 – 1500 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;G23&quot;, description: &quot;Giám sát/quản lý 1001 – 1500 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;G31&quot;, description: &quot;Giám sát/quản lý 1501 – 2000 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;G32&quot;, description: &quot;Giám sát/quản lý 1501 – 2000 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;G33&quot;, description: &quot;Giám sát/quản lý 1501 – 2000 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;H11&quot;, description: &quot;Giám sát/quản lý 2000 – 5000 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;H12&quot;, description: &quot;Giám sát/quản lý 2000 – 5000 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;H13&quot;, description: &quot;Giám sát/quản lý 2000 – 5000 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;H21&quot;, description: &quot;Giám sát/quản lý 5000 – 10000 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;H22&quot;, description: &quot;Giám sát/quản lý 5000 – 10000 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;H23&quot;, description: &quot;Giám sát/quản lý 5000 – 10000 nhân sự – Vị trí quản lý.&quot; },
-        { grade: &quot;H31&quot;, description: &quot;Giám sát/quản lý trên 10000 nhân sự – Vị trí công việc giản đơn.&quot; },
-        { grade: &quot;H32&quot;, description: &quot;Giám sát/quản lý trên 10000 nhân sự – Vị trí chuyên môn.&quot; },
-        { grade: &quot;H33&quot;, description: &quot;Giám sát/quản lý trên 10000 nhân sự – Vị trí quản lý.&quot; },
-    ]
-  },
-  {
-      name: &quot;Ảnh hưởng của các quyết định&quot;,
-      levels: [
-          { grade: &quot;A1&quot;, description: &quot;Các quyết định không gây ra thiệt hại nào hoặc công việc có thể làm lại với nguồn lực không đáng kể — Ảnh hưởng đối với cá nhân, nhóm, phòng của tổ chức.&quot; },
-          { grade: &quot;B1&quot;, description: &quot;Các quyết định có nguy cơ gây ra lãng phí ở mức thấp (dưới 2 triệu VND) hoặc công việc không hiệu quả — Ảnh hưởng đối với cá nhân, nhóm, phòng của tổ chức.&quot; },
-          { grade: &quot;B2&quot;, description: &quot;Các quyết định có nguy cơ gây ra lãng phí ở mức thấp (dưới 2 triệu VND) hoặc công việc không hiệu quả — Ảnh hưởng đối với ban, trung tâm, khối trong tổ chức.&quot; },
-          { grade: &quot;B3&quot;, description: &quot;Các quyết định có nguy cơ gây ra lãng phí ở mức thấp (dưới 2 triệu VND) hoặc công việc không hiệu quả — Ảnh hưởng lớn tới toàn tổ chức.&quot; },
-          { grade: &quot;C1&quot;, description: &quot;Các quyết định có nguy cơ gây ra tổn thất tài chính nhỏ (dưới 50 triệu VND) — Ảnh hưởng đối với cá nhân, nhóm, phòng của tổ chức.&quot; },
-          { grade: &quot;C2&quot;, description: &quot;Các quyết định có nguy cơ gây ra tổn thất tài chính nhỏ (dưới 50 triệu VND) — Ảnh hưởng đối với ban, trung tâm, khối trong tổ chức.&quot; },
-          { grade: &quot;C3&quot;, description: &quot;Các quyết định có nguy cơ gây ra tổn thất tài chính nhỏ (dưới 50 triệu VND) — Ảnh hưởng lớn tới toàn tổ chức.&quot; },
-          { grade: &quot;D1&quot;, description: &quot;Các quyết định có nguy cơ gây ra tổn thất tài chính lớn (trên 50 triệu VND) — Ảnh hưởng đối với cá nhân, nhóm, phòng của tổ chức.&quot; },
-          { grade: &quot;D2&quot;, description: &quot;Các quyết định có nguy cơ gây ra tổn thất tài chính lớn (trên 50 triệu VND) — Ảnh hưởng đối với ban, trung tâm, khối trong tổ chức.&quot; },
-          { grade: &quot;D3&quot;, description: &quot;Các quyết định có nguy cơ gây ra tổn thất tài chính lớn (trên 50 triệu VND) — Ảnh hưởng lớn tới toàn tổ chức.&quot; },
-          { grade: &quot;E1&quot;, description: &quot;Các quyết định ở tầm doanh nghiệp có nguy cơ gây ra thiệt hại nghiêm trọng, ảnh hưởng tới vị thế tổ chức trên thị trường, khả năng sinh lời và lợi nhuận tiềm năng — Ảnh hưởng đối với cá nhân, nhóm, phòng của tổ chức.&quot; },
-          { grade: &quot;E2&quot;, description: &quot;Các quyết định ở tầm doanh nghiệp có nguy cơ gây ra thiệt hại nghiêm trọng, ảnh hưởng tới vị thế tổ chức trên thị trường, khả năng sinh lời và lợi nhuận tiềm năng — Ảnh hưởng đối với ban, trung tâm, khối trong tổ chức.&quot; },
-          { grade: &quot;E3&quot;, description: &quot;Các quyết định ở tầm doanh nghiệp có nguy cơ gây ra thiệt hại nghiêm trọng, ảnh hưởng tới vị thế tổ chức trên thị trường, khả năng sinh lời và lợi nhuận tiềm năng — Ảnh hưởng lớn tới toàn tổ chức.&quot; },
-          { grade: &quot;F1&quot;, description: &quot;Các quyết định có thể trực tiếp đưa đến phá sản và ngừng kinh doanh — Ảnh hưởng đối với cá nhân, nhóm, phòng của tổ chức.&quot; },
-          { grade: &quot;F2&quot;, description: &quot;Các quyết định có thể trực tiếp đưa đến phá sản và ngừng kinh doanh — Ảnh hưởng đối với ban, trung tâm, khối trong tổ chức.&quot; },
-          { grade: &quot;F3&quot;, description: &quot;Các quyết định có thể trực tiếp đưa đến phá sản và ngừng kinh doanh — Ảnh hưởng lớn tới toàn tổ chức.&quot; },
-          { grade: &quot;NA&quot;, description: &quot;Không áp dụng.&quot; },
-      ]
-  },
-  {
-      name: &quot;Quyền hạn&quot;,
-      levels: [
-          { grade: &quot;A0&quot;, description: &quot;Không được phân quyền phê duyệt về mặt tài chính (không có quyền phê duyệt tài chính). Không được tuyển nhân viên.&quot; },
-          { grade: &quot;A1&quot;, description: &quot;Không được phân quyền phê duyệt về mặt tài chính (không có quyền phê duyệt tài chính). Tuyển nhân viên làm việc độc lập.&quot; },
-          { grade: &quot;A2&quot;, description: &quot;Không được phân quyền phê duyệt về mặt tài chính (không có quyền phê duyệt tài chính). Tuyển cấp quản lý.&quot; },
-          { grade: &quot;A3&quot;, description: &quot;Không được phân quyền phê duyệt về mặt tài chính (không có quyền phê duyệt tài chính). Tuyển cấp lãnh đạo hoặc ngoài kế hoạch.&quot; },
-          { grade: &quot;B0&quot;, description: &quot;Được duyệt một phần ngân sách. Tỉ lệ nhất định của ngân sách được duyệt. Không được tuyển nhân viên.&quot; },
-          { grade: &quot;B1&quot;, description: &quot;Được duyệt một phần ngân sách. Tỉ lệ nhất định của ngân sách được duyệt. Tuyển nhân viên làm việc độc lập.&quot; },
-          { grade: &quot;B2&quot;, description: &quot;Được duyệt một phần ngân sách. Tỉ lệ nhất định của ngân sách được duyệt. Tuyển cấp quản lý.&quot; },
-          { grade: &quot;B3&quot;, description: &quot;Được duyệt một phần ngân sách. Tỉ lệ nhất định của ngân sách được duyệt. Tuyển cấp lãnh đạo hoặc ngoài kế hoạch.&quot; },
-          { grade: &quot;C0&quot;, description: &quot;Được duyệt toàn bộ ngân sách. Không được tuyển nhân viên.&quot; },
-          { grade: &quot;C1&quot;, description: &quot;Được duyệt toàn bộ ngân sách. Tuyển nhân viên làm việc độc lập.&quot; },
-          { grade: &quot;C2&quot;, description: &quot;Được duyệt toàn bộ ngân sách. Tuyển cấp quản lý.&quot; },
-          { grade: &quot;C3&quot;, description: &quot;Được duyệt toàn bộ ngân sách. Tuyển cấp lãnh đạo hoặc ngoài kế hoạch.&quot; },
-          { grade: &quot;D0&quot;, description: &quot;Được duyệt ngoài ngân sách dưới hoặc bằng 5% ngân sách lũy kế được duyệt. Không được tuyển nhân viên.&quot; },
-          { grade: &quot;D1&quot;, description: &quot;Được duyệt ngoài ngân sách dưới hoặc bằng 5% ngân sách lũy kế được duyệt. Tuyển nhân viên làm việc độc lập.&quot; },
-          { grade: &quot;D2&quot;, description: &quot;Được duyệt ngoài ngân sách dưới hoặc bằng 5% ngân sách lũy kế được duyệt. Tuyển cấp quản lý.&quot; },
-          { grade: &quot;D3&quot;, description: &quot;Được duyệt ngoài ngân sách dưới hoặc bằng 5% ngân sách lũy kế được duyệt. Tuyển cấp lãnh đạo hoặc ngoài kế hoạch.&quot; },
-          { grade: &quot;E0&quot;, description: &quot;Được duyệt ngoài ngân sách trên 5% ngân sách lũy kế được duyệt. Không được tuyển nhân viên.&quot; },
-          { grade: &quot;E1&quot;, description: &quot;Được duyệt ngoài ngân sách trên 5% ngân sách lũy kế được duyệt. Tuyển nhân viên làm việc độc lập.&quot; },
-          { grade: &quot;E2&quot;, description: &quot;Được duyệt ngoài ngân sách trên 5% ngân sách lũy kế được duyệt. Tuyển cấp quản lý.&quot; },
-          { grade: &quot;E3&quot;, description: &quot;Được duyệt ngoài ngân sách trên 5% ngân sách lũy kế được duyệt. Tuyển cấp lãnh đạo hoặc ngoài kế hoạch.&quot; },
-          { grade: &quot;NA&quot;, description: &quot;Không áp dụng.&quot; },
-      ]
-  },
-  {
-      name: &quot;Môi trường làm việc&quot;,
-      levels: [
-          { grade: &quot;A1&quot;, description: &quot;Công việc thực hiện trong nhà trong điều kiện văn phòng, hầu như không bị ảnh hưởng bởi môi trường bên ngoài. Rất ít có khả năng có chấn thương thân thể.&quot; },
-          { grade: &quot;A2&quot;, description: &quot;Công việc thực hiện trong nhà trong điều kiện văn phòng, hầu như không bị ảnh hưởng bởi môi trường bên ngoài. Thường xuyên có khả năng xảy ra chấn thương thân thể như bị cắt, thâm tím.&quot; },
-          { grade: &quot;A3&quot;, description: &quot;Công việc thực hiện trong nhà trong điều kiện văn phòng, hầu như không bị ảnh hưởng bởi môi trường bên ngoài. Liên tục có khả năng xảy ra chấn thương thân thể nghiêm trọng.&quot; },
-          { grade: &quot;B1&quot;, description: &quot;Công việc thường được thực hiện trong nhà trong điều kiện làm việc dễ chịu, đôi khi có những ảnh hưởng khó chịu của môi trường như tiếng ồn, nhiệt độ và chất bẩn. Rất ít có khả năng có chấn thương thân thể.&quot; },
-          { grade: &quot;B2&quot;, description: &quot;Công việc thường được thực hiện trong nhà trong điều kiện làm việc dễ chịu, đôi khi có những ảnh hưởng khó chịu của môi trường như tiếng ồn, nhiệt độ và chất bẩn. Thường xuyên có khả năng xảy ra chấn thương thân thể như bị cắt, thâm tím.&quot; },
-          { grade: &quot;B3&quot;, description: &quot;Công việc thường được thực hiện trong nhà trong điều kiện làm việc dễ chịu, đôi khi có những ảnh hưởng khó chịu của môi trường như tiếng ồn, nhiệt độ và chất bẩn. Liên tục có khả năng xảy ra chấn thương thân thể nghiêm trọng.&quot; },
-          { grade: &quot;C1&quot;, description: &quot;Công việc trong nhà với những ảnh hưởng khó chịu của môi trường như tiếng ồn, nhiệt độ và chất bẩn. Rất ít có khả năng có chấn thương thân thể.&quot; },
-          { grade: &quot;C2&quot;, description: &quot;Công việc trong nhà với những ảnh hưởng khó chịu của môi trường như tiếng ồn, nhiệt độ và chất bẩn. Thường xuyên có khả năng xảy ra chấn thương thân thể như bị cắt, thâm tím.&quot; },
-          { grade: &quot;C3&quot;, description: &quot;Công việc trong nhà với những ảnh hưởng khó chịu của môi trường như tiếng ồn, nhiệt độ và chất bẩn. Liên tục có khả năng xảy ra chấn thương thân thể nghiêm trọng.&quot; },
-          { grade: &quot;D1&quot;, description: &quot;Phần lớn công việc thực hiện ngoài trời nhưng không yêu cầu phải duy trì công việc trong điều kiện thời tiết khắc nghiệt. Rất ít có khả năng có chấn thương thân thể.&quot; },
-          { grade: &quot;D2&quot;, description: &quot;Phần lớn công việc thực hiện ngoài trời nhưng không yêu cầu phải duy trì công việc trong điều kiện thời tiết khắc nghiệt. Thường xuyên có khả năng xảy ra chấn thương thân thể như bị cắt, thâm tím.&quot; },
-          { grade: &quot;D3&quot;, description: &quot;Phần lớn công việc thực hiện ngoài trời nhưng không yêu cầu phải duy trì công việc trong điều kiện thời tiết khắc nghiệt. Liên tục có khả năng xảy ra chấn thương thân thể nghiêm trọng.&quot; },
-          { grade: &quot;E1&quot;, description: &quot;Công việc hầu hết thực hiện ngoài trời. Liên tục chịu ảnh hưởng của nhiều loại hình khí hậu và những ảnh hưởng môi trường khó chịu. Rất ít có khả năng có chấn thương thân thể.&quot; },
-          { grade: &quot;E2&quot;, description: &quot;Công việc hầu hết thực hiện ngoài trời. Liên tục chịu ảnh hưởng của nhiều loại hình khí hậu và những ảnh hưởng môi trường khó chịu. Thường xuyên có khả năng xảy ra chấn thương thân thể như bị cắt, thâm tím.&quot; },
-          { grade: &quot;E3&quot;, description: &quot;Công việc hầu hết thực hiện ngoài trời. Liên tục chịu ảnh hưởng của nhiều loại hình khí hậu và những ảnh hưởng môi trường khó chịu. Liên tục có khả năng xảy ra chấn thương thân thể nghiêm trọng.&quot; },
-          { grade: &quot;NA&quot;, description: &quot;Không áp dụng.&quot; },
-      ]
-  },
-  {
-      name: &quot;Yêu cầu thể chất&quot;,
-      levels: [
-          { grade: &quot;A1&quot;, description: &quot;Công việc thường được thực hiện ở tư thế ngồi, đôi khi được đứng và đi lại tự do. Không yêu cầu hoặc có yêu cầu nâng hàng nhẹ.&quot; },
-          { grade: &quot;A2&quot;, description: &quot;Công việc thường được thực hiện ở tư thế ngồi, đôi khi được đứng và đi lại tự do. Nâng nhẹ và/hoặc thi thoảng nâng hàng ở mức vừa.&quot; },
-          { grade: &quot;A3&quot;, description: &quot;Công việc thường được thực hiện ở tư thế ngồi, đôi khi được đứng và đi lại tự do. Thường xuyên nâng hàng ở mức vừa và đôi khi nâng hàng nặng.&quot; },
-          { grade: &quot;A4&quot;, description: &quot;Công việc thường được thực hiện ở tư thế ngồi, đôi khi được đứng và đi lại tự do. Thường xuyên nâng hàng nặng.&quot; },
-          { grade: &quot;B1&quot;, description: &quot;Phần lớn công việc thực hiện ở tư thế đứng và/hoặc đi lại, đôi khi ở tư thế ngồi. Không yêu cầu hoặc có yêu cầu nâng hàng nhẹ.&quot; },
-          { grade: &quot;B2&quot;, description: &quot;Phần lớn công việc thực hiện ở tư thế đứng và/hoặc đi lại, đôi khi ở tư thế ngồi. Nâng nhẹ và/hoặc thi thoảng nâng hàng ở mức vừa.&quot; },
-          { grade: &quot;B3&quot;, description: &quot;Phần lớn công việc thực hiện ở tư thế đứng và/hoặc đi lại, đôi khi ở tư thế ngồi. Thường xuyên nâng hàng ở mức vừa và đôi khi nâng hàng nặng.&quot; },
-          { grade: &quot;B4&quot;, description: &quot;Phần lớn công việc thực hiện ở tư thế đứng và/hoặc đi lại, đôi khi ở tư thế ngồi. Thường xuyên nâng hàng nặng.&quot; },
-          { grade: &quot;C1&quot;, description: &quot;Công việc có những giai đoạn ngắn cần cúi gập, uốn người, quỳ hoặc trèo. Không yêu cầu hoặc có yêu cầu nâng hàng nhẹ.&quot; },
-          { grade: &quot;C2&quot;, description: &quot;Công việc có những giai đoạn ngắn cần cúi gập, uốn người, quỳ hoặc trèo. Nâng nhẹ và/hoặc thi thoảng nâng hàng ở mức vừa.&quot; },
-          { grade: &quot;C3&quot;, description: &quot;Công việc có những giai đoạn ngắn cần cúi gập, uốn người, quỳ hoặc trèo. Thường xuyên nâng hàng ở mức vừa và đôi khi nâng hàng nặng.&quot; },
-          { grade: &quot;C4&quot;, description: &quot;Công việc có những giai đoạn ngắn cần cúi gập, uốn người, quỳ hoặc trèo. Thường xuyên nâng hàng nặng.&quot; },
-          { grade: &quot;D1&quot;, description: &quot;Công việc thường xuyên phải cúi gập, uốn người, quỳ hoặc trèo. Không yêu cầu hoặc có yêu cầu nâng hàng nhẹ.&quot; },
-          { grade: &quot;D2&quot;, description: &quot;Công việc thường xuyên phải cúi gập, uốn người, quỳ hoặc trèo. Nâng nhẹ và/hoặc thi thoảng nâng hàng ở mức vừa.&quot; },
-          { grade: &quot;D3&quot;, description: &quot;Công việc thường xuyên phải cúi gập, uốn người, quỳ hoặc trèo. Thường xuyên nâng hàng ở mức vừa và đôi khi nâng hàng nặng.&quot; },
-          { grade: &quot;D4&quot;, description: &quot;Công việc thường xuyên phải cúi gập, uốn người, quỳ hoặc trèo. Thường xuyên nâng hàng nặng.&quot; },
-          { grade: &quot;NA&quot;, description: &quot;Không áp dụng.&quot; },
-      ]
-  }
-];</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/Footer.tsx</h2>
-            <pre><code>import React from 'react';
-
-const Footer: React.FC = () =&gt; {
-  return (
-    &lt;footer className=&quot;bg-[#111827] py-6 border-t border-gray-800&quot;&gt;
-      &lt;div className=&quot;container mx-auto text-center text-gray-400 px-4&quot;&gt;
-        &lt;p&gt;&amp;copy; {new Date().getFullYear()} JD Evaluation AI. All Rights Reserved.&lt;/p&gt;
-        &lt;p className=&quot;text-sm mt-1&quot;&gt;A tool for internal job evaluation based on the PwC methodology.&lt;/p&gt;
-      &lt;/div&gt;
-    &lt;/footer&gt;
-  );
-};
-
-export default Footer;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/JdInput.tsx</h2>
-            <pre><code>import React, { useState, useCallback, useRef } from 'react';
-import mammoth from 'mammoth';
-
-interface JdInputProps {
-  jobTitle: string;
-  setJobTitle: (title: string) =&gt; void;
-  setJdText: (text: string) =&gt; void;
-  onEvaluate: () =&gt; void;
-  isLoading: boolean;
-  error: string | null;
-  setError: (error: string | null) =&gt; void;
-}
-
-const formatBytes = (bytes: number, decimals = 2) =&gt; {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const dm = decimals &lt; 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
-const readFileContent = async (file: File): Promise&lt;string&gt; =&gt; {
-    return new Promise((resolve, reject) =&gt; {
-        const reader = new FileReader();
-        reader.onload = async (event) =&gt; {
-            try {
-                if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                    const arrayBuffer = event.target?.result;
-                    if (arrayBuffer instanceof ArrayBuffer) {
-                        const result = await mammoth.extractRawText({ arrayBuffer });
-                        resolve(result.value);
-                    } else {
-                        reject(new Error('Failed to read ArrayBuffer from .docx file.'));
-                    }
-                } else if (file.type === 'text/plain') {
-                    resolve(event.target?.result as string);
-                } else {
-                    reject(new Error(`Unsupported file type: ${file.name}. Please upload a .docx or .txt file.`));
-                }
-            } catch (error) {
-                const message = error instanceof Error ? error.message : &quot;Unknown error during file processing&quot;;
-                reject(new Error(`Error processing file: ${message}`));
-            }
-        };
-        reader.onerror = (error) =&gt; reject(error);
-
-        if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            reader.readAsArrayBuffer(file);
-        } else if (file.type === 'text/plain') {
-            reader.readAsText(file, 'UTF-8');
-        } else {
-             reject(new Error(`Unsupported file type: ${file.name}. Please upload a .docx or .txt file.`));
-        }
-    });
-};
-
-const JdInput: React.FC&lt;JdInputProps&gt; = ({ jobTitle, setJobTitle, setJdText, onEvaluate, isLoading, error, setError }) =&gt; {
-  const [file, setFile] = useState&lt;File | null&gt;(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isReadingFile, setIsReadingFile] = useState(false);
-  const fileInputRef = useRef&lt;HTMLInputElement&gt;(null);
-  const [jdText, setInternalJdText] = useState&lt;string&gt;('');
-
-  const handleFile = useCallback(async (selectedFile: File | null) =&gt; {
-    if (!selectedFile) return;
-
-    if (selectedFile.size &gt; 200 * 1024 * 1024) { // 200MB limit
-        setError(&quot;File is too large. Limit is 200MB.&quot;);
-        return;
-    }
-    
-    setIsReadingFile(true);
-    setError(null);
-    try {
-        const text = await readFileContent(selectedFile);
-        setJdText(text);
-        setInternalJdText(text);
-        setFile(selectedFile);
-        if (!jobTitle) {
-            setJobTitle(selectedFile.name.replace(/\.[^/.]+$/, &quot;&quot;));
-        }
-    } catch (e: any) {
-        setError(e.message);
-        setFile(null);
-        setJdText('');
-        setInternalJdText('');
-    } finally {
-        setIsReadingFile(false);
-    }
-  }, [setJdText, setJobTitle, jobTitle, setError]);
-  
-  const handleRemoveFile = () =&gt; {
-    setFile(null);
-    setJdText('');
-    setInternalJdText('');
-    if (fileInputRef.current) {
-        fileInputRef.current.value = &quot;&quot;;
-    }
-  }
-
-  const onDragEnter = (e: React.DragEvent&lt;HTMLDivElement&gt;) =&gt; {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-  const onDragLeave = (e: React.DragEvent&lt;HTMLDivElement&gt;) =&gt; {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-  const onDragOver = (e: React.DragEvent&lt;HTMLDivElement&gt;) =&gt; {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-  const onDrop = (e: React.DragEvent&lt;HTMLDivElement&gt;) =&gt; {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    if (e.dataTransfer.files &amp;&amp; e.dataTransfer.files.length &gt; 0) {
-      handleFile(e.dataTransfer.files[0]);
-      e.dataTransfer.clearData();
-    }
-  };
-  const onFileSelect = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
-    if (e.target.files &amp;&amp; e.target.files.length &gt; 0) {
-        handleFile(e.target.files[0]);
-    }
-  };
-  
-  const triggerFileSelect = () =&gt; fileInputRef.current?.click();
-
-  const isButtonDisabled = isLoading || isReadingFile || !jdText.trim() || !jobTitle.trim();
-
-  return (
-    &lt;div className=&quot;space-y-8&quot;&gt;
-      &lt;div className=&quot;text-center&quot;&gt;
-        &lt;h1 className=&quot;text-3xl font-extrabold text-gray-100 tracking-tight flex items-center justify-center&quot;&gt;
-            &lt;span role=&quot;img&quot; aria-label=&quot;clipboard&quot; className=&quot;text-4xl mr-3&quot;&gt;📋&lt;/span&gt;
-            Đánh giá mô tả công việc theo 12 yếu tố PwC
-        &lt;/h1&gt;
-        &lt;p className=&quot;text-gray-400 mt-2 max-w-2xl mx-auto&quot;&gt;
-            Hãy tải lên file mô tả công việc để được hệ thống đánh giá tự động.
-        &lt;/p&gt;
-      &lt;/div&gt;
-
-      &lt;div className=&quot;max-w-xl mx-auto space-y-6&quot;&gt;
-        &lt;div&gt;
-          &lt;label htmlFor=&quot;job-title&quot; className=&quot;flex items-center gap-2 text-md font-bold text-gray-300 mb-2&quot;&gt;
-            &lt;span className=&quot;text-blue-300 font-mono text-sm bg-blue-900/50 px-2 py-1 rounded&quot;&gt;abc&lt;/span&gt;
-            Nhập tên vị trí công việc
-          &lt;/label&gt;
-          &lt;input
-            type=&quot;text&quot;
-            id=&quot;job-title&quot;
-            value={jobTitle}
-            onChange={(e) =&gt; setJobTitle(e.target.value)}
-            placeholder=&quot;e.g., Deputy Sorting Centers Manager&quot;
-            className=&quot;w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 ease-in-out&quot;
-            disabled={isLoading || isReadingFile}
-          /&gt;
-        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;label className=&quot;flex items-center gap-2 text-md font-bold text-gray-300 mb-2&quot;&gt;
-                &lt;span className=&quot;text-emerald-300 font-mono text-sm bg-emerald-900/50 px-2 py-1 rounded&quot;&gt;docx&lt;/span&gt;
-                Tải lên JD (.docx, .txt)
-            &lt;/label&gt;
-            &lt;div
-                onDragEnter={onDragEnter}
-                onDragLeave={onDragLeave}
-                onDragOver={onDragOver}
-                onDrop={onDrop}
-                className={`relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-200 ${isDragging ? 'border-emerald-500 bg-gray-800/50' : 'border-gray-600 hover:border-gray-500'}`}
-                onClick={triggerFileSelect}
-            &gt;
-                &lt;input
-                    type=&quot;file&quot;
-                    ref={fileInputRef}
-                    onChange={onFileSelect}
-                    accept=&quot;.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt&quot;
-                    className=&quot;hidden&quot;
-                    disabled={isLoading || isReadingFile}
-                /&gt;
-                {isReadingFile ? (
-                    &lt;&gt;
-                    &lt;svg className=&quot;animate-spin h-8 w-8 text-emerald-500&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot;&gt;
-                        &lt;circle className=&quot;opacity-25&quot; cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;4&quot;&gt;&lt;/circle&gt;
-                        &lt;path className=&quot;opacity-75&quot; fill=&quot;currentColor&quot; d=&quot;M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z&quot;&gt;&lt;/path&gt;
-                    &lt;/svg&gt;
-                    &lt;p className=&quot;mt-2 text-gray-400&quot;&gt;Đang đọc file...&lt;/p&gt;
-                    &lt;/&gt;
-                ) : file ? (
-                    &lt;div className=&quot;text-center text-gray-300&quot;&gt;
-                        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;mx-auto h-12 w-12 text-emerald-400&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot;&gt;
-                            &lt;path strokeLinecap=&quot;round&quot; strokeLinejoin=&quot;round&quot; strokeWidth={2} d=&quot;M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z&quot; /&gt;
-                        &lt;/svg&gt;
-                        &lt;p className=&quot;mt-2 font-semibold&quot;&gt;{file.name}&lt;/p&gt;
-                        &lt;p className=&quot;text-sm text-gray-500&quot;&gt;{formatBytes(file.size)}&lt;/p&gt;
-                        &lt;button onClick={(e) =&gt; { e.stopPropagation(); handleRemoveFile(); }} className=&quot;mt-3 text-sm text-red-400 hover:text-red-300 font-semibold&quot;&gt;
-                            Remove File
-                        &lt;/button&gt;
-                    &lt;/div&gt;
-                ) : (
-                    &lt;div className=&quot;text-center text-gray-400&quot;&gt;
-                        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;mx-auto h-12 w-12&quot; stroke=&quot;currentColor&quot; fill=&quot;none&quot; viewBox=&quot;0 0 48 48&quot; aria-hidden=&quot;true&quot;&gt;
-                            &lt;path d=&quot;M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8&quot; strokeWidth={2} strokeLinecap=&quot;round&quot; strokeLinejoin=&quot;round&quot; /&gt;
-                        &lt;/svg&gt;
-                        &lt;p className=&quot;mt-2&quot;&gt;
-                            &lt;span className=&quot;font-semibold text-emerald-400&quot;&gt;Click to upload&lt;/span&gt; or drag and drop
-                        &lt;/p&gt;
-                        &lt;p className=&quot;text-xs mt-1&quot;&gt;DOCX or TXT (max 200MB)&lt;/p&gt;
-                    &lt;/div&gt;
-                )}
-            &lt;/div&gt;
-        &lt;/div&gt;
-
-        &lt;div className=&quot;flex justify-center&quot;&gt;
-            &lt;button
-              onClick={onEvaluate}
-              disabled={isButtonDisabled}
-              className=&quot;flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-emerald-600 text-white font-bold rounded-lg shadow-lg hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 transform hover:scale-105 disabled:scale-100 focus:outline-none focus:ring-4 focus:ring-emerald-500/50&quot;
-            &gt;
-              {isLoading ? (
-                &lt;&gt;
-                  &lt;svg className=&quot;animate-spin -ml-1 mr-3 h-5 w-5 text-white&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot;&gt;
-                    &lt;circle className=&quot;opacity-25&quot; cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;4&quot;&gt;&lt;/circle&gt;
-                    &lt;path className=&quot;opacity-75&quot; fill=&quot;currentColor&quot; d=&quot;M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z&quot;&gt;&lt;/path&gt;
-                  &lt;/svg&gt;
-                  Đang đánh giá...
-                &lt;/&gt;
-              ) : (
-                &lt;&gt;
-                    &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-6 w-6 mr-3&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot;&gt;
-                        &lt;path strokeLinecap=&quot;round&quot; strokeLinejoin=&quot;round&quot; strokeWidth={2} d=&quot;M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4&quot; /&gt;
-                    &lt;/svg&gt;
-                    Đánh giá JD
-                &lt;/&gt;
-              )}
-            &lt;/button&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  );
-};
-
-export default JdInput;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/EvaluationDisplay.tsx</h2>
-            <pre><code>import React from 'react';
-import { EvaluationResult, HistoryItem } from '../types';
-import Loader from './Loader';
-import EvaluationResultView from './EvaluationResultView';
-import HistoryView from './HistoryView';
-
-interface EvaluationDisplayProps {
-  isLoading: boolean;
-  error: string | null;
-  evaluationResult: EvaluationResult | null;
-  history: HistoryItem[];
-  activeTab: 'evaluation' | 'history';
-  setActiveTab: (tab: 'evaluation' | 'history') =&gt; void;
-}
-
-const TabButton: React.FC&lt;{ title: string, isActive: boolean, onClick: () =&gt; void, count: number }&gt; = ({ title, isActive, onClick, count }) =&gt; (
-    &lt;button
-        onClick={onClick}
-        className={`px-4 py-2 text-sm font-semibold rounded-lg flex items-center space-x-2 transition-colors duration-200 ${
-            isActive
-                ? 'bg-emerald-500 text-white'
-                : 'text-gray-300 hover:bg-gray-700'
-        }`}
-    &gt;
-        &lt;span&gt;{title}&lt;/span&gt;
-        &lt;span className={`px-2 py-0.5 rounded-full text-xs font-bold ${isActive ? 'bg-white text-emerald-600' : 'bg-gray-600 text-gray-200'}`}&gt;{count}&lt;/span&gt;
-    &lt;/button&gt;
-);
-
-
-const EvaluationDisplay: React.FC&lt;EvaluationDisplayProps&gt; = ({ isLoading, error, evaluationResult, history, activeTab, setActiveTab }) =&gt; {
-  if (isLoading) {
-    return &lt;Loader /&gt;;
-  }
-
-  if (error) {
-    return (
-      &lt;div className=&quot;flex flex-col items-center justify-center h-full text-center text-red-400 bg-red-900/50 p-6 rounded-lg&quot;&gt;
-        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-12 w-12 mb-4&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot;&gt;
-          &lt;path strokeLinecap=&quot;round&quot; strokeLinejoin=&quot;round&quot; strokeWidth={2} d=&quot;M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&quot; /&gt;
-        &lt;/svg&gt;
-        &lt;h3 className=&quot;text-lg font-bold&quot;&gt;Evaluation Failed&lt;/h3&gt;
-        &lt;p className=&quot;mt-1 text-sm&quot;&gt;{error}&lt;/p&gt;
-      &lt;/div&gt;
-    );
-  }
-
-  if (!evaluationResult) {
-    return (
-      &lt;div className=&quot;flex flex-col items-center justify-center h-full text-center text-gray-500&quot;&gt;
-        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-16 w-16 text-gray-600 mb-4&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot;&gt;
-            &lt;path strokeLinecap=&quot;round&quot; strokeLinejoin=&quot;round&quot; strokeWidth={1.5} d=&quot;M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z&quot; /&gt;
-        &lt;/svg&gt;
-        &lt;h3 className=&quot;text-lg font-semibold text-gray-300&quot;&gt;Awaiting Evaluation&lt;/h3&gt;
-        &lt;p className=&quot;mt-1 max-w-sm text-gray-400&quot;&gt;Your AI-powered job description analysis will appear here once you submit a JD for evaluation.&lt;/p&gt;
-      &lt;/div&gt;
-    );
-  }
-
-  return (
-    &lt;div className=&quot;flex flex-col h-full&quot;&gt;
-        &lt;div className=&quot;flex space-x-2 border-b border-gray-700 pb-3 mb-4&quot;&gt;
-            &lt;TabButton title=&quot;Current Evaluation&quot; isActive={activeTab === 'evaluation'} onClick={() =&gt; setActiveTab('evaluation')} count={1} /&gt;
-            &lt;TabButton title=&quot;History&quot; isActive={activeTab === 'history'} onClick={() =&gt; setActiveTab('history')} count={history.length} /&gt;
-        &lt;/div&gt;
-        &lt;div className=&quot;flex-grow overflow-y-auto pr-2 -mr-4&quot;&gt;
-            {activeTab === 'evaluation' &amp;&amp; &lt;EvaluationResultView result={evaluationResult} /&gt;}
-            {activeTab === 'history' &amp;&amp; &lt;HistoryView history={history} /&gt;}
-        &lt;/div&gt;
-    &lt;/div&gt;
-  );
-};
-
-export default EvaluationDisplay;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/Loader.tsx</h2>
-            <pre><code>import React from 'react';
-
-const Loader: React.FC = () =&gt; {
-  return (
-    &lt;div className=&quot;flex flex-col items-center justify-center h-full text-center&quot;&gt;
-      &lt;svg className=&quot;animate-spin h-12 w-12 text-emerald-500&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot;&gt;
-        &lt;circle className=&quot;opacity-25&quot; cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;4&quot;&gt;&lt;/circle&gt;
-        &lt;path className=&quot;opacity-75&quot; fill=&quot;currentColor&quot; d=&quot;M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z&quot;&gt;&lt;/path&gt;
-      &lt;/svg&gt;
-      &lt;h3 className=&quot;mt-4 text-lg font-semibold text-gray-300&quot;&gt;AI is Evaluating...&lt;/h3&gt;
-      &lt;p className=&quot;mt-1 text-gray-400&quot;&gt;This may take a few moments. Please wait.&lt;/p&gt;
-    &lt;/div&gt;
-  );
-};
-
-export default Loader;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/EvaluationResultView.tsx</h2>
-            <pre><code>import React from 'react';
-import { EvaluationResult } from '../types';
-
-const SummarySection: React.FC&lt;{ title: string; content: string; }&gt; = ({ title, content }) =&gt; (
-    &lt;div&gt;
-        &lt;h3 className=&quot;text-xl font-bold text-gray-200 mb-2&quot;&gt;{title}&lt;/h3&gt;
-        &lt;div className=&quot;p-4 bg-gray-800/50 rounded-lg border border-gray-700&quot;&gt;
-            &lt;p className=&quot;text-gray-300 whitespace-pre-wrap&quot;&gt;{content}&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-);
-
-
-const EvaluationResultView: React.FC&lt;{ result: EvaluationResult }&gt; = ({ result }) =&gt; {
-  return (
-    &lt;div className=&quot;space-y-8 text-gray-200&quot;&gt;
-        &lt;div&gt;
-            &lt;p className=&quot;text-lg font-bold text-gray-400&quot;&gt;Kết quả đánh giá theo 12 yếu tố PwC&lt;/p&gt;
-            &lt;h2 className=&quot;text-3xl font-extrabold text-emerald-400 tracking-tight&quot;&gt;
-                {result.jobTitle}
-            &lt;/h2&gt;
-            &lt;p className=&quot;mt-2 text-gray-400&quot;&gt;
-                Dựa trên thông tin bạn cung cấp, tôi đã đánh giá JD theo phương pháp PwC đã được chuẩn hóa. Do JD bạn cung cấp hiện tại quá sơ sài (chỉ có tiêu đề và các mục lớn), tôi sẽ đưa ra đánh giá dựa trên giả định về một số yếu tố thông thường của một JD tiêu chuẩn. Xin lưu ý rằng đánh giá này có thể cần được điều chỉnh khi có thêm thông tin chi tiết.
-            &lt;/p&gt;
-        &lt;/div&gt;
-      
-      {/* Factors Table */}
-      &lt;div&gt;
-        &lt;h3 className=&quot;text-xl font-bold text-gray-200 mb-3&quot;&gt;Bảng đánh giá JD&lt;/h3&gt;
-        &lt;div className=&quot;overflow-x-auto rounded-lg border border-gray-700 bg-[#1f2937]&quot;&gt;
-          &lt;table className=&quot;min-w-full divide-y divide-gray-700&quot;&gt;
-            &lt;thead className=&quot;bg-gray-800/50&quot;&gt;
-              &lt;tr&gt;
-                &lt;th scope=&quot;col&quot; className=&quot;px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider w-2/6&quot;&gt;Yếu tố&lt;/th&gt;
-                &lt;th scope=&quot;col&quot; className=&quot;px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider w-3/6&quot;&gt;Lý do&lt;/th&gt;
-                 &lt;th scope=&quot;col&quot; className=&quot;px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider&quot;&gt;Dẫn chứng từ JD&lt;/th&gt;
-                &lt;th scope=&quot;col&quot; className=&quot;px-2 py-3 text-center text-xs font-bold text-gray-400 uppercase tracking-wider w-1/6&quot;&gt;Mức xếp loại&lt;/th&gt;
-              &lt;/tr&gt;
-            &lt;/thead&gt;
-            &lt;tbody className=&quot;divide-y divide-gray-700&quot;&gt;
-              {result.evaluations.map((item, index) =&gt; (
-                &lt;tr key={index} className=&quot;hover:bg-gray-800/50&quot;&gt;
-                  &lt;td className=&quot;px-4 py-4 whitespace-normal text-sm font-semibold text-gray-200 align-top&quot;&gt;{index + 1}. {item.factor}&lt;/td&gt;
-                  &lt;td className=&quot;px-4 py-4 text-sm text-gray-300 align-top whitespace-normal&quot;&gt;{item.reason}&lt;/td&gt;
-                  &lt;td className=&quot;px-4 py-4 text-sm text-gray-400 align-top whitespace-normal italic&quot;&gt;&quot;{item.evidence}&quot;&lt;/td&gt;
-                  &lt;td className=&quot;px-2 py-4 whitespace-nowrap text-center align-top&quot;&gt;
-                    &lt;span className=&quot;px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-emerald-900 text-emerald-300&quot;&gt;
-                      {item.grade}
-                    &lt;/span&gt;
-                  &lt;/td&gt;
-                &lt;/tr&gt;
-              ))}
-            &lt;/tbody&gt;
-          &lt;/table&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      
-      &lt;SummarySection title=&quot;Danh sách các JD có phạm vi tương đồng&quot; content={result.similarJobsComparison} /&gt;
-      &lt;SummarySection title=&quot;Nhận xét tổng quan&quot; content={result.overallSummary} /&gt;
-
-    &lt;/div&gt;
-  );
-};
-
-export default EvaluationResultView;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/HistoryView.tsx</h2>
-            <pre><code>import React, { useState } from 'react';
-import { HistoryItem } from '../types';
-import EvaluationResultView from './EvaluationResultView';
-
-const AccordionItem: React.FC&lt;{ item: HistoryItem }&gt; = ({ item }) =&gt; {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-        &lt;div className=&quot;border border-gray-700 rounded-lg bg-[#1f2937]&quot;&gt;
-            &lt;h2&gt;
-                &lt;button
-                    type=&quot;button&quot;
-                    className={`flex items-center justify-between w-full p-4 font-medium text-left text-gray-200 hover:bg-gray-800/50 transition-colors ${isOpen ? 'bg-gray-800/50' : ''}`}
-                    onClick={() =&gt; setIsOpen(!isOpen)}
-                &gt;
-                    &lt;span className=&quot;font-bold&quot;&gt;{item.result.jobTitle}&lt;/span&gt;
-                    &lt;svg
-                        className={`w-6 h-6 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                        fill=&quot;currentColor&quot;
-                        viewBox=&quot;0 0 20 20&quot;
-                        xmlns=&quot;http://www.w3.org/2000/svg&quot;
-                    &gt;
-                        &lt;path
-                            fillRule=&quot;evenodd&quot;
-                            d=&quot;M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z&quot;
-                            clipRule=&quot;evenodd&quot;
-                        &gt;&lt;/path&gt;
-                    &lt;/svg&gt;
-                &lt;/button&gt;
-            &lt;/h2&gt;
-            {isOpen &amp;&amp; (
-                &lt;div className=&quot;p-4 border-t border-gray-700&quot;&gt;
-                    &lt;EvaluationResultView result={item.result} /&gt;
-                &lt;/div&gt;
-            )}
-        &lt;/div&gt;
-    )
-}
-
-const HistoryView: React.FC&lt;{ history: HistoryItem[] }&gt; = ({ history }) =&gt; {
-    if (history.length === 0) {
-        return &lt;p className=&quot;text-center text-gray-400&quot;&gt;No evaluations have been performed yet.&lt;/p&gt;
-    }
-    
-    // Display in reverse chronological order
-    const reversedHistory = [...history].reverse();
-
-    return (
-        &lt;div className=&quot;space-y-2&quot;&gt;
-            {reversedHistory.map((item, index) =&gt; (
-                &lt;AccordionItem key={index} item={item} /&gt;
-            ))}
-        &lt;/div&gt;
-    );
-};
-
-export default HistoryView;</code></pre>
-        </div>
-
-        <div class="file-container">
-            <h2>components/SGradeLookup.tsx</h2>
-            <pre><code>import React, { useState, useMemo, useRef, useEffect } from 'react';
-import * as XLSX from 'xlsx';
-import { SGradeJob } from '../types';
-
-const useClickOutside = (ref: React.RefObject&lt;HTMLElement&gt;, handler: () =&gt; void) =&gt; {
-    useEffect(() =&gt; {
-        const listener = (event: MouseEvent | TouchEvent) =&gt; {
-            if (!ref.current || ref.current.contains(event.target as Node)) {
-                return;
-            }
-            handler();
-        };
-        document.addEventListener('mousedown', listener);
-        document.addEventListener('touchstart', listener);
-        return () =&gt; {
-            document.removeEventListener('mousedown', listener);
-            document.removeEventListener('touchstart', listener);
-        };
-    }, [ref, handler]);
-};
-
-interface SGradeLookupProps {
-    jobs: SGradeJob[];
-    setJobs: (jobs: SGradeJob[]) =&gt; void;
-}
-
-const SGradeLookup: React.FC&lt;SGradeLookupProps&gt; = ({ jobs, setJobs }) =&gt; {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedRank, setSelectedRank] = useState('all');
-    const [isFilterVisible, setIsFilterVisible] = useState(false);
-    const [importError, setImportError] = useState&lt;string | null&gt;(null);
-    const [importSuccess, setImportSuccess] = useState&lt;string | null&gt;(null);
-
-
-    const filterRef = useRef&lt;HTMLDivElement&gt;(null);
-    const fileInputRef = useRef&lt;HTMLInputElement&gt;(null);
-    
-    useClickOutside(filterRef, () =&gt; {
-        if (isFilterVisible) {
-            setIsFilterVisible(false);
-        }
-    });
-
-    const ranks = useMemo(() =&gt; {
-        const uniqueRanks = Array.from(new Set(jobs.map(job =&gt; job.rank)));
-        uniqueRanks.sort((a, b) =&gt; {
-            const numA = parseInt(a.replace('S', ''), 10);
-            const numB = parseInt(b.replace('S', ''), 10);
-            if (isNaN(numA) || isNaN(numB)) {
-                return a.localeCompare(b); // Fallback for non-S ranks
-            }
-            return numA - numB;
-        });
-        return ['all', ...uniqueRanks];
-    }, [jobs]);
-    
-    const filteredData = useMemo(() =&gt; {
-        return jobs.filter(job =&gt; {
-            const term = searchTerm.toLowerCase();
-            const rankMatch = selectedRank === 'all' || job.rank === selectedRank;
-            const termMatch = job.positionName.toLowerCase().includes(term) || job.vietnameseName.toLowerCase().includes(term);
-            return rankMatch &amp;&amp; termMatch;
-        });
-    }, [searchTerm, selectedRank, jobs]);
-    
-    const handleDownloadTemplate = () =&gt; {
-        const header = [&quot;positionName&quot;, &quot;vietnameseName&quot;, &quot;positionType&quot;, &quot;rank&quot;];
-        const exampleRow = [&quot;Sample Position&quot;, &quot;Vị Trí Mẫu&quot;, &quot;Indirect&quot;, &quot;S7&quot;];
-        const ws = XLSX.utils.aoa_to_sheet([header, exampleRow]);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, &quot;Template&quot;);
-        XLSX.writeFile(wb, &quot;s_grade_template.xlsx&quot;);
-    };
-
-    const triggerFileImport = () =&gt; {
-        fileInputRef.current?.click();
-    };
-
-    const handleFileChange = (event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
-        setImportError(null);
-        setImportSuccess(null);
-        const file = event.target.files?.[0];
-        if (!file) return;
-
-        if (!file.name.endsWith('.xlsx')) {
-            setImportError('Vui lòng tải lên file có định dạng .xlsx.');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) =&gt; {
-            const data = e.target?.result;
-            if (!data) {
-                setImportError('File rỗng hoặc không thể đọc được nội dung.');
-                return;
-            }
-            try {
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const newJobsData: any[] = XLSX.utils.sheet_to_json(worksheet);
-
-                if (newJobsData.length === 0) {
-                    setImportError('File không có dữ liệu (ngoài dòng header).');
-                    return;
-                }
-                
-                const headers = Object.keys(newJobsData[0]);
-                const expectedHeaders = ['positionName', 'vietnameseName', 'positionType', 'rank'];
-
-                if (!expectedHeaders.every(h =&gt; headers.includes(h))) {
-                     setImportError(`Cấu trúc file không hợp lệ. Header phải chứa các cột: ${expectedHeaders.join(', ')}`);
-                     return;
-                }
-                
-                const importedJobs: Omit&lt;SGradeJob, 'id'&gt;[] = newJobsData.map((row) =&gt; ({
-                    positionName: String(row.positionName || '').trim(),
-                    vietnameseName: String(row.vietnameseName || '').trim(),
-                    positionType: String(row.positionType || '').trim(),
-                    rank: String(row.rank || '').trim(),
-                })).filter(job =&gt; job.positionName &amp;&amp; job.rank);
-
-                if (importedJobs.length === 0) {
-                    setImportError('Không tìm thấy dữ liệu hợp lệ nào trong file.');
-                    return;
-                }
-
-                if (jobs.length === 0) {
-                    // First import, set as master data
-                    const jobsWithIds = importedJobs.map((job, index) =&gt; ({...job, id: index + 1 }));
-                    setJobs(jobsWithIds);
-                    setImportSuccess(`Đã nhập thành công ${jobsWithIds.length} vị trí làm dữ liệu gốc.`);
-                } else {
-                    // Subsequent imports, append new data
-                    const existingPositionNames = new Set(jobs.map(j =&gt; j.positionName.toLowerCase()));
-                    let addedCount = 0;
-                    let duplicateCount = 0;
-
-                    const newJobsToAdd = importedJobs.filter(newJob =&gt; {
-                        if (existingPositionNames.has(newJob.positionName.toLowerCase())) {
-                            duplicateCount++;
-                            return false;
-                        }
-                        return true;
-                    });
-                    
-                    if(newJobsToAdd.length &gt; 0) {
-                        const maxId = Math.max(0, ...jobs.map(j =&gt; j.id));
-                        const jobsWithIds = newJobsToAdd.map((job, index) =&gt; ({...job, id: maxId + index + 1 }));
-                        setJobs([...jobs, ...jobsWithIds]);
-                        addedCount = jobsWithIds.length;
-                    }
-
-                    let successMessage = `Hoàn tất: Đã thêm ${addedCount} vị trí mới.`;
-                    if (duplicateCount &gt; 0) {
-                        successMessage += ` Bỏ qua ${duplicateCount} vị trí do trùng lặp.`;
-                    }
-                     if (addedCount === 0 &amp;&amp; duplicateCount &gt; 0) {
-                        successMessage = `Hoàn tất: Không có vị trí mới nào được thêm. Bỏ qua ${duplicateCount} vị trí do trùng lặp.`;
-                    }
-                     if (addedCount === 0 &amp;&amp; duplicateCount === 0) {
-                        successMessage = &quot;Tệp không chứa vị trí mới nào để thêm.&quot;
-                    }
-                    setImportSuccess(successMessage);
-                }
-
-            } catch (error) {
-                console.error(&quot;Error parsing XLSX:&quot;, error);
-                setImportError('Đã xảy ra lỗi khi xử lý file. Vui lòng kiểm tra lại định dạng và nội dung file XLSX.');
-            } finally {
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = &quot;&quot;;
-                }
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    };
-
-
-    return (
-        &lt;div className=&quot;bg-[#1f2937] p-6 rounded-2xl shadow-lg border border-gray-700 w-full&quot;&gt;
-            &lt;div className=&quot;flex flex-wrap gap-4 justify-between items-center mb-6&quot;&gt;
-                &lt;h2 className=&quot;text-2xl font-bold text-gray-100&quot;&gt;Tra cứu S-Grade&lt;/h2&gt;
-                &lt;div className=&quot;flex items-center space-x-2&quot;&gt;
-                    &lt;button
-                        onClick={handleDownloadTemplate}
-                        className=&quot;flex items-center space-x-2 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white hover:bg-gray-700 transition text-sm&quot;
-                        title=&quot;Tải file mẫu định dạng XLSX&quot;
-                    &gt;
-                        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-5 w-5&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;currentColor&quot;&gt;&lt;path fillRule=&quot;evenodd&quot; d=&quot;M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.172-5.172a1 1 0 011.414 0L10 14.172l2.414-2.414a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z&quot; clipRule=&quot;evenodd&quot; /&gt;&lt;path fillRule=&quot;evenodd&quot; d=&quot;M10 2a1 1 0 011 1v10a1 1 0 11-2 0V3a1 1 0 011-1z&quot; clipRule=&quot;evenodd&quot; /&gt;&lt;/svg&gt;
-                        &lt;span&gt;Tải file mẫu&lt;/span&gt;
-                    &lt;/button&gt;
-                    &lt;button
-                        onClick={triggerFileImport}
-                        className=&quot;flex items-center space-x-2 px-3 py-2 bg-emerald-600 border border-emerald-500 rounded-lg text-white hover:bg-emerald-700 transition text-sm&quot;
-                        title=&quot;Nhập dữ liệu S-Grade từ file XLSX&quot;
-                    &gt;
-                         &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-5 w-5&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;currentColor&quot;&gt;&lt;path fillRule=&quot;evenodd&quot; d=&quot;M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z&quot; clipRule=&quot;evenodd&quot; /&gt;&lt;/svg&gt;
-                        &lt;span&gt;{jobs.length &gt; 0 ? 'Nhập thêm' : 'Nhập S-Grade'}&lt;/span&gt;
-                    &lt;/button&gt;
-                    &lt;input type=&quot;file&quot; ref={fileInputRef} onChange={handleFileChange} accept=&quot;.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot; className=&quot;hidden&quot; /&gt;
-                    &lt;div className=&quot;relative&quot; ref={filterRef}&gt;
-                        &lt;button
-                            onClick={() =&gt; setIsFilterVisible(!isFilterVisible)}
-                            className=&quot;flex items-center space-x-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white hover:bg-gray-700 transition&quot;
-                            aria-haspopup=&quot;true&quot;
-                            aria-expanded={isFilterVisible}
-                        &gt;
-                            &lt;span&gt;Lọc hiển thị&lt;/span&gt;
-                            &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-5 w-5&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;currentColor&quot;&gt;
-                                &lt;path fillRule=&quot;evenodd&quot; d=&quot;M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z&quot; clipRule=&quot;evenodd&quot; /&gt;
-                            &lt;/svg&gt;
-                        &lt;/button&gt;
-                        {isFilterVisible &amp;&amp; (
-                            &lt;div className=&quot;absolute top-full right-0 mt-2 w-72 bg-[#2d3748] border border-gray-600 rounded-lg shadow-xl p-4 z-10&quot;&gt;
-                                &lt;div className=&quot;space-y-4&quot;&gt;
-                                    &lt;div&gt;
-                                        &lt;label htmlFor=&quot;search-term&quot; className=&quot;block text-sm font-medium text-gray-300 mb-1&quot;&gt;Mã/Tên vị trí&lt;/label&gt;
-                                        &lt;input
-                                            type=&quot;text&quot;
-                                            id=&quot;search-term&quot;
-                                            value={searchTerm}
-                                            onChange={(e) =&gt; setSearchTerm(e.target.value)}
-                                            placeholder=&quot;Nhập mã/tên vị trí...&quot;
-                                            className=&quot;w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500&quot;
-                                        /&gt;
-                                    &lt;/div&gt;
-                                    &lt;div&gt;
-                                        &lt;label htmlFor=&quot;rank-filter&quot; className=&quot;block text-sm font-medium text-gray-300 mb-1&quot;&gt;Cấp bậc&lt;/label&gt;
-                                        &lt;select
-                                            id=&quot;rank-filter&quot;
-                                            value={selectedRank}
-                                            onChange={(e) =&gt; setSelectedRank(e.target.value)}
-                                            className=&quot;w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500&quot;
-                                        &gt;
-                                            {ranks.map(rank =&gt; (
-                                                &lt;option key={rank} value={rank}&gt;{rank === 'all' ? 'Tất cả' : rank}&lt;/option&gt;
-                                            ))}
-                                        &lt;/select&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        )}
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            
-            {importSuccess &amp;&amp; (
-                 &lt;div className=&quot;bg-green-900/50 text-green-300 border border-green-700 p-3 rounded-md mb-4 text-sm&quot; role=&quot;alert&quot;&gt;
-                    {importSuccess}
-                &lt;/div&gt;
-            )}
-            {importError &amp;&amp; (
-                &lt;div className=&quot;bg-red-900/50 text-red-300 border border-red-700 p-3 rounded-md mb-4 text-sm&quot; role=&quot;alert&quot;&gt;
-                    &lt;strong&gt;Lỗi:&lt;/strong&gt; {importError}
-                &lt;/div&gt;
-            )}
-
-            &lt;div className=&quot;overflow-x-auto rounded-lg border border-gray-700&quot;&gt;
-                &lt;table className=&quot;min-w-full divide-y divide-gray-700&quot;&gt;
-                    &lt;thead className=&quot;bg-gray-800/50&quot;&gt;
-                        &lt;tr&gt;
-                            &lt;th scope=&quot;col&quot; className=&quot;px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider&quot;&gt;Tên vị trí&lt;/th&gt;
-                            &lt;th scope=&quot;col&quot; className=&quot;px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider&quot;&gt;Tên Tiếng Việt&lt;/th&gt;
-                            &lt;th scope=&quot;col&quot; className=&quot;px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider&quot;&gt;Loại vị trí&lt;/th&gt;
-                            &lt;th scope=&quot;col&quot; className=&quot;px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider&quot;&gt;Cấp bậc&lt;/th&gt;
-                        &lt;/tr&gt;
-                    &lt;/thead&gt;
-                    &lt;tbody className=&quot;bg-[#1f2937] divide-y divide-gray-700&quot;&gt;
-                        {jobs.length === 0 ? (
-                            &lt;tr&gt;
-                                &lt;td colSpan={4} className=&quot;text-center py-12 text-gray-500&quot;&gt;
-                                    &lt;div className=&quot;flex flex-col items-center justify-center&quot;&gt;
-                                        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-16 w-16 text-gray-600 mb-4&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; strokeWidth={1.5}&gt;
-                                            &lt;path strokeLinecap=&quot;round&quot; strokeLinejoin=&quot;round&quot; d=&quot;M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z&quot; /&gt;
-                                        &lt;/svg&gt;
-                                        &lt;h3 className=&quot;text-xl font-semibold text-gray-300&quot;&gt;Chưa có dữ liệu S-Grade&lt;/h3&gt;
-                                        &lt;p className=&quot;mt-2 text-base text-gray-400&quot;&gt;
-                                            Vui lòng sử dụng nút &lt;strong className=&quot;font-semibold text-emerald-400&quot;&gt;&quot;Nhập S-Grade&quot;&lt;/strong&gt; để tải lên dữ liệu.
-                                        &lt;/p&gt;
-                                    &lt;/div&gt;
-                                &lt;/td&gt;
-                            &lt;/tr&gt;
-                        ) : filteredData.length &gt; 0 ? filteredData.map(job =&gt; (
-                            &lt;tr key={job.id} className=&quot;hover:bg-gray-800/50&quot;&gt;
-                                &lt;td className=&quot;px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-400&quot;&gt;
-                                    &lt;div className=&quot;flex items-center&quot;&gt;
-                                         &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; className=&quot;h-5 w-5 mr-2 text-gray-500&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;currentColor&quot;&gt;
-                                            &lt;path d=&quot;M9 2a2 2 0 00-2 2v8a2 2 0 002 2h2a2 2 0 002-2V4a2 2 0 00-2-2H9z&quot; /&gt;
-                                            &lt;path d=&quot;M4 12a2 2 0 012-2h10a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z&quot; /&gt;
-                                        &lt;/svg&gt;
-                                        {job.positionName}
-                                    &lt;/div&gt;
-                                &lt;/td&gt;
-                                &lt;td className=&quot;px-6 py-4 whitespace-nowrap text-sm text-gray-300&quot;&gt;{job.vietnameseName}&lt;/td&gt;
-                                &lt;td className=&quot;px-6 py-4 whitespace-nowrap text-sm text-gray-300&quot;&gt;{job.positionType}&lt;/td&gt;
-                                &lt;td className=&quot;px-6 py-4 whitespace-nowrap text-sm text-gray-300&quot;&gt;{job.rank}&lt;/td&gt;
-                            &lt;/tr&gt;
-                        )) : (
-                            &lt;tr&gt;
-                                &lt;td colSpan={4} className=&quot;text-center py-8 text-gray-500&quot;&gt;
-                                    Không tìm thấy vị trí nào phù hợp với bộ lọc hiện tại.
-                                &lt;/td&gt;
-                            &lt;/tr&gt;
-                        )}
-                    &lt;/tbody&gt;
-                &lt;/table&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    );
-};
-
-export default SGradeLookup;</code></pre>
-        </div>
-
     </div>
-</body>
+    <script type="module" src="/script.js"></script>
+  </body>
 </html>
