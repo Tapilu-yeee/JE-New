@@ -1,182 +1,227 @@
-/* =======================
-   JD Evaluation AI (GitHub Pages)
-   Cấu hình API Gemini: CHỈ SỬA 1 DÒNG DƯỚI ĐÂY
-   ======================= */
-// === CẤU HÌNH API GEMINI Ở ĐÂY (thay YOUR_API_LINK_HERE bằng link bạn lấy ở Google AI Studio) ===
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD9fDIYcMI_juMCXsoz8StSTOSvPUPid1w";
+/* =========================================
+   JD Evaluation - Frontend (GitHub Pages)
+   Notes:
+   - Không hiện ô nhập API nữa. Điền link API cố định bên dưới.
+   - Tùy bạn thay YOUR_API_LINK_HERE bằng link Gemini lấy ở Google AI Studio.
+   ========================================= */
+// === CẤU HÌNH API GEMINI Ở ĐÂY ===
+const GEMINI_API_URL =
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD9fDIYcMI_juMCXsoz8StSTOSvPUPid1w";
 
-// ------------------------------------------------------------------
-const $ = (s)=>document.querySelector(s); const $$=(s)=>document.querySelectorAll(s);
-$("#y").textContent = new Date().getFullYear();
+// 12 yếu tố theo phương pháp PwC
+const FACTORS = [
+  "Trình độ học vấn",
+  "Kinh nghiệm",
+  "Mức độ phức tạp của công việc",
+  "Phạm vi công việc",
+  "Mức độ giải quyết vấn đề",
+  "Mức độ cần được chỉ dẫn/giám sát",
+  "Mức độ liên lạc khi thực hiện công việc",
+  "Trách nhiệm giám sát & quản lý",
+  "Ảnh hưởng của các quyết định",
+  "Quyền hạn",
+  "Môi trường làm việc",
+  "Yêu cầu thể chất"
+];
 
-// Tabs
-$$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
-  $$(".tab").forEach(b=>b.classList.remove("active"));
-  $$(".tab-panel").forEach(p=>p.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById(btn.dataset.tab).classList.add("active");
-}));
+// System hướng dẫn theo PwC + yêu cầu xuất JSON chuẩn
+const SYSTEM_PROMPT = `Bạn là chuyên gia đánh giá giá trị công việc theo phương pháp PwC nội bộ.
+Luôn chấm đủ 12 yếu tố sau: ${FACTORS.join(", ")}.
+Trả lại kết quả DUY NHẤT dưới dạng JSON theo schema:
+{
+  "factors": [
+    { "name": "<tên yếu tố>", "grade": "<mức A/B/C...>", "reason": "<lý do>", "evidence": "<trích dẫn từ JD>" }
+  ]
+}
+- Không trả lời văn bản ngoài JSON.
+- Nếu JD không đủ dữ kiện, vẫn cố gắng chọn mức gần nhất và nêu rõ giả định trong reason.
+`;
 
-// Dropzone
-const dz=$("#dropzone"); const fileInput=$("#jdFile");
-["dragenter","dragover"].forEach(evt=>dz.addEventListener(evt,e=>{e.preventDefault();e.stopPropagation();dz.classList.add("drag")}));
-["dragleave","drop"].forEach(evt=>dz.addEventListener(evt,e=>{e.preventDefault();e.stopPropagation();dz.classList.remove("drag")}));
-dz.addEventListener("click",()=>fileInput.click());
-dz.addEventListener("keydown",(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();fileInput.click();}});
+// ===== UI: Tabs =====
+const tabs = document.querySelectorAll(".tab");
+const panels = {
+  jd: document.getElementById("tab-jd"),
+  sgrade: document.getElementById("tab-sgrade")
+};
+const underline = document.querySelector(".tab-underline");
+function activateTab(which) {
+  tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === which));
+  panels.jd.classList.toggle("show", which === "jd");
+  panels.sgrade.classList.toggle("show", which === "sgrade");
+  // underline
+  const active = document.querySelector('.tab.active');
+  if (active) {
+    const rect = active.getBoundingClientRect();
+    const parentRect = active.parentElement.getBoundingClientRect();
+    underline.style.width = rect.width + "px";
+    underline.style.transform = `translateX(${rect.left - parentRect.left}px)`;
+  }
+}
+tabs.forEach((btn) => btn.addEventListener("click", () => activateTab(btn.dataset.tab)));
+window.addEventListener("load", () => activateTab("jd"));
 
-// Đọc file JD
-let jdText="";
-fileInput.addEventListener("change", async (e)=>{
-  const f=e.target.files?.[0]; if(!f) return;
-  $("#fileInfo").textContent="Đang đọc file...";
-  try{
-    if (f.type==="application/vnd.openxmlformats-officedocument.wordprocessingml.document" || f.name.endsWith(".docx")){
-      const buf=await f.arrayBuffer(); const result=await window.mammoth.extractRawText({arrayBuffer:buf}); jdText=result.value||"";
-    }else if (f.type==="text/plain" || f.name.endsWith(".txt")){
-      jdText=await f.text();
-    }else{ throw new Error("File không hỗ trợ. Hãy dùng .docx hoặc .txt"); }
-    $("#fileInfo").textContent=`Đã tải: ${f.name} (${(f.size/1024).toFixed(1)} KB)`;
-  }catch(err){ $("#fileInfo").textContent="Lỗi: "+err.message; jdText=""; }
+// ===== Dropzone =====
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("fileInput");
+dropzone.addEventListener("click", () => fileInput.click());
+dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("drag"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("drag");
+  if (e.dataTransfer.files?.length) fileInput.files = e.dataTransfer.files;
 });
 
-// Gọi Gemini
+// ===== JD Evaluation =====
+const evaluateBtn = document.getElementById("evaluateBtn");
+const resultSection = document.getElementById("resultSection");
+const resultBody = document.getElementById("resultBody");
+
+evaluateBtn.addEventListener("click", async () => {
+  const jobTitle = document.getElementById("jobTitle").value.trim();
+  const file = fileInput.files?.[0];
+  if (!file) { alert("Vui lòng chọn JD (.docx hoặc .txt)"); return; }
+
+  const jdText = await readFileText(file);
+  const prompt = buildPrompt(jdText, jobTitle);
+  showLoading(true);
+
+  try {
+    const data = await callGemini(prompt);
+    const parsed = safeJson(data);
+    renderResult(parsed?.factors || []);
+  } catch (err) {
+    console.error(err);
+    alert("Không thể gọi Gemini. Kiểm tra GEMINI_API_URL hoặc quota.");
+  } finally {
+    showLoading(false);
+  }
+});
+
+function showLoading(on){
+  evaluateBtn.disabled = !!on;
+  evaluateBtn.textContent = on ? "Đang đánh giá..." : "Đánh giá JD";
+}
+
+function buildPrompt(jdText, jobTitle){
+  return [
+`[HƯỚNG DẪN HỆ THỐNG]`,
+SYSTEM_PROMPT,
+`[NHIỆM VỤ] Đánh giá JD theo 12 yếu tố PwC đã chuẩn hóa. Yêu cầu:
+- Phải có đủ 12 đối tượng trong mảng "factors" theo đúng thứ tự FACTORS đã nêu.
+- "grade" dùng thang A/B/C/D... (có thể có số nếu cần theo hệ thống nội bộ).
+- "reason" súc tích, dùng ngôn ngữ Việt, 1-3 câu, bám theo phương pháp PwC.
+- "evidence" là trích dẫn ngắn gọn những câu chữ quan trọng từ JD.
+`,
+`[THÔNG TIN] Vị trí: ${jobTitle || "(chưa cung cấp)"}\n[JD]\n${jdText}`
+  ].join("\n\n");
+}
+
 async function callGemini(prompt){
-  const body={contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.2}};
-  const res=await fetch(GEMINI_API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!res.ok){ const t=await res.text(); throw new Error("Gemini API error: "+res.status+" "+t); }
-  const data=await res.json();
-  const text=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||"";
+  const body = {
+    contents: [
+      { role:"user", parts:[{ text: prompt }] }
+    ],
+    generationConfig: {
+      temperature: 0.3,
+      responseMimeType: "application/json"
+    }
+  };
+  const res = await fetch(GEMINI_API_URL, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error(await res.text());
+  const json = await res.json();
+  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || "";
   return text;
 }
 
-function buildPrompt(title, jd){
-  return `Bạn là chuyên gia đánh giá công việc PwC. Hãy phân tích JD sau và trả về JSON với dạng:
-{
-  "jobTitle": "...",
-  "evaluations": [
-    {"factor": "Trình độ học vấn", "grade":"A", "reason":"...", "evidence":"..."}
-  ],
-  "similarJobsComparison":"...",
-  "overallSummary":"..."
+function safeJson(raw){
+  try { return JSON.parse(raw); } catch(_){}
+  // fallback: try to extract JSON in code block
+  const m = raw.match(/\{[\s\S]*\}/);
+  if(m) { try { return JSON.parse(m[0]); } catch(_){} }
+  return null;
 }
-Chỉ in JSON thuần, không giải thích.
-Tiêu đề: ${title}
-JD:
-${jd}`;
-}
-function sanitizeJsonText(t){ return t.replace(/^```json\s*|^```\s*|```\s*$/gmi,"").trim(); }
-function renderResult(obj){
-  $("#panelResult").classList.remove("hidden");
-  $("#resultHeader").innerHTML = `<p class="muted">Kết quả đánh giá theo 12 yếu tố PwC</p><h2>${obj.jobTitle || $("#jobTitle").value || "Job Title"}</h2>`;
-  const rows=(obj.evaluations||[]).map((it,i)=>`
+
+function renderResult(items){
+  // Bảo đảm 12 yếu tố đủ thứ tự; nếu thiếu, bổ sung placeholder
+  const map = new Map(items.map(x => [x.name, x]));
+  const rows = FACTORS.map(name => {
+    const it = map.get(name) || { name, grade: "—", reason: "—", evidence: "—" };
+    return it;
+  });
+
+  resultBody.innerHTML = rows.map(r => `
     <tr>
-      <td>${i+1}. ${it.factor||""}</td>
-      <td>${it.reason||""}</td>
-      <td><span class="muted">"${it.evidence||""}"</span></td>
-      <td class="center"><span class="badge-pill">${it.grade||""}</span></td>
-    </tr>`).join("");
-  const table=`<div class="section-title">Bảng đánh giá JD</div>
-    <div class="table-wrap"><table class="table"><thead><tr><th>Yếu tố</th><th>Lý do</th><th>Dẫn chứng</th><th>Mức</th></tr></thead><tbody>${rows||'<tr><td colspan="4" class="center muted">Không có dữ liệu.</td></tr>'}</tbody></table></div>`;
-  const similar=`<div class="section-title">Danh sách JD tương đồng</div><div class="box">${(obj.similarJobsComparison||"Không có dữ liệu.")}</div>`;
-  const summary=`<div class="section-title">Nhận xét tổng quan</div><div class="box">${(obj.overallSummary||"Không có dữ liệu.")}</div>`;
-  $("#resultBody").innerHTML=table+similar+summary;
+      <td><strong>${escapeHtml(r.name)}</strong></td>
+      <td><span class="badge">${escapeHtml(r.grade || "—")}</span></td>
+      <td>${escapeHtml(r.reason || "—")}</td>
+      <td>${escapeHtml(r.evidence || "—")}</td>
+    </tr>
+  `).join("");
+  resultSection.classList.remove("hidden");
 }
-$("#btnEvaluate").addEventListener("click", async()=>{
-  const title=$("#jobTitle").value.trim();
-  if(!title){ alert("Vui lòng nhập tên vị trí."); return; }
-  if(!jdText.trim()){ alert("Vui lòng tải JD (.docx hoặc .txt)."); return; }
-  $("#panelResult").classList.remove("hidden");
-  $("#resultHeader").innerHTML=`<p class="muted">Đang gọi Gemini...</p>`; $("#resultBody").innerHTML="";
+
+function escapeHtml(str){
+  return (str||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ====== S-Grade lookup (simple client-side) ======
+async function loadSgrade(){
   try{
-    const raw=await callGemini(buildPrompt(title,jdText)); const sanitized=sanitizeJsonText(raw);
-    let obj; try{ obj=JSON.parse(sanitized);}catch{ throw new Error("Phản hồi không phải JSON hợp lệ. Raw: "+raw.slice(0,600)); }
-    renderResult(obj);
-  }catch(err){ $("#resultHeader").innerHTML=`<p class="muted">Lỗi</p>`; $("#resultBody").innerHTML=`<div class="box" style="border:1px solid #7f1d1d;color:#fecaca;padding:12px;border-radius:8px">${err.message}</div>`; }
-});
-
-// ---------- S-Grade ----------
-let sData=[]; let filtered=[];
-async function loadSGrade(){
-  try{ const res=await fetch("./sgrade.json",{cache:"no-store"}); sData=await res.json(); }catch{ sData=[]; }
-  filtered=[...sData]; fillRanks(); renderTable();
+    const res = await fetch("sgrade.json");
+    const data = await res.json();
+    window.__SGRADE__ = data;
+    renderSgrade();
+  }catch(e){
+    console.warn("Không tải được sgrade.json", e);
+  }
 }
-function fillRanks(){
-  const sel=$("#rankFilter");
-  const ranks=Array.from(new Set(sData.map(x=>x.rank))).sort((a,b)=>{
-    const na=parseInt((a||'').replace(/\D+/g,''))||0; const nb=parseInt((b||'').replace(/\D+/g,''))||0; return na-nb || String(a).localeCompare(String(b));
-  });
-  sel.innerHTML=`<option value="all">Tất cả</option>`+ranks.map(r=>`<option value="${r}">${r}</option>`).join("");
-}
-function renderTable(){
-  const body=$("#sTableBody");
-  if(filtered.length===0){ body.innerHTML=`<tr><td colspan="4" class="center muted">Không có dữ liệu.</td></tr>`; return; }
-  body.innerHTML=filtered.map(j=>`
+function renderSgrade(){
+  const body = document.getElementById("sgradeBody");
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  const lv = document.getElementById("levelFilter").value;
+  const rows = (window.__SGRADE__ || []).filter(x => {
+    const okQ = !q || (x.title||"").toLowerCase().includes(q) || (x.vi||"").toLowerCase().includes(q);
+    const okL = !lv || x.level === lv;
+    return okQ && okL;
+  }).map(x => `
     <tr>
-      <td>${j.positionName||""}</td>
-      <td>${j.vietnameseName||""}</td>
-      <td>${j.positionType||""}</td>
-      <td>${j.rank||""}</td>
-    </tr>`).join("");
+      <td>${escapeHtml(x.title)}</td>
+      <td>${escapeHtml(x.vi)}</td>
+      <td>${escapeHtml(x.type)}</td>
+      <td>${escapeHtml(x.level)}</td>
+    </tr>
+  `).join("");
+  body.innerHTML = rows || `<tr><td colspan="4">Không có dữ liệu</td></tr>`;
 }
-$("#searchInput").addEventListener("input", applyFilter);
-$("#rankFilter").addEventListener("change", applyFilter);
-function applyFilter(){
-  const term=$("#searchInput").value.trim().toLowerCase(); const r=$("#rankFilter").value;
-  filtered=sData.filter(j=>{ const txt=(j.positionName+" "+j.vietnameseName).toLowerCase(); const okT=!term || txt.includes(term); const okR=(r==="all")||(j.rank===r); return okT&&okR; });
-  renderTable();
+document.getElementById("searchInput").addEventListener("input", renderSgrade);
+document.getElementById("levelFilter").addEventListener("change", renderSgrade);
+document.getElementById("downloadTemplate").addEventListener("click", () => {
+  window.location.href = "s_grade_template.xlsx";
+});
+document.getElementById("excelImport").addEventListener("change", (e) => {
+  alert("Nhập Excel: demo client-side. Hãy tiếp tục dùng file sgrade.json trên GitHub để dữ liệu hiển thị khi reload.");
+});
+document.getElementById("exportExcel").addEventListener("click", () => {
+  alert("Xuất Excel: bản GitHub Pages không có server nên demo tạm. Dữ liệu hiện đang nằm ở sgrade.json.");
+});
+loadSgrade();
+
+// ===== helpers =====
+async function readFileText(file){
+  if(file.name.endsWith(".txt")){
+    return await file.text();
+  }
+  if(file.name.endsWith(".docx")){
+    // Đọc docx đơn giản bằng TextDecoder cho demo (không giải nén - chỉ fallback)
+    // Khuyến nghị chuẩn bị thêm parser nếu cần độ chính xác cao.
+    const buf = await file.arrayBuffer();
+    // best-effort: cố gắng trích text
+    return new TextDecoder().decode(new Uint8Array(buf));
+  }
+  return await file.text();
 }
-$("#btnDownloadTemplate").addEventListener("click",()=> window.location.href="./s_grade_template.xlsx");
-$("#btnImportExcel").addEventListener("click",()=> $("#excelImport").click());
-$("#excelImport").addEventListener("change", async (e)=>{
-  $("#importMsg").textContent="";
-  const f=e.target.files?.[0]; if(!f) return;
-  if(!f.name.endsWith(".xlsx")){ $("#importMsg").textContent="Vui lòng chọn file .xlsx"; return; }
-  const data=await f.arrayBuffer(); const wb=XLSX.read(data,{type:"array"}); const ws=wb.Sheets[wb.SheetNames[0]];
-  const rows=XLSX.utils.sheet_to_json(ws);
-  const expected=["positionName","vietnameseName","positionType","rank"];
-  const ok=expected.every(k=>Object.prototype.hasOwnProperty.call(rows[0]||{},k));
-  if(!ok){ $("#importMsg").textContent="Sai header. Cần: "+expected.join(", "); return; }
-  const add=rows.map(r=>({
-    positionName:String(r.positionName||"").trim(),
-    vietnameseName:String(r.vietnameseName||"").trim(),
-    positionType:String(r.positionType||"").trim(),
-    rank:String(r.rank||"").trim()
-  })).filter(x=>x.positionName && x.rank);
-  const exists=new Set(sData.map(x=>(x.positionName||"").toLowerCase()));
-  const newOnes=add.filter(x=>!exists.has(x.positionName.toLowerCase()));
-  sData=sData.concat(newOnes); applyFilter();
-  $("#importMsg").textContent=`Đã thêm ${newOnes.length} vị trí mới.`; e.target.value="";
-});
-$("#btnExportExcel").addEventListener("click",()=>{
-  const ws=XLSX.utils.json_to_sheet(sData); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"SGrade"); XLSX.writeFile(wb,"s_grade_export.xlsx");
-});
-loadSGrade();
-
-
-/* ---------- TAB SWITCHING HOTFIX ---------- */
-document.addEventListener('DOMContentLoaded', () => {
-  const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
-  const tabPanes   = Array.from(document.querySelectorAll('.tab-pane'));
-
-  if (!tabButtons.length || !tabPanes.length) return;
-
-  const activate = (btn) => {
-    tabButtons.forEach(b => b.classList.remove('active'));
-    tabPanes.forEach(p => p.classList.add('hidden'));
-
-    btn.classList.add('active');
-    const targetSel = btn.dataset.target;
-    const pane = document.querySelector(targetSel);
-    if (pane) pane.classList.remove('hidden');
-  };
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      activate(btn);
-    });
-  });
-
-  const initial = tabButtons.find(b => b.dataset.target === location.hash);
-  if (initial) activate(initial);
-});

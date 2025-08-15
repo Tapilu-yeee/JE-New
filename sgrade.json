@@ -1,4 +1,14 @@
 [
-  {"positionName":"Sample Position","vietnameseName":"Vị Trí Mẫu","positionType":"Indirect","rank":"S7"},
-  {"positionName":"Junior Accountant","vietnameseName":"Kế toán viên","positionType":"Indirect","rank":"S3"}
+  {
+    "title": "Sample Position",
+    "vi": "Vị Trí Mẫu",
+    "type": "Indirect",
+    "level": "S7"
+  },
+  {
+    "title": "Junior Accountant",
+    "vi": "Kế toán viên",
+    "type": "Indirect",
+    "level": "S3"
+  }
 ]
