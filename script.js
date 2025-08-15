@@ -1,14 +1,16 @@
-/* =========================================
-   JD Evaluation - Frontend (GitHub Pages)
-   Notes:
-   - Không hiện ô nhập API nữa. Điền link API cố định bên dưới.
-   - Tùy bạn thay YOUR_API_LINK_HERE bằng link Gemini lấy ở Google AI Studio.
-   ========================================= */
-// === CẤU HÌNH API GEMINI Ở ĐÂY ===
+
+/* =============================
+   S-Grade SCOMMERCE (GitHub Pages)
+   Cấu hình API Gemini: CHỈ SỬA 1 DÒNG DƯỚI ĐÂY
+   ============================= */
+// === CẤU HÌNH API GEMINI Ở ĐÂY (thay YOUR_API_LINK_HERE bằng link đầy đủ ở Google AI Studio) ===
 const GEMINI_API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD9fDIYcMI_juMCXsoz8StSTOSvPUPid1w";
 
-// 12 yếu tố theo phương pháp PwC
+// ----------------- UI helpers -----------------
+const $ = (s) => document.querySelector(s);
+const on = (el, ev, fn) => el.addEventListener(ev, fn);
+
 const FACTORS = [
   "Trình độ học vấn",
   "Kinh nghiệm",
@@ -24,204 +26,244 @@ const FACTORS = [
   "Yêu cầu thể chất"
 ];
 
-// System hướng dẫn theo PwC + yêu cầu xuất JSON chuẩn
-const SYSTEM_PROMPT = `Bạn là chuyên gia đánh giá giá trị công việc theo phương pháp PwC nội bộ.
-Luôn chấm đủ 12 yếu tố sau: ${FACTORS.join(", ")}.
-Trả lại kết quả DUY NHẤT dưới dạng JSON theo schema:
+const SYSTEM_PROMPT = `Bạn là chuyên gia đánh giá giá trị công việc theo khung PwC đã được chuẩn hoá nội bộ.
+YÊU CẦU BẮT BUỘC:
+1) Đọc JD (văn bản) và đánh giá ĐỦ 12 yếu tố sau: ${FACTORS.join(", ")}.
+2) Mỗi yếu tố chỉ chọn MỘT mức (ví dụ: A, B, C, D, E..., hoặc A1, B1... theo mô tả trong tài liệu).
+3) Mỗi yếu tố phải có: "reason" (lý do) và "evidence" (trích dẫn nguyên văn ngắn từ JD).
+4) CHỈ TRẢ VỀ JSON DUY NHẤT theo schema sau, không giải thích thêm:
 {
+  "jobTitle": "<tên vị trí trích xuất được từ JD, nếu có>",
   "factors": [
-    { "name": "<tên yếu tố>", "grade": "<mức A/B/C...>", "reason": "<lý do>", "evidence": "<trích dẫn từ JD>" }
-  ]
-}
-- Không trả lời văn bản ngoài JSON.
-- Nếu JD không đủ dữ kiện, vẫn cố gắng chọn mức gần nhất và nêu rõ giả định trong reason.
-`;
+    { "name": "<tên yếu tố>", "grade": "<mức>", "reason": "<lý do>", "evidence": "<dẫn chứng ngắn>" }
+  ],
+  "overallSummary": "<nhận xét tổng quan ngắn gọn>"
+}`;
 
-// ===== UI: Tabs =====
-const tabs = document.querySelectorAll(".tab");
-const panels = {
-  jd: document.getElementById("tab-jd"),
-  sgrade: document.getElementById("tab-sgrade")
-};
-const underline = document.querySelector(".tab-underline");
-function activateTab(which) {
-  tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === which));
-  panels.jd.classList.toggle("show", which === "jd");
-  panels.sgrade.classList.toggle("show", which === "sgrade");
-  // underline
-  const active = document.querySelector('.tab.active');
-  if (active) {
-    const rect = active.getBoundingClientRect();
-    const parentRect = active.parentElement.getBoundingClientRect();
-    underline.style.width = rect.width + "px";
-    underline.style.transform = `translateX(${rect.left - parentRect.left}px)`;
+// Tabs
+const tabEval = $("#tab-eval");
+const tabSgrade = $("#tab-sgrade");
+const panelEval = $("#panel-eval");
+const panelSgrade = $("#panel-sgrade");
+function setTab(which){
+  if(which==="eval"){
+    tabEval.classList.add("active");
+    tabSgrade.classList.remove("active");
+    panelEval.classList.add("show");
+    panelSgrade.classList.remove("show");
+    panelSgrade.hidden = true;
+    panelEval.hidden = false;
+  } else {
+    tabSgrade.classList.add("active");
+    tabEval.classList.remove("active");
+    panelSgrade.classList.add("show");
+    panelEval.classList.remove("show");
+    panelEval.hidden = true;
+    panelSgrade.hidden = false;
   }
 }
-tabs.forEach((btn) => btn.addEventListener("click", () => activateTab(btn.dataset.tab)));
-window.addEventListener("load", () => activateTab("jd"));
+on(tabEval,"click",()=>setTab("eval"));
+on(tabSgrade,"click",()=>setTab("sgrade"));
 
-// ===== Dropzone =====
-const dropzone = document.getElementById("dropzone");
-const fileInput = document.getElementById("fileInput");
-dropzone.addEventListener("click", () => fileInput.click());
-dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("drag"); });
-dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
-dropzone.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dropzone.classList.remove("drag");
-  if (e.dataTransfer.files?.length) fileInput.files = e.dataTransfer.files;
+// Upload zone
+const dropZone = $("#dropZone");
+const fileInput = $("#fileInput");
+dropZone.addEventListener("click",()=>fileInput.click());
+dropZone.addEventListener("dragover",(e)=>{ e.preventDefault(); dropZone.style.borderColor="#10b981"; });
+dropZone.addEventListener("dragleave",()=>{ dropZone.style.borderColor="var(--border)"; });
+dropZone.addEventListener("drop",(e)=>{
+  e.preventDefault(); dropZone.style.borderColor="var(--border)";
+  if(e.dataTransfer.files?.length) fileInput.files = e.dataTransfer.files;
 });
 
-// ===== JD Evaluation =====
-const evaluateBtn = document.getElementById("evaluateBtn");
-const resultSection = document.getElementById("resultSection");
-const resultBody = document.getElementById("resultBody");
-
-evaluateBtn.addEventListener("click", async () => {
-  const jobTitle = document.getElementById("jobTitle").value.trim();
-  const file = fileInput.files?.[0];
-  if (!file) { alert("Vui lòng chọn JD (.docx hoặc .txt)"); return; }
-
-  const jdText = await readFileText(file);
-  const prompt = buildPrompt(jdText, jobTitle);
-  showLoading(true);
-
-  try {
-    const data = await callGemini(prompt);
-    const parsed = safeJson(data);
-    renderResult(parsed?.factors || []);
-  } catch (err) {
-    console.error(err);
-    alert("Không thể gọi Gemini. Kiểm tra GEMINI_API_URL hoặc quota.");
-  } finally {
-    showLoading(false);
-  }
-});
-
-function showLoading(on){
-  evaluateBtn.disabled = !!on;
-  evaluateBtn.textContent = on ? "Đang đánh giá..." : "Đánh giá JD";
-}
-
-function buildPrompt(jdText, jobTitle){
-  return [
-`[HƯỚNG DẪN HỆ THỐNG]`,
-SYSTEM_PROMPT,
-`[NHIỆM VỤ] Đánh giá JD theo 12 yếu tố PwC đã chuẩn hóa. Yêu cầu:
-- Phải có đủ 12 đối tượng trong mảng "factors" theo đúng thứ tự FACTORS đã nêu.
-- "grade" dùng thang A/B/C/D... (có thể có số nếu cần theo hệ thống nội bộ).
-- "reason" súc tích, dùng ngôn ngữ Việt, 1-3 câu, bám theo phương pháp PwC.
-- "evidence" là trích dẫn ngắn gọn những câu chữ quan trọng từ JD.
-`,
-`[THÔNG TIN] Vị trí: ${jobTitle || "(chưa cung cấp)"}\n[JD]\n${jdText}`
-  ].join("\n\n");
-}
-
-async function callGemini(prompt){
-  const body = {
-    contents: [
-      { role:"user", parts:[{ text: prompt }] }
-    ],
-    generationConfig: {
-      temperature: 0.3,
-      responseMimeType: "application/json"
-    }
-  };
-  const res = await fetch(GEMINI_API_URL, {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(body)
-  });
-  if(!res.ok) throw new Error(await res.text());
-  const json = await res.json();
-  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-  return text;
-}
-
-function safeJson(raw){
-  try { return JSON.parse(raw); } catch(_){}
-  // fallback: try to extract JSON in code block
-  const m = raw.match(/\{[\s\S]*\}/);
-  if(m) { try { return JSON.parse(m[0]); } catch(_){} }
-  return null;
-}
-
-function renderResult(items){
-  // Bảo đảm 12 yếu tố đủ thứ tự; nếu thiếu, bổ sung placeholder
-  const map = new Map(items.map(x => [x.name, x]));
-  const rows = FACTORS.map(name => {
-    const it = map.get(name) || { name, grade: "—", reason: "—", evidence: "—" };
-    return it;
-  });
-
-  resultBody.innerHTML = rows.map(r => `
-    <tr>
-      <td><strong>${escapeHtml(r.name)}</strong></td>
-      <td><span class="badge">${escapeHtml(r.grade || "—")}</span></td>
-      <td>${escapeHtml(r.reason || "—")}</td>
-      <td>${escapeHtml(r.evidence || "—")}</td>
-    </tr>
-  `).join("");
-  resultSection.classList.remove("hidden");
-}
-
-function escapeHtml(str){
-  return (str||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
-
-// ====== S-Grade lookup (simple client-side) ======
-async function loadSgrade(){
-  try{
-    const res = await fetch("sgrade.json");
-    const data = await res.json();
-    window.__SGRADE__ = data;
-    renderSgrade();
-  }catch(e){
-    console.warn("Không tải được sgrade.json", e);
-  }
-}
-function renderSgrade(){
-  const body = document.getElementById("sgradeBody");
-  const q = document.getElementById("searchInput").value.trim().toLowerCase();
-  const lv = document.getElementById("levelFilter").value;
-  const rows = (window.__SGRADE__ || []).filter(x => {
-    const okQ = !q || (x.title||"").toLowerCase().includes(q) || (x.vi||"").toLowerCase().includes(q);
-    const okL = !lv || x.level === lv;
-    return okQ && okL;
-  }).map(x => `
-    <tr>
-      <td>${escapeHtml(x.title)}</td>
-      <td>${escapeHtml(x.vi)}</td>
-      <td>${escapeHtml(x.type)}</td>
-      <td>${escapeHtml(x.level)}</td>
-    </tr>
-  `).join("");
-  body.innerHTML = rows || `<tr><td colspan="4">Không có dữ liệu</td></tr>`;
-}
-document.getElementById("searchInput").addEventListener("input", renderSgrade);
-document.getElementById("levelFilter").addEventListener("change", renderSgrade);
-document.getElementById("downloadTemplate").addEventListener("click", () => {
-  window.location.href = "s_grade_template.xlsx";
-});
-document.getElementById("excelImport").addEventListener("change", (e) => {
-  alert("Nhập Excel: demo client-side. Hãy tiếp tục dùng file sgrade.json trên GitHub để dữ liệu hiển thị khi reload.");
-});
-document.getElementById("exportExcel").addEventListener("click", () => {
-  alert("Xuất Excel: bản GitHub Pages không có server nên demo tạm. Dữ liệu hiện đang nằm ở sgrade.json.");
-});
-loadSgrade();
-
-// ===== helpers =====
-async function readFileText(file){
-  if(file.name.endsWith(".txt")){
+// Read file (.txt, .docx)
+async function readFileContent(file){
+  if(!file) return "";
+  if(file.type === "text/plain"){
     return await file.text();
   }
-  if(file.name.endsWith(".docx")){
-    // Đọc docx đơn giản bằng TextDecoder cho demo (không giải nén - chỉ fallback)
-    // Khuyến nghị chuẩn bị thêm parser nếu cần độ chính xác cao.
-    const buf = await file.arrayBuffer();
-    // best-effort: cố gắng trích text
-    return new TextDecoder().decode(new Uint8Array(buf));
+  // docx
+  if(file.name.toLowerCase().endsWith(".docx")){
+    const arrayBuffer = await file.arrayBuffer();
+    const res = await window.mammoth.extractRawText({arrayBuffer});
+    return res.value || "";
   }
-  return await file.text();
+  throw new Error("Định dạng không hỗ trợ. Vui lòng dùng .docx hoặc .txt");
 }
+
+// Build prompt
+function buildPrompt(jobTitle, jdText){
+  return `Vị trí cần đánh giá: "${jobTitle || "(chưa nhập)"}"\n\nJD:\n${jdText}`;
+}
+
+// Call Gemini
+async function callGemini(prompt){
+  const body = {
+    contents: [{ role: "user", parts: [{ text: prompt }]}],
+    systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }]},
+    generationConfig: { temperature: 0.2, responseMimeType: "application/json" }
+  };
+  const res = await fetch(GEMINI_API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    const t = await res.text();
+    throw new Error(`Gemini API lỗi ${res.status}: ${t.slice(0,200)}`);
+  }
+  const data = await res.json();
+  // Lấy text trả về (tuỳ API)
+  let text =
+    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+    data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data ||
+    data?.candidates?.[0]?.content?.parts?.[0]?.executableCode ||
+    data?.candidates?.[0]?.content?.parts?.[0]?.functionCall ||
+    data?.candidates?.[0]?.content?.parts?.[0]?.stringValue ||
+    "";
+  if (typeof text !== "string") text = JSON.stringify(text);
+
+  // Tìm JSON trong chuỗi (phòng khi model thêm backticks)
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if(!jsonMatch) throw new Error("Phản hồi không chứa JSON hợp lệ.");
+  return JSON.parse(jsonMatch[0]);
+}
+
+// Render
+const resultCard = $("#resultCard");
+const resultBody = $("#resultBody");
+const resultHeader = $("#resultHeader");
+const overall = $("#overall");
+function renderResult(jobTitle, result){
+  const title = result.jobTitle || jobTitle || "Không rõ chức danh";
+  resultHeader.textContent = `Kết quả đánh giá: ${title}`;
+
+  // Map theo 12 yếu tố (đảm bảo đủ dòng)
+  const map = {};
+  (result.factors||[]).forEach(f=>{ map[(f.name||"").trim()] = f; });
+
+  resultBody.innerHTML = "";
+  FACTORS.forEach((name, idx)=>{
+    const row = map[name] || { name, grade:"-", reason:"(Không có dữ liệu)", evidence:"" };
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><b>${idx+1}. ${name}</b></td>
+      <td>${escapeHTML(row.reason||"")}</td>
+      <td><i>${escapeHTML(row.evidence||"")}</i></td>
+      <td class="w-min"><span class="chip">${escapeHTML(row.grade||"-")}</span></td>
+    `;
+    resultBody.appendChild(tr);
+  });
+  overall.textContent = result.overallSummary ? ("Nhận xét tổng quan: " + result.overallSummary) : "";
+  resultCard.hidden = false;
+}
+function escapeHTML(s){
+  return (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
+
+// Actions
+const btnEvaluate = $("#btnEvaluate");
+const btnClear = $("#btnClear");
+const jobTitleInput = $("#jobTitle");
+const errorCard = $("#errorCard");
+const errorText = $("#errorText");
+
+on(btnClear,"click",()=>{
+  jobTitleInput.value = "";
+  fileInput.value = "";
+  resultCard.hidden = true;
+  errorCard.hidden = true;
+});
+
+on(btnEvaluate,"click", async ()=>{
+  try{
+    errorCard.hidden = true;
+    resultCard.hidden = true;
+    btnEvaluate.disabled = true; btnEvaluate.textContent = "Đang đánh giá...";
+    const file = fileInput.files?.[0];
+    if(!file) throw new Error("Vui lòng chọn tệp JD (.docx hoặc .txt)");
+    const jdText = await readFileContent(file);
+    const prompt = buildPrompt(jobTitleInput.value.trim(), jdText);
+    const result = await callGemini(prompt);
+    renderResult(jobTitleInput.value.trim(), result);
+  }catch(err){
+    errorText.textContent = err.message || String(err);
+    errorCard.hidden = false;
+  }finally{
+    btnEvaluate.disabled = false; btnEvaluate.textContent = "Đánh giá JD";
+  }
+});
+
+// -------------------- S-GRADE --------------------
+async function loadSgrade(){
+  const res = await fetch("./sgrade.json");
+  const data = await res.json();
+  window.__S_GRADE = data || [];
+  renderSgrade();
+  fillRanks();
+}
+function fillRanks(){
+  const data = window.__S_GRADE||[];
+  const set = new Set(data.map(x=>x.rank));
+  const select = $("#rankFilter");
+  select.innerHTML = `<option value="all">Tất cả</option>`+ Array.from(set).sort().map(r=>`<option value="${r}">${r}</option>`).join("");
+}
+function renderSgrade(){
+  const body = $("#sgradeBody");
+  const q = ($("#searchTerm").value||"").toLowerCase();
+  const rank = $("#rankFilter").value||"all";
+  const data = (window.__S_GRADE||[]).filter(x=>{
+    const okRank = rank==="all" || (x.rank===rank);
+    const okQ = !q || (x.positionName||"").toLowerCase().includes(q) || (x.vietnameseName||"").toLowerCase().includes(q);
+    return okRank && okQ;
+  });
+  body.innerHTML = data.map(x=>`
+    <tr>
+      <td>${escapeHTML(x.positionName||"")}</td>
+      <td>${escapeHTML(x.vietnameseName||"")}</td>
+      <td>${escapeHTML(x.positionType||"")}</td>
+      <td>${escapeHTML(x.rank||"")}</td>
+    </tr>
+  `).join("");
+}
+on($("#searchTerm"),"input",renderSgrade);
+on($("#rankFilter"),"change",renderSgrade);
+
+// Template / Import / Export (client-only)
+on($("#btnTemplate"),"click",()=>{
+  const header = ["positionName","vietnameseName","positionType","rank"];
+  const example = ["Sample Position","Vị Trí Mẫu","Indirect","S7"];
+  const ws=XLSX.utils.aoa_to_sheet([header, example]);
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Template");
+  XLSX.writeFile(wb, "s_grade_template.xlsx");
+});
+on($("#btnImport"),"click",()=>$("#excelInput").click());
+on($("#excelInput"),"change",e=>{
+  const f = e.target.files?.[0]; if(!f) return;
+  const fr = new FileReader();
+  fr.onload = (evt)=>{
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws);
+    const cleaned = rows.map(r=>({
+      positionName: String(r.positionName||"").trim(),
+      vietnameseName: String(r.vietnameseName||"").trim(),
+      positionType: String(r.positionType||"").trim(),
+      rank: String(r.rank||"").trim()
+    })).filter(r=>r.positionName && r.rank);
+    window.__S_GRADE = (window.__S_GRADE||[]).concat(cleaned);
+    fillRanks(); renderSgrade();
+  };
+  fr.readAsArrayBuffer(f);
+});
+on($("#btnExport"),"click",()=>{
+  const data = window.__S_GRADE||[];
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "SGrade");
+  XLSX.writeFile(wb, "sgrade_export.xlsx");
+});
+
+// Init
+setTab("eval");
+loadSgrade();
