@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -6,37 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>S-Grade SCOMMERCE</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-  <!-- Montserrat -->
+
+  <!-- Google Fonts: Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="./style.css" />
+  <!-- ADDED: Upload fixes -->
+  <link rel="stylesheet" href="./fix-upload.css" />
+
   <!-- Mammoth for .docx parsing -->
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+
+  <!-- Gemini API key (restrict by referrer in Google AI Studio) -->
+  <script>
+    window.__GEMINI_API_KEY__ = window.__GEMINI_API_KEY__ || "YOUR_GEMINI_API_KEY";
+  </script>
 </head>
 <body>
-  <header class="container header">
+  <header class="header container">
     <h1 class="app-title">S-Grade SCOMMERCE</h1>
-    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố</p>
+    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố PwC & Tra cứu S-Grade</p>
+    <nav class="tabs" role="tablist" aria-label="Main Tabs">
+      <button class="tab active" id="tab-eval" role="tab" aria-controls="panel-eval" aria-selected="true">Đánh giá JD</button>
+      <button class="tab" id="tab-sgrade" role="tab" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
+      <span class="spacer"></span>
+    </nav>
   </header>
 
-  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
-    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
-    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
-  </nav>
-
-  <!-- Evaluation Panel -->
+  <!-- Evaluate Panel -->
   <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
     <section class="card">
-      <div class="section-title">
-        <span class="emoji">📋</span>
+      <div class="row" style="align-items:center;gap:16px">
         <div>
           <h2>Đánh giá mô tả công việc theo 12 yếu tố PwC</h2>
           <p class="muted">Hãy tải lên file mô tả công việc để được hệ thống đánh giá tự động.</p>
         </div>
       </div>
 
-      <label class="label">Nhập tên vị trí công việc</label>
+      <label class="label" for="jobTitle">Nhập tên vị trí công việc</label>
       <input id="jobTitle" type="text" class="input" placeholder="e.g., Deputy Sorting Centers Manager" />
 
       <label class="label">Tải lên JD (.docx, .txt)</label>
@@ -46,10 +55,8 @@
           <b>Click to upload</b> or drag and drop
           <div class="muted small">DOCX or TXT (max 200MB)</div>
         </div>
-        <input id="fileInput" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" hidden />
-      
-        <span class="dz-filename" id="dzFilename" aria-live="polite"></span>
-</div>
+        <input id="fileInput" type="file" accept=".doc,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" hidden />
+      </div>
 
       <div class="actions">
         <button id="btnEvaluate" class="btn primary">Đánh giá JD</button>
@@ -64,12 +71,12 @@
           <thead>
             <tr>
               <th>Yếu tố</th>
+              <th>Điểm</th>
               <th>Lý do</th>
-              <th>Dẫn chứng</th>
-              <th class="w-min">Mức</th>
+              <th>Dẫn chứng JD</th>
             </tr>
           </thead>
-          <tbody id="resultBody"></tbody>
+          <tbody></tbody>
         </table>
       </div>
       <div id="overall" class="overall"></div>
@@ -91,18 +98,17 @@
         <div class="spacer"></div>
         <button id="btnTemplate" class="btn">Tải file mẫu</button>
         <button id="btnImport" class="btn primary">Nhập Excel</button>
-        <button id="btnExport" class="btn">Xuất Excel</button>
-        <input id="excelInput" type="file" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
+        <button id="btnExport" class="btn">Xuất JSON</button>
       </div>
 
       <div class="table-wrap">
         <table class="table">
           <thead>
             <tr>
-              <th>Tên vị trí</th>
-              <th>Tên Tiếng Việt</th>
-              <th>Loại vị trí</th>
-              <th>Cấp bậc</th>
+              <th>Position (EN)</th>
+              <th>Chức danh (VI)</th>
+              <th>Type</th>
+              <th>S-Grade</th>
             </tr>
           </thead>
           <tbody id="sgradeBody"></tbody>
@@ -111,9 +117,10 @@
     </section>
   </main>
 
-  <footer class="container footer">© 2025 JD Evaluation AI. All rights reserved.</footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Scripts -->
   <script src="./script.js"></script>
+  <script type="module" src="/js/gemini-pwc.js"></script>
+  <!-- ADDED: Upload fixes (must be last) -->
+  <script src="./fix-upload.js"></script>
 </body>
 </html>
