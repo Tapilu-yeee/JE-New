@@ -1,21 +1,21 @@
-
-
-/* === PATCH: Montserrat everywhere + wider layout + slightly smaller fonts === */
-:root { --base-font: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+/* === PATCH: Montserrat everywhere + wider layout + slightly smaller base font === */
+:root { --font-sans: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
 html, body, button, input, select, textarea,
-.dropzone, .tab, .btn, table, th, td, label, .card, .muted, .overall,
-.h1,.h2,.h3,h1,h2,h3,h4,h5,h6 {
-  font-family: var(--base-font);
+label, table, th, td, .btn, .tab, .dropzone, .card, .overall, .muted,
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--font-sans);
 }
 
-/* Smaller base size (≈ -1 step) */
+/* Smaller base size (~ -1 step). Change to 14px if muốn nhỏ thêm */
 html { font-size: 15px; }
 
 /* Wider content area on desktop */
-.container { max-width: 1200px; }
+@media (min-width: 1280px){
+  .container { max-width: 1200px; }
+}
 
-/* Slightly tighter UI */
+/* Slightly denser UI */
 .table th, .table td { padding: 0.75rem 1rem; }
 .input { font-size: 0.95rem; }
 .btn { font-size: 0.95rem; }
@@ -24,12 +24,11 @@ html { font-size: 15px; }
 .overall { line-height: 1.6; }
 .overall strong { font-weight: 700; }
 
-
-/* === CLICK GUARD (limits upload label to its box; restores pointer events) === */
+/* === CLICK GUARD: keep clicks working only inside dropzone === */
 .dropzone { position: relative; overflow: hidden; }
 .dropzone .dz-label { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; height: 100%; pointer-events: auto; }
-.dropzone .dz-label * { pointer-events: none; } /* ensure label receives the click */
-.dropzone input[type="file"] { display: none; } /* we trigger it via <label for="fileInput"> */
+.dropzone .dz-label * { pointer-events: none; }
+.dropzone input[type="file"] { display: none; }
 
-/* Prevent any accidental full-screen overlay from blocking clicks */
+/* restore pointer events globally in case of accidental overlay */
 header, main, footer, .container, .card, .tabs, .table, .dropzone { pointer-events: auto !important; }
