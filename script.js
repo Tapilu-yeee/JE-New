@@ -289,7 +289,6 @@ async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '
   function findEvaluateButton(){
     let el = document.querySelector('#btnEvaluate');
     if (el) return el;
-    // try to find by text content
     const buttons = Array.from(document.querySelectorAll('button'));
     return buttons.find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
   }
@@ -299,46 +298,74 @@ async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '
     const buttons = Array.from(document.querySelectorAll('button'));
     return buttons.find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
   }
-  function ensureLabel(container){
-    let label = document.querySelector('#uploadFileName');
-    if (!label){
-      label = document.createElement('span');
-      label.id = 'uploadFileName';
-      label.textContent = '';
-      (container || document.body).appendChild(label);
-    }
-    return label;
-  }
   document.addEventListener('DOMContentLoaded', function(){
     const fileInput = document.querySelector('input[type="file"]');
     if(!fileInput){ return; }
     const evalBtn = findEvaluateButton();
     const clearBtn = findClearButton();
-    // create filename label near the input (prefer parent container)
-    const label = ensureLabel(fileInput.closest('.upload-box') || fileInput.parentElement || document.body);
 
-    // default disable evaluate until file chosen
+    let uploadLabel = document.querySelector('#uploadLabel');
+    if (!uploadLabel) {
+      uploadLabel = document.querySelector(`label[for="${fileInput.id}"]`) || fileInput.closest('label');
+    }
+    const defaultText = (uploadLabel && uploadLabel.textContent.trim()) || "Click to upload or drag and drop";
+
+    const old = document.querySelector('#uploadFileName');
+    if (old && old.parentElement) old.parentElement.removeChild(old);
+
     if (evalBtn){ evalBtn.disabled = true; }
 
     function refresh(){
       if (fileInput.files && fileInput.files.length){
         const name = fileInput.files[0].name;
-        label.textContent = 'Đã chọn: ' + name;
+        if (uploadLabel) uploadLabel.textContent = 'Đã chọn: ' + name;
         if (evalBtn) evalBtn.disabled = false;
       } else {
-        label.textContent = '';
+        if (uploadLabel) uploadLabel.textContent = defaultText;
         if (evalBtn) evalBtn.disabled = true;
       }
     }
-    fileInput.addEventListener('change', refresh);
 
+    fileInput.addEventListener('change', refresh);
     if (clearBtn){
       clearBtn.addEventListener('click', function(){
         try{ fileInput.value=''; }catch(e){}
         refresh();
       });
     }
-    // initial
     refresh();
   });
 })();
+
+
+
+// === Upload Label Override Patch ===
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const fileInput = document.querySelector('#jdFile') || document.querySelector('input[type="file"]');
+    const uploadLabel = document.querySelector('#uploadLabel');
+    const evalBtn = document.querySelector('#btnEvaluate');
+    const clearBtn = document.querySelector('#btnClear');
+    if (!fileInput || !uploadLabel) return;
+
+    function refresh(){
+      if (fileInput.files && fileInput.files.length){
+        const name = fileInput.files[0].name;
+        uploadLabel.textContent = 'Đã chọn: ' + name;
+        if (evalBtn) evalBtn.disabled = false;
+      } else {
+        uploadLabel.textContent = 'Click to upload or drag and drop';
+        if (evalBtn) evalBtn.disabled = true;
+      }
+    }
+    fileInput.addEventListener('change', refresh);
+    if (clearBtn){
+      clearBtn.addEventListener('click', function(){
+        try{ fileInput.value=''; }catch(e){}
+        refresh();
+      });
+    }
+    refresh();
+  });
+})();
+
