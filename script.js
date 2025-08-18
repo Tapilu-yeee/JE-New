@@ -268,92 +268,104 @@ on($("#btnExport"),"click",()=>{
 setTab("eval");
 loadSgrade();
 
-// === Upload UX consolidated (filename, click, dragdrop, enable button) ===
-(function(){
-  function ready(fn){
-    if (document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
+
+// === PwC Gemini integration helper ===
+async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '#result'){
+  try {
+    const jd = document.querySelector(inputSelector)?.value || '';
+    const res = await window.__PWC_EVAL__.evaluateJDWithPwC(jd);
+    const out = document.querySelector(outputSelector);
+    if (out) out.textContent = JSON.stringify(res, null, 2);
+    return res;
+  } catch(e){
+    console.error(e);
+    alert('Lỗi PwC/Gemini: ' + (e.message||e));
   }
-  ready(function(){
-    const dropZone = document.getElementById('dropZone') || document.querySelector('.dropzone');
-    const fileInput = document.getElementById('fileInput') || (dropZone && dropZone.querySelector('input[type="file"]'));
-    if(!dropZone || !fileInput) return;
+}
 
-    // ensure label exists
-    let fileNameEl = document.getElementById('dzFilename');
-    if (!fileNameEl){
-      fileNameEl = document.createElement('span');
-      fileNameEl.id = 'dzFilename';
-      fileNameEl.className = 'dz-filename';
-      fileNameEl.setAttribute('aria-live','polite');
-      dropZone.appendChild(fileNameEl);
+
+// === Upload UX patch: show filename & gate Evaluate button ===
+(function(){
+  function findEvaluateButton(){
+    let el = document.querySelector('#btnEvaluate');
+    if (el) return el;
+    const buttons = Array.from(document.querySelectorAll('button'));
+    return buttons.find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
+  }
+  function findClearButton(){
+    let el = document.querySelector('#btnClear');
+    if (el) return el;
+    const buttons = Array.from(document.querySelectorAll('button'));
+    return buttons.find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    const fileInput = document.querySelector('input[type="file"]');
+    if(!fileInput){ return; }
+    const evalBtn = findEvaluateButton();
+    const clearBtn = findClearButton();
+
+    let uploadLabel = document.querySelector('#uploadLabel');
+    if (!uploadLabel) {
+      uploadLabel = document.querySelector(`label[for="${fileInput.id}"]`) || fileInput.closest('label');
     }
+    const defaultText = (uploadLabel && uploadLabel.textContent.trim()) || "Click to upload or drag and drop";
 
-    // cache default children (except input & filename)
-    const defaultChildren = Array.from(dropZone.children).filter(el => el !== fileNameEl && el !== fileInput);
+    const old = document.querySelector('#uploadFileName');
+    if (old && old.parentElement) old.parentElement.removeChild(old);
 
-    const evalBtn = document.getElementById('btnEvaluate') || Array.from(document.querySelectorAll('button')).find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
-    const clearBtn = document.getElementById('btnClear') || Array.from(document.querySelectorAll('button')).find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
+    if (evalBtn){ evalBtn.disabled = true; }
 
-    function setEnabled(on){ if (evalBtn) evalBtn.disabled = !on; }
-    function showDefault(){
-      fileNameEl.textContent = '';
-      defaultChildren.forEach(el => { el.style.display = ''; });
-      dropZone.classList.remove('has-file');
-      setEnabled(false);
-    }
-    function showFilename(name){
-      fileNameEl.textContent = 'Đã chọn: ' + name;
-      defaultChildren.forEach(el => { el.style.display = 'none'; });
-      dropZone.classList.add('has-file');
-      setEnabled(true);
-    }
-    function refreshFromFiles(files){
-      if (files && files.length){
-        showFilename(files[0].name);
+    function refresh(){
+      if (fileInput.files && fileInput.files.length){
+        const name = fileInput.files[0].name;
+        if (uploadLabel) uploadLabel.textContent = 'Đã chọn: ' + name;
+        if (evalBtn) evalBtn.disabled = false;
       } else {
-        showDefault();
+        if (uploadLabel) uploadLabel.textContent = defaultText;
+        if (evalBtn) evalBtn.disabled = true;
       }
     }
 
-    // click anywhere in dropzone to open file picker
-    dropZone.addEventListener('click', function(e){
-      if (e.target && e.target.tagName === 'INPUT') return;
-      fileInput.click();
-    });
-
-    // keyboard accessibility
-    dropZone.setAttribute('role','button');
-    if (!dropZone.getAttribute('tabindex')) dropZone.setAttribute('tabindex','0');
-    dropZone.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        fileInput.click();
-      }
-    });
-
-    // drag & drop feedback + file capture
-    dropZone.addEventListener('dragover', function(e){ e.preventDefault(); dropZone.classList.add('dragover'); });
-    dropZone.addEventListener('dragleave', function(){ dropZone.classList.remove('dragover'); });
-    dropZone.addEventListener('drop', function(e){
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      const files = e.dataTransfer && e.dataTransfer.files;
-      refreshFromFiles(files && files.length ? files : fileInput.files);
-    });
-
-    // input change
-    fileInput.addEventListener('change', function(){ refreshFromFiles(fileInput.files); });
-
-    // clear
+    fileInput.addEventListener('change', refresh);
     if (clearBtn){
       clearBtn.addEventListener('click', function(){
         try{ fileInput.value=''; }catch(e){}
-        showDefault();
+        refresh();
       });
     }
-
-    // init
-    showDefault();
+    refresh();
   });
 })();
+
+
+
+// === Upload Label Override Patch ===
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const fileInput = document.querySelector('#jdFile') || document.querySelector('input[type="file"]');
+    const uploadLabel = document.querySelector('#uploadLabel');
+    const evalBtn = document.querySelector('#btnEvaluate');
+    const clearBtn = document.querySelector('#btnClear');
+    if (!fileInput || !uploadLabel) return;
+
+    function refresh(){
+      if (fileInput.files && fileInput.files.length){
+        const name = fileInput.files[0].name;
+        uploadLabel.textContent = 'Đã chọn: ' + name;
+        if (evalBtn) evalBtn.disabled = false;
+      } else {
+        uploadLabel.textContent = 'Click to upload or drag and drop';
+        if (evalBtn) evalBtn.disabled = true;
+      }
+    }
+    fileInput.addEventListener('change', refresh);
+    if (clearBtn){
+      clearBtn.addEventListener('click', function(){
+        try{ fileInput.value=''; }catch(e){}
+        refresh();
+      });
+    }
+    refresh();
+  });
+})();
+
