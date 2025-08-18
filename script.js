@@ -299,29 +299,26 @@ async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '
     return buttons.find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
   }
   document.addEventListener('DOMContentLoaded', function(){
-    const fileInput = document.querySelector('input[type="file"]');
-    if(!fileInput){ return; }
+    const fileInput = document.querySelector('#fileInput') || document.querySelector('input[type="file"]');
+    const dropZone = document.querySelector('#dropZone') || fileInput?.closest('.dropzone');
+    const fileNameEl = document.querySelector('#dzFilename');
+    if(!fileInput || !dropZone){ return; }
+
     const evalBtn = findEvaluateButton();
     const clearBtn = findClearButton();
 
-    let uploadLabel = document.querySelector('#uploadLabel');
-    if (!uploadLabel) {
-      uploadLabel = document.querySelector(`label[for="${fileInput.id}"]`) || fileInput.closest('label');
-    }
-    const defaultText = (uploadLabel && uploadLabel.textContent.trim()) || "Click to upload or drag and drop";
-
-    const old = document.querySelector('#uploadFileName');
-    if (old && old.parentElement) old.parentElement.removeChild(old);
-
+    // Default: disable evaluate
     if (evalBtn){ evalBtn.disabled = true; }
 
     function refresh(){
       if (fileInput.files && fileInput.files.length){
         const name = fileInput.files[0].name;
-        if (uploadLabel) uploadLabel.textContent = 'Đã chọn: ' + name;
+        if (fileNameEl) fileNameEl.textContent = 'Đã chọn: ' + name;
+        dropZone.classList.add('has-file');
         if (evalBtn) evalBtn.disabled = false;
       } else {
-        if (uploadLabel) uploadLabel.textContent = defaultText;
+        if (fileNameEl) fileNameEl.textContent = '';
+        dropZone.classList.remove('has-file');
         if (evalBtn) evalBtn.disabled = true;
       }
     }

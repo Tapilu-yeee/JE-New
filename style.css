@@ -85,3 +85,11 @@ body{
 button, input, textarea, select, label {
   font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
+
+/* Dropzone filename-only view and Montserrat enforcement */
+.dropzone, .dropzone *{
+  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+.dropzone .dz-filename{ display:none; font-weight:600; }
+.dropzone.has-file > *:not(.dz-filename):not(input){ display:none !important; }
+.dropzone.has-file .dz-filename{ display:block; }
