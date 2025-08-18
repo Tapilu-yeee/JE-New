@@ -196,17 +196,37 @@ on(btnEvaluate,"click", async ()=>{
 
 // -------------------- S-GRADE --------------------
 async function loadSgrade(){
-  try{
-    const res = await fetch("./sgrade.json", {cache:"no-store"});
-    if(!res.ok) throw new Error("Không đọc được sgrade.json");
-    const data = await res.json();
-    window.__S_GRADE = Array.isArray(data) ? data : [];
-  }catch(err){
-    console.error("[S-GRADE] load error:", err);
-    window.__S_GRADE = window.__S_GRADE || [];
+  const urls = [
+    "./sgrade.json",
+    "sgrade.json",
+    new URL("sgrade.json", location.href).toString()
+  ];
+  let data = [];
+  for (const u of urls){
+    try{
+      const res = await fetch(u, {cache:"no-store"});
+      if(res.ok){
+        const j = await res.json();
+        if (Array.isArray(j)) { data = j; break; }
+      }
+    }catch(err){
+      console.warn("[S-GRADE] try", u, "failed:", err);
+    }
   }
+  if (!Array.isArray(data)) data = [];
+  window.__S_GRADE = data;
   renderSgrade();
   fillRanks();
+  const hintEl = document.getElementById("sgradeBody");
+  if (hintEl && (!data || data.length === 0)){
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 4;
+    td.className = "muted";
+    td.textContent = "Không tải được dữ liệu S-Grade. Hãy chắc chắn có file sgrade.json ở cùng thư mục với index.html (và commit lên GitHub Pages).";
+    tr.appendChild(td);
+    hintEl.appendChild(tr);
+  }
 }
 function fillRanks(){
   const data = window.__S_GRADE||[];
