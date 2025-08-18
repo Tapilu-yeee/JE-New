@@ -6,23 +6,16 @@
   <title>S-Grade SCOMMERCE</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
 
-  <!-- Google Fonts: Montserrat -->
+  <!-- Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="./style.css" />
-  <!-- ADDED: Upload fixes -->
-  <link rel="stylesheet" href="./fix-upload.css" />
+  <!-- KHÔNG thêm fix-upload.css nữa để tránh xung đột -->
 
   <!-- Mammoth for .docx parsing -->
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
-
-  <!-- Gemini API key (restrict by referrer in Google AI Studio) -->
-  <script>
-    window.__GEMINI_API_KEY__ = window.__GEMINI_API_KEY__ || "YOUR_GEMINI_API_KEY";
-  </script>
 </head>
 <body>
   <header class="header container">
@@ -49,12 +42,15 @@
       <input id="jobTitle" type="text" class="input" placeholder="e.g., Deputy Sorting Centers Manager" />
 
       <label class="label">Tải lên JD (.docx, .txt)</label>
-      <div id="dropZone" class="dropzone" tabindex="0">
-        <div class="dz-icon">📄</div>
-        <div>
-          <b>Click to upload</b> or drag and drop
-          <div class="muted small">DOCX or TXT (max 200MB)</div>
-        </div>
+      <div id="dropZone" class="dropzone">
+        <!-- Clickable area is a label bound to #fileInput -->
+        <label class="dz-label" for="fileInput" style="display:block;cursor:pointer;">
+          <div class="dz-icon">📄</div>
+          <div id="dzText">
+            <b>Click to upload</b> or drag and drop
+            <div class="muted small">DOCX or TXT (max 200MB)</div>
+          </div>
+        </label>
         <input id="fileInput" type="file" accept=".doc,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" hidden />
       </div>
 
@@ -120,7 +116,63 @@
   <!-- Scripts -->
   <script src="./script.js"></script>
   <script type="module" src="/js/gemini-pwc.js"></script>
-  <!-- ADDED: Upload fixes (must be last) -->
-  <script src="./fix-upload.js"></script>
+
+  <!-- Inline stabilization: remove old listeners & update filename -->
+  <script>
+    (function(){
+      function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+      ready(function(){
+        var dropZone = document.getElementById('dropZone');
+        var fileInput = document.getElementById('fileInput');
+        var dzText   = document.getElementById('dzText');
+        var btnEval  = document.getElementById('btnEvaluate');
+        var btnClear = document.getElementById('btnClear');
+        if(!dropZone || !fileInput || !dzText) return;
+
+        // Remove any old listeners (clone trick)
+        var fresh = dropZone.cloneNode(true);
+        dropZone.parentNode.replaceChild(fresh, dropZone);
+        dropZone = document.getElementById('dropZone');
+        fileInput = document.getElementById('fileInput');
+        dzText    = document.getElementById('dzText');
+        btnEval   = document.getElementById('btnEvaluate');
+        btnClear  = document.getElementById('btnClear');
+
+        var defaultHTML = dzText.innerHTML;
+        if(btnEval) btnEval.disabled = true;
+
+        function setSelected(name){
+          dzText.textContent = 'Đã chọn: ' + name;
+          if(btnEval) btnEval.disabled = false;
+        }
+        function resetLabel(){
+          dzText.innerHTML = defaultHTML;
+          if(btnEval) btnEval.disabled = true;
+        }
+
+        // Change
+        fileInput.addEventListener('change', function(){
+          var f = fileInput.files && fileInput.files[0];
+          if (f) setSelected(f.name); else resetLabel();
+        });
+        // Drop (show name only)
+        dropZone.addEventListener('dragover', function(e){ e.preventDefault(); });
+        dropZone.addEventListener('drop', function(e){
+          e.preventDefault();
+          var files = e.dataTransfer && e.dataTransfer.files;
+          if (files && files.length){ setSelected(files[0].name); }
+        });
+
+        // Clear
+        if (btnClear){
+          btnClear.addEventListener('click', function(){
+            try{ fileInput.value=''; }catch(e){}
+            resetLabel();
+          });
+        }
+        resetLabel();
+      });
+    })();
+  </script>
 </body>
 </html>
