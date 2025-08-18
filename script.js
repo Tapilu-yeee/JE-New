@@ -267,3 +267,18 @@ on($("#btnExport"),"click",()=>{
 // Init
 setTab("eval");
 loadSgrade();
+
+
+// === PwC Gemini integration helper ===
+async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '#result'){
+  try {
+    const jd = document.querySelector(inputSelector)?.value || '';
+    const res = await window.__PWC_EVAL__.evaluateJDWithPwC(jd);
+    const out = document.querySelector(outputSelector);
+    if (out) out.textContent = JSON.stringify(res, null, 2);
+    return res;
+  } catch(e){
+    console.error(e);
+    alert('Lỗi PwC/Gemini: ' + (e.message||e));
+  }
+}
