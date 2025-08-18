@@ -1,14 +1,1568 @@
 [
   {
-    "positionName": "Sample Position",
-    "vietnameseName": "Vị Trí Mẫu",
+    "positionName": "Marketing Manager",
+    "vietnameseName": "Trưởng Phòng Tiếp Thị",
     "positionType": "Indirect",
     "rank": "S7"
   },
   {
-    "positionName": "Junior Accountant",
-    "vietnameseName": "Kế toán viên",
+    "positionName": "Trade Marketing Supervisor",
+    "vietnameseName": "Giám Sát Tiếp Thị Thương Mại",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Trade Marketing Specialist",
+    "vietnameseName": "Chuyên Viên Tiếp Thị Thương Mại",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Brand Specialist",
+    "vietnameseName": "Chuyên Viên Quản Lý Thương Hiệu",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Community Management Specialist",
+    "vietnameseName": "Chuyên Viên Xây Dựng Cộng Đồng",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Creative Producer",
+    "vietnameseName": "Nhân Viên Sản Xuất Sáng Tạo Nội Dung",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Trade Marketing Executive",
+    "vietnameseName": "Nhân Viên Tiếp Thị Thương Mại",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "SME Business Development Director",
+    "vietnameseName": "Giám Đốc Phát Triển Kinh Doanh Khách Hàng Vừa Và Nhỏ",
+    "positionType": "Indirect",
+    "rank": "S9"
+  },
+  {
+    "positionName": "Acting SME Business Development Director",
+    "vietnameseName": "Giám Đốc Phát Triển Kinh Doanh Khách Hàng Vừa Và Nhỏ Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S8"
+  },
+  {
+    "positionName": "Head of Customer Experience",
+    "vietnameseName": "Trưởng Phòng Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Customer Intelligence Manager",
+    "vietnameseName": "Trưởng Phòng Trí Tuệ Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Customer Experience Manager",
+    "vietnameseName": "Trưởng Phòng Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Customer Experience Expert",
+    "vietnameseName": "Chuyên Gia Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Touchpoint Control Manager",
+    "vietnameseName": "Trưởng Phòng Kiểm Soát Điểm Chạm",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Senior Data Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Dữ Liệu Cấp Cao",
     "positionType": "Indirect",
     "rank": "S3"
+  },
+  {
+    "positionName": "Customer Intelligence Specialist",
+    "vietnameseName": "Chuyên Viên Trí Tuệ Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Data Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Dữ Liệu",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Customer Experience Specialist",
+    "vietnameseName": "Chuyên Viên Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Process Assurance Specialist",
+    "vietnameseName": "Chuyên Viên Đảm Bảo Quy Trình",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Touchpoint Control Specialist",
+    "vietnameseName": "Chuyên Viên Kiểm Soát Điểm Chạm",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Customer Intelligence Executive",
+    "vietnameseName": "Nhân Viên Trí Tuệ Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Customer Experience Executive",
+    "vietnameseName": "Nhân Viên Trải Nghiệm Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Touchpoint Control Executive",
+    "vietnameseName": "Nhân Viên Kiểm Soát Điểm Chạm",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Touchpoint Control Officer",
+    "vietnameseName": "Cộng Tác Viên Kiểm Soát Điểm Chạm",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Head of C2C",
+    "vietnameseName": "Trưởng Phòng Bán Lẻ",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Telesales Manager",
+    "vietnameseName": "Trưởng Phòng Bán Hàng Qua Điện Thoại",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Customer Services Manager",
+    "vietnameseName": "Trưởng Phòng Chăm Sóc Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Telesales Supervisor",
+    "vietnameseName": "Giám Sát Bán Hàng Qua Điện Thoại",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Customer Services Supervisor",
+    "vietnameseName": "Giám Sát Chăm Sóc Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Telesales Team Leader",
+    "vietnameseName": "Trưởng Nhóm Bán Hàng Qua Điện Thoại",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Partnership Specialist",
+    "vietnameseName": "Chuyên Viên Quan Hệ Đối Tác Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Performance Marketing Team Leader",
+    "vietnameseName": "Trưởng Nhóm Tiếp Thị Hiệu Quả",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Growth Enablement Team Leader",
+    "vietnameseName": "Trưởng Nhóm Hỗ Trợ Tăng Trưởng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Growth Specialist",
+    "vietnameseName": "Chuyên Viên Tăng Trưởng Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Customer Support Team Leader",
+    "vietnameseName": "Trưởng Nhóm Hỗ Trợ Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Partnership Support Team Leader",
+    "vietnameseName": "Trưởng Nhóm Hỗ Trợ Đối Tác",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Customer Contact Team Leader",
+    "vietnameseName": "Trưởng Nhóm Tiếp Nhận Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Telesales Specialist",
+    "vietnameseName": "Chuyên Viên Bán Hàng Qua Điện Thoại",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Partnership Specialist",
+    "vietnameseName": "Chuyên Viên Quan Hệ Đối Tác",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Graphic Design Specialist",
+    "vietnameseName": "Chuyên Viên Thiết Kế Đồ Họa",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Gamification Specialist",
+    "vietnameseName": "Chuyên Viên Trò Chơi Tương Tác",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Data Analytics",
+    "vietnameseName": "Chuyên Viên Phân Tích Dữ Liệu",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Customer Data Platform Specialist",
+    "vietnameseName": "Chuyên Viên Nền Tảng Dữ Liệu Khách hàng",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Content Specialist",
+    "vietnameseName": "Chuyên Viên Sáng Tạo Nội Dung",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Video Creative Specialist",
+    "vietnameseName": "Chuyên Viên Sáng Tạo Video",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Digital Marketing Specialist",
+    "vietnameseName": "Chuyên Viên Tiếp Thị Trực Tuyến",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Telesales Executive",
+    "vietnameseName": "Nhân Viên Bán Hàng Qua Điện Thoại",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Call Center Specialist",
+    "vietnameseName": "Chuyên Viên Tổng Đài Chăm Sóc Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Call Center Executive",
+    "vietnameseName": "Nhân Viên Tổng Đài Chăm Sóc Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Special Support Specialist",
+    "vietnameseName": "Chuyên Viên Hỗ Trợ Đặc Biệt",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Special Support Executive",
+    "vietnameseName": "Nhân Viên Hỗ Trợ Đặc Biệt",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Internal Support Specialist",
+    "vietnameseName": "Chuyên Viên Hỗ Trợ Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Internal Support Executive",
+    "vietnameseName": "Nhân Viên Hỗ Trợ Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Partnership Support Specialist",
+    "vietnameseName": "Chuyên Viên Hỗ Trợ Đối Tác",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Partnership Support Executive",
+    "vietnameseName": "Nhân Viên Hỗ Trợ Đối Tác",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Social Support Specialist",
+    "vietnameseName": "Chuyên Viên Chăm Sóc Khách Hàng Qua Mạng Xã Hội",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Social Support Executive",
+    "vietnameseName": "Nhân Viên Chăm Sóc Khách Hàng Qua Mạng Xã Hội",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Social Media Support Specialist",
+    "vietnameseName": "Chuyên Viên Chăm Sóc Khách Hàng Qua Mạng Xã Hội",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Social Media Support Executive",
+    "vietnameseName": "Nhân Viên Chăm Sóc Khách Hàng Qua Mạng Xã Hội",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Pricing & Sales Planning Manager",
+    "vietnameseName": "Trưởng Phòng Định Giá và Kế Hoạch Bán Hàng",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Category Specialist",
+    "vietnameseName": "Chuyên Viên Quản Lý Ngành Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Category Executive",
+    "vietnameseName": "Nhân Viên Quản Lý Ngành Hàng",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Big Clients Account Specialist",
+    "vietnameseName": "Chuyên Viên Chuyên Trách Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Big Clients Account Executive",
+    "vietnameseName": "Nhân Viên Chuyên Trách Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Senior Business Development Manager",
+    "vietnameseName": "Trưởng Phòng Phát Triển Kinh Doanh Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Acting Senior Business Development Manager",
+    "vietnameseName": "Trưởng Phòng Phát Triển Kinh Doanh Cấp Cao Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Business Development Manager",
+    "vietnameseName": "Trưởng Phòng Phát Triển Kinh Doanh",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Senior Business Development Specialist",
+    "vietnameseName": "Chuyên Viên Phát Triển Kinh Doanh Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Business Development Specialist",
+    "vietnameseName": "Chuyên Viên Phát Triển Kinh Doanh",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Business Development Executive",
+    "vietnameseName": "Nhân Viên Phát Triển Kinh Doanh",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Senior Customer Services B2C Manager",
+    "vietnameseName": "Trưởng Phòng Chăm Sóc Khách Hàng B2C Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Senior Field Sale Manager",
+    "vietnameseName": "Trưởng Phòng Phát Triển Kinh Doanh Thực Địa Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Acting Senior Field Sale Manager",
+    "vietnameseName": "Trưởng Phòng Phát Triển Kinh Doanh Thực Địa Cấp Cao Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Field Sale Manager",
+    "vietnameseName": "Trưởng Phòng Phát Triển Kinh Doanh Thực Địa",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Customer Services B2C Supervisor",
+    "vietnameseName": "Giám Sát Chăm Sóc Khách Hàng B2C",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Customer Services B2C Team Leader",
+    "vietnameseName": "Trưởng Nhóm Chăm Sóc Khách Hàng B2C",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Claim Team Leader",
+    "vietnameseName": "Trưởng Nhóm Xử Lý Đền Bù",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Field Sale Team Leader",
+    "vietnameseName": "Trưởng Nhóm Phát Triển Kinh Doanh Thực Địa",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Field Sale Specialist",
+    "vietnameseName": "Chuyên Viên Phát Triển Kinh Doanh Thực Địa Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Acting Field Sale Team Leader",
+    "vietnameseName": "Trưởng Nhóm Phát Triển Kinh Doanh Thực Địa Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Senior Customer Services B2C Specialist",
+    "vietnameseName": "Chuyên Viên Chăm Sóc Khách Hàng B2C Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Senior Claim Specialist",
+    "vietnameseName": "Chuyên Viên Xử Lý Đền Bù Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Field Sale Specialist",
+    "vietnameseName": "Chuyên Viên Phát Triển Kinh Doanh Thực Địa",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Sale Admin Specialist",
+    "vietnameseName": "Chuyên Viên Hỗ Trợ Kinh Doanh",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Customer Services B2C Executive",
+    "vietnameseName": "Nhân Viên Chăm Sóc Khách Hàng B2C",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Claim Specialist",
+    "vietnameseName": "Chuyên Viên Xử Lý Đền Bù",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Customer Services B2C Specialist",
+    "vietnameseName": "Chuyên Viên Chăm Sóc Khách Hàng B2C",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Field Sale Executive",
+    "vietnameseName": "Nhân Viên Phát Triển Kinh Doanh Thực Địa",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Key Account Manager",
+    "vietnameseName": "Trưởng Phòng Quản Lý Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Key Account Supervisor",
+    "vietnameseName": "Giám Sát Quản Lý Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Key Account Team Leader",
+    "vietnameseName": "Trưởng Nhóm Quản Lý Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Key Account Specialist",
+    "vietnameseName": "Chuyên Viên Quản Lý Khách Hàng Lớn Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Key Account Solutions Team Leader",
+    "vietnameseName": "Trưởng Nhóm Giải Pháp Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Key Account Care Specialist",
+    "vietnameseName": "Chuyên Viên Chăm Sóc Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Key Account Specialist",
+    "vietnameseName": "Chuyên Viên Quản Lý Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Key Account Solutions Specialist",
+    "vietnameseName": "Chuyên Viên Giải Pháp Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Key Account Care Executive",
+    "vietnameseName": "Nhân Viên Chăm Sóc Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Key Account Executive",
+    "vietnameseName": "Nhân Viên Quản Lý Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Key Account Solutions Executive",
+    "vietnameseName": "Nhân Viên Giải Pháp Khách Hàng Lớn",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Investment Manager",
+    "vietnameseName": "Trưởng Phòng Đầu Tư",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Senior Investment Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Đầu Tư Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Assistant to Chief Financial Officer",
+    "vietnameseName": "Trợ Lý Phó Tổng Giám Đốc Khối Tài Chính",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Senior Accounting Manager",
+    "vietnameseName": "Trưởng Phòng Kế Toán Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Senior General Accountant",
+    "vietnameseName": "Chuyên Viên Kế Toán Tổng Hợp Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Accounts Payable Manager",
+    "vietnameseName": "Trưởng phòng Kế Toán Công Nợ Phải Trả",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "General Accountant",
+    "vietnameseName": "Chuyên Viên Kế Toán Tổng Hợp",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Accounts Payable Specialist",
+    "vietnameseName": "Chuyên Viên Kế Toán Công Nợ Phải Trả Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Customer Accounts Receivable Supervisor",
+    "vietnameseName": "Giám Sát Kế Toán Công Nợ Phải Thu Khách Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Accounts Receivable Supervisor",
+    "vietnameseName": "Giám Sát Kế Toán Công Nợ Phải Thu",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "COD Accounts Receivable Team Leader",
+    "vietnameseName": "Trưởng Nhóm Kế Toán Công Nợ Phải Thu COD",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Accounts Receivable Specialist",
+    "vietnameseName": "Chuyên Viên Kế Toán Công Nợ Phải Thu Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Cash Management Team Leader",
+    "vietnameseName": "Trưởng Nhóm Bộ Phận Kế Toán Thanh Toán",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Accounts Payable Specialist",
+    "vietnameseName": "Chuyên Viên Kế Toán Công Nợ Phải Trả",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Accounts Receivable Specialist",
+    "vietnameseName": "Chuyên Viên Kế Toán Công Nợ Phải Thu",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Revenue Management Specialist",
+    "vietnameseName": "Chuyên viên Quản Lý Doanh Thu",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Cash Management Specialist",
+    "vietnameseName": "Chuyên Viên Kế Toán Thanh Toán",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Accounts Payable Executive",
+    "vietnameseName": "Nhân Viên Kế Toán Công Nợ Phải Trả",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Accounts Receivable Executive",
+    "vietnameseName": "Nhân Viên Kế Toán Công Nợ Phải Thu",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Revenue Management Executive",
+    "vietnameseName": "Nhân Viên Quản Lý Doanh Thu",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Cash Management Executive",
+    "vietnameseName": "Nhân Viên Kế Toán Thanh Toán",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Fixed Assets Accountant",
+    "vietnameseName": "Kế Toán Tài Sản Cố Định",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Group Finance Director",
+    "vietnameseName": "Giám Đốc Tài Chính Tập Đoàn",
+    "positionType": "Indirect",
+    "rank": "S9"
+  },
+  {
+    "positionName": "Acting Group Finance Director",
+    "vietnameseName": "Giám Đốc Tài Chính Tập Đoàn Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Senior Financial Planning & Analysis Manager",
+    "vietnameseName": "Trưởng Phòng Kế Hoạch & Phân Tích Tài Chính Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Financial Planning & Analysis Manager",
+    "vietnameseName": "Trưởng Phòng Kế Hoạch & Phân Tích Tài Chính",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Financial Planning & Analysis Supervisor",
+    "vietnameseName": "Giám Sát Kế Hoạch & Phân Tích Tài Chính",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Senior Financial Planning & Analysis Specialist",
+    "vietnameseName": "Chuyên Viên Kế Hoạch & Phân Tích Tài Chính Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Financial Planning & Analysis Specialist",
+    "vietnameseName": "Chuyên Viên Kế Hoạch & Phân Tích Tài Chính",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Reporting Specialist",
+    "vietnameseName": "Chuyên Viên Báo Cáo Quản Trị",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Purchasing Manager",
+    "vietnameseName": "Trưởng Phòng Mua Hàng Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Mechanical & Electrical Manager",
+    "vietnameseName": "Trưởng Phòng Cơ Điện",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Truck Manager",
+    "vietnameseName": "Trưởng Phòng Quản Lý Xe Tải",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Senior Purchasing Specialist",
+    "vietnameseName": "Chuyên Viên Mua Hàng Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Purchasing Specialist",
+    "vietnameseName": "Chuyên Viên Mua Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Purchasing Executive",
+    "vietnameseName": "Nhân Viên Mua Hàng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Compensation & Benefits Manager",
+    "vietnameseName": "Trưởng Phòng Tiền Lương & Phúc Lợi",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Senior Compensation & Benefits Specialist",
+    "vietnameseName": "Chuyên Viên Tiền Lương & Phúc Lợi Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Compensation & Benefits Specialist",
+    "vietnameseName": "Chuyên Viên Tiền Lương & Phúc Lợi",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Compensation & Benefits Executive",
+    "vietnameseName": "Nhân Viên Tiền Lương & Phúc Lợi",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Compensation & Benefits Officer",
+    "vietnameseName": "Cộng Tác Viên Tiền Lương & Phúc Lợi",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Senior Employee Well-Being Manager",
+    "vietnameseName": "Trưởng Phòng Cấp Cao Đời Sống Nhân Viên",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Employee Well-Being Team Leader",
+    "vietnameseName": "Trưởng Nhóm Đời Sống Nhân Viên",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "SHE Specialist",
+    "vietnameseName": "Chuyên Viên An Toàn Lao Động",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Employee Well-Being Specialist",
+    "vietnameseName": "Chuyên Viên Đời Sống Nhân Viên",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Employee Well-Being Executive",
+    "vietnameseName": "Nhân Viên Đời Sống Nhân Viên",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "SHE Executive",
+    "vietnameseName": "Nhân Viên An Toàn Lao Động",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Senior HRBP Manager",
+    "vietnameseName": "Trưởng Phòng Đối Tác Nhân Sự Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "HRBP Specialist",
+    "vietnameseName": "Chuyên Viên Đối Tác Nhân Sự",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "HRBP Executive",
+    "vietnameseName": "Nhân Viên Đối Tác Nhân Sự",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "HRBP Officer",
+    "vietnameseName": "Cộng Tác Viên Đối Tác Nhân Sự",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Learning & Development Expert",
+    "vietnameseName": "Chuyên Gia Học Tập & Phát Triển",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Learning & Development Manager",
+    "vietnameseName": "Trưởng Phòng Học Tập và Phát Triển",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Training Manager",
+    "vietnameseName": "Trưởng Phòng Đào Tạo",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Senior Talent Development Specialist",
+    "vietnameseName": "Chuyên Viên Phát Triển Nhân Tài Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Learning & Development Supervisor",
+    "vietnameseName": "Giám Sát Học Tập & Phát Triển",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Senior Learning & Development Specialist",
+    "vietnameseName": "Chuyên Viên Học Tập & Phát Triển Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Learning & Development Specialist",
+    "vietnameseName": "Chuyên Viên Học Tập & Phát Triển",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Learning & Development Executive",
+    "vietnameseName": "Nhân Viên Học Tập & Phát Triển",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Learning & Development Officer",
+    "vietnameseName": "Cộng Tác Viên Học Tập & Phát Triển",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Office Admin Manager",
+    "vietnameseName": "Trưởng Phòng Hành Chính",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Office Admin Team Leader",
+    "vietnameseName": "Trưởng Nhóm Hành Chính",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Office Admin Specialist",
+    "vietnameseName": "Chuyên Viên Hành Chính",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Office Admin Executive",
+    "vietnameseName": "Nhân Viên Hành Chính",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Total Rewards Manager",
+    "vietnameseName": "Trưởng Phòng Chính sách Tưởng Thưởng",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Senior Total Rewards Specialist",
+    "vietnameseName": "Chuyên Viên Chính Sách Tưởng Thưởng Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Total Rewards Specialist",
+    "vietnameseName": "Chuyên Viên Chính Sách Tưởng Thưởng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "People Performance Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Dữ Liệu Nhân Lực",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Total Rewards Executive",
+    "vietnameseName": "Nhân Viên Chính Sách Tưởng Thưởng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Employee Experience Manager",
+    "vietnameseName": "Trưởng Phòng Trải Nghiệm Nhân Viên",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Senior Employee Experience Specialist",
+    "vietnameseName": "Chuyên Viên Trải Nghiệm Nhân Viên Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Employee Experience Specialist",
+    "vietnameseName": "Chuyên Viên Trải Nghiệm Nhân Viên",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Processing & Data Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Quy Trình Và Dữ Liệu",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Legal Director",
+    "vietnameseName": "Giám Đốc Pháp Chế",
+    "positionType": "Indirect",
+    "rank": "S8"
+  },
+  {
+    "positionName": "Legal Manager",
+    "vietnameseName": "Trưởng Phòng Pháp Chế",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Senior Legal Specialist",
+    "vietnameseName": "Chuyên Viên Pháp Chế Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Legal Specialist",
+    "vietnameseName": "Chuyên Viên Pháp Lý",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Legal Officer",
+    "vietnameseName": "Cộng Tác Viên Pháp Chế",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Legal Executive",
+    "vietnameseName": "Nhân Viên Pháp Chế",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Internal Audit & Internal Control Director",
+    "vietnameseName": "Giám Đốc Kiểm Soát & Kiểm Toán Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S8"
+  },
+  {
+    "positionName": "Internal Audit Supervisor",
+    "vietnameseName": "Giám Sát Kiểm Toán Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Internal Audit Team Leader",
+    "vietnameseName": "Trưởng Nhóm Kiểm Toán Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Internal Audit Specialist",
+    "vietnameseName": "Chuyên Viên Kiểm Toán Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Internal Audit Executive",
+    "vietnameseName": "Nhân Viên Kiểm Toán Nội Bộ",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Collections Officer",
+    "vietnameseName": "Cộng Tác Viên Truy Thu",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Chief of Staff",
+    "vietnameseName": "Chánh Văn Phòng",
+    "positionType": "Indirect",
+    "rank": "S8"
+  },
+  {
+    "positionName": "Senior Business Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Kinh Doanh Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Business Analyst 3",
+    "vietnameseName": "Nhân Viên Phân Tích Kinh Doanh - Bậc 3",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Regional Director",
+    "vietnameseName": "Giám Đốc Vùng",
+    "positionType": "Indirect",
+    "rank": "S9"
+  },
+  {
+    "positionName": "Regional Director",
+    "vietnameseName": "Giám Đốc Vùng",
+    "positionType": "Indirect",
+    "rank": "S8"
+  },
+  {
+    "positionName": "Regional Deputy Director",
+    "vietnameseName": "Phó Giám Đốc Vùng",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Acting Regional Deputy Director",
+    "vietnameseName": "Phó Giám Đốc Vùng Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Area Manager",
+    "vietnameseName": "Quản Lý Khu Vực",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "HRBP Manager",
+    "vietnameseName": "Trưởng Phòng Đối Tác Nhân Sự",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "HRBP Supervisor",
+    "vietnameseName": "Giám Sát Đối Tác Nhân Sự",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Acting Area Manager",
+    "vietnameseName": "Quản Lý Khu Vực Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Sorting Supervisor",
+    "vietnameseName": "Giám Sát Kho Trung Chuyển",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Exceptional Handing Supervisor",
+    "vietnameseName": "Giám Sát  Xử Lý Ngoại Lệ",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "HRBP Team Leader",
+    "vietnameseName": "Trưởng Nhóm Đối Tác Nhân Sự",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Assistant to Regional Director",
+    "vietnameseName": "Trợ Lý Giám Đốc Vùng",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Operations Administration Specialist",
+    "vietnameseName": "Chuyên Viên Hành Chính Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Truck Coordinator",
+    "vietnameseName": "Điều Phối Vận Tải",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Sorting Coordinator",
+    "vietnameseName": "Điều Phối Kho Trung Chuyển",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Business Development Field Executive",
+    "vietnameseName": "Nhân Viên Phát Triển Thị Trường",
+    "positionType": "Direct",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Operations Executive",
+    "vietnameseName": "Nhân Viên Xử Lý",
+    "positionType": "Direct",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Operations Administration Executive",
+    "vietnameseName": "Nhân Viên Hành Chính Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Regional Business Development Executive",
+    "vietnameseName": "Nhân Viên Phát Triển Kinh Doanh Vùng",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Sorting Staff",
+    "vietnameseName": "Nhân Viên Phân Hàng",
+    "positionType": "Direct",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Light Truck Driver",
+    "vietnameseName": "Tài Xế Xe Tải Nhẹ",
+    "positionType": "Direct",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Truck Administration Executive",
+    "vietnameseName": "Nhân Viên Hành Chính Vận Tải",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Exceptional Handling Executive",
+    "vietnameseName": "Nhân Viên Xử Lý Ngoại Lệ",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Sorting Centers Director",
+    "vietnameseName": "Giám Đốc Kho Trung Chuyển",
+    "positionType": "Indirect",
+    "rank": "S9"
+  },
+  {
+    "positionName": "Senior Sorting Centers Manager",
+    "vietnameseName": "Trưởng Phòng Kho Trung Chuyển Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S8"
+  },
+  {
+    "positionName": "Acting Senior Sorting Centers Manager",
+    "vietnameseName": "Trưởng Phòng Kho Trung Chuyển Cấp Cao Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Deputy Sorting Centers Manager",
+    "vietnameseName": "Phó Phòng Kho Trung Chuyển",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Linehaul Manager",
+    "vietnameseName": "Trưởng Phòng Vận Tải",
+    "positionType": "Indirect",
+    "rank": "S6"
+  },
+  {
+    "positionName": "Acting Deputy Sorting Centers Manager",
+    "vietnameseName": "Phó Phòng Kho Trung Chuyển Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Linehaul Supervisor",
+    "vietnameseName": "Giám Sát Vận Tải",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Truck Maintenance Supervisor",
+    "vietnameseName": "Giám Sát Bảo Trì Xe Tải",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Sorting Team Leader",
+    "vietnameseName": "Trưởng Nhóm Phân Hàng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Security Team Leader",
+    "vietnameseName": "Trưởng Nhóm An Ninh",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Acting Sorting Supervisor",
+    "vietnameseName": "Giám Sát Kho Trung Chuyển Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Truck Optimization Specialist",
+    "vietnameseName": "Chuyên Viên Tối Ưu Vận Tải",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Truck Maintenance Specialist",
+    "vietnameseName": "Chuyên Viên Bảo Trì Xe Tải",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Truck Driver",
+    "vietnameseName": "Tài Xế Xe Tải",
+    "positionType": "Direct",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Data Admin Executive",
+    "vietnameseName": "Nhân Viên Quản Lý Dữ Liệu",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Security Executive",
+    "vietnameseName": "Nhân Viên An Ninh",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Cleaner",
+    "vietnameseName": "Nhân Viên Tạp Vụ",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Medical Executive",
+    "vietnameseName": "Nhân Viên Y Tế",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Material Management Executive",
+    "vietnameseName": "Nhân Viên Quản Lý Công Cụ Dụng Cụ",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Maintenance Supervisor",
+    "vietnameseName": "Giám Sát Bảo Trì",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Maintenance Team Leader",
+    "vietnameseName": "Trưởng Nhóm Bảo Trì",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Acting Maintenance Team Leader",
+    "vietnameseName": "Trưởng Nhóm Bảo Trì Thử Vai",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Maintenance Specialist",
+    "vietnameseName": "Chuyên Viên Bảo Trì",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Maintenance Executive",
+    "vietnameseName": "Nhân Viên Bảo Trì",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Senior Network Manager",
+    "vietnameseName": "Trưởng Phòng Mạng Lưới Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Network Performance & Cost Optimization Manager",
+    "vietnameseName": "Trưởng Phòng Hiệu Suất Mạng Lưới & Tối Ưu Chi Phí",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Network Planning Manager",
+    "vietnameseName": "Trưởng Phòng Hoạch Định Mạng Lưới",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "3PL Partnership Manager",
+    "vietnameseName": "Trưởng Phòng Đối Tác Vận Chuyển",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Network Operation Manager",
+    "vietnameseName": "Network Operation Manager",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Network Planning Specialist",
+    "vietnameseName": "Chuyên Viên Hoạch Định Mạng Lưới",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Construction Manager",
+    "vietnameseName": "Trưởng Phòng Xây Dựng",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Senior Operational Excellence Manager",
+    "vietnameseName": "Trưởng Phòng Chiến Lược Vận Hành Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Operations Support Manager",
+    "vietnameseName": "Trưởng Phòng Hỗ Trợ Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S5"
+  },
+  {
+    "positionName": "Operations Support Supervisor",
+    "vietnameseName": "Giám Sát Hỗ Trợ Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Operational Excellence Specialist",
+    "vietnameseName": "Chuyên Viên Chiến Lược Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior Operational Data Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Dữ Liệu Vận Hành Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Operations Support Team Leader",
+    "vietnameseName": "Trưởng Nhóm Hỗ Trợ Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Operational Data Analyst",
+    "vietnameseName": "Chuyên Viên Phân Tích Dữ Liệu Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S2"
+  },
+  {
+    "positionName": "Operations Support Executive",
+    "vietnameseName": "Nhân Viên Hỗ Trợ Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "QC Camera Executive",
+    "vietnameseName": "Nhân viên giám sát camera",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Operational Excellence Officer",
+    "vietnameseName": "Cộng tác viên Chiến Lược Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Operational Excellence Executive",
+    "vietnameseName": "Nhân Viên Chiến Lược Vận Hành",
+    "positionType": "Indirect",
+    "rank": "S1"
+  },
+  {
+    "positionName": "Senior Site Development Specialist",
+    "vietnameseName": "Chuyên Viên Tìm Kiếm Mặt Bằng Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S4"
+  },
+  {
+    "positionName": "Site Inspection Specialist",
+    "vietnameseName": "Chuyên viên giám sát xây dựng",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Senior National HRBP Manager",
+    "vietnameseName": "Trưởng Phòng Đối Tác Nhân Sự Toàn Quốc Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S7"
+  },
+  {
+    "positionName": "Senior HRBP Specialist",
+    "vietnameseName": "Chuyên Viên Đối Tác Nhân Sự Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S3"
+  },
+  {
+    "positionName": "Chief Executive Officer",
+    "vietnameseName": "Tổng Giám Đốc",
+    "positionType": "Indirect",
+    "rank": "S13"
+  },
+  {
+    "positionName": "Chief People Officer",
+    "vietnameseName": "Phó Tổng Giám Đốc Khối Nhân Lực",
+    "positionType": "Indirect",
+    "rank": "S12"
+  },
+  {
+    "positionName": "Chief Financial Officer",
+    "vietnameseName": "Phó Tổng Giám Đốc Khối Tài Chính",
+    "positionType": "Indirect",
+    "rank": "S12"
+  },
+  {
+    "positionName": "Chief Operations Officer",
+    "vietnameseName": "Phó Tổng Giám Đốc Khối Thị Trường",
+    "positionType": "Indirect",
+    "rank": "S12"
+  },
+  {
+    "positionName": "Senior Tech Director",
+    "vietnameseName": "Giám Đốc Công Nghệ Cấp Cao",
+    "positionType": "Indirect",
+    "rank": "S10"
   }
 ]
