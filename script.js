@@ -73,7 +73,7 @@ dropZone.addEventListener("dragover",(e)=>{ e.preventDefault(); dropZone.style.b
 dropZone.addEventListener("dragleave",()=>{ dropZone.style.borderColor="var(--border)"; });
 dropZone.addEventListener("drop",(e)=>{
   e.preventDefault(); dropZone.style.borderColor="var(--border)";
-  if(e.dataTransfer.files?.length) fileInput.files = e.dataTransfer.files;
+  if(e.dataTransfer.files?.length){ window.__LAST_FILE = e.dataTransfer.files[0]; try{ const evt=new Event("change"); fileInput.dispatchEvent(evt);}catch(_){} }
 });
 
 // Read file (.txt, .docx)
@@ -131,7 +131,7 @@ async function callGemini(prompt){
 
 // Render
 const resultCard = $("#resultCard");
-const resultBody = $("#resultBody");
+const resultBody = document.querySelector('#resultBody') || document.querySelector('#resultTable tbody');
 const resultHeader = $("#resultHeader");
 const overall = $("#overall");
 function renderResult(jobTitle, result){
@@ -154,7 +154,7 @@ function renderResult(jobTitle, result){
     `;
     resultBody.appendChild(tr);
   });
-  overall.innerHTML = result.overallSummary ? ("<strong>Nhận xét tổng quan:</strong> " + escapeHTML(result.overallSummary)) : "";
+  overall.textContent = result.overallSummary ? ("Nhận xét tổng quan: " + result.overallSummary) : "";
   resultCard.hidden = false;
 }
 function escapeHTML(s){
@@ -180,7 +180,7 @@ on(btnEvaluate,"click", async ()=>{
     errorCard.hidden = true;
     resultCard.hidden = true;
     btnEvaluate.disabled = true; btnEvaluate.textContent = "Đang đánh giá...";
-    const file = fileInput.files?.[0];
+    const file = fileInput.files?.[0] || window.__LAST_FILE;
     if(!file) throw new Error("Vui lòng chọn tệp JD (.docx hoặc .txt)");
     const jdText = await readFileContent(file);
     const prompt = buildPrompt(jobTitleInput.value.trim(), jdText);
@@ -196,11 +196,37 @@ on(btnEvaluate,"click", async ()=>{
 
 // -------------------- S-GRADE --------------------
 async function loadSgrade(){
-  const res = await fetch("./sgrade.json");
-  const data = await res.json();
-  window.__S_GRADE = data || [];
+  const urls = [
+    "./sgrade.json",
+    "sgrade.json",
+    new URL("sgrade.json", location.href).toString()
+  ];
+  let data = [];
+  for (const u of urls){
+    try{
+      const res = await fetch(u, {cache:"no-store"});
+      if(res.ok){
+        const j = await res.json();
+        if (Array.isArray(j)) { data = j; break; }
+      }
+    }catch(err){
+      console.warn("[S-GRADE] try", u, "failed:", err);
+    }
+  }
+  if (!Array.isArray(data)) data = [];
+  window.__S_GRADE = data;
   renderSgrade();
   fillRanks();
+  const hintEl = document.getElementById("sgradeBody");
+  if (hintEl && (!data || data.length === 0)){
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 4;
+    td.className = "muted";
+    td.textContent = "Không tải được dữ liệu S-Grade. Hãy chắc chắn có file sgrade.json ở cùng thư mục với index.html (và commit lên GitHub Pages).";
+    tr.appendChild(td);
+    hintEl.appendChild(tr);
+  }
 }
 function fillRanks(){
   const data = window.__S_GRADE||[];
@@ -358,29 +384,26 @@ loadSgrade();
   });
 })();
 
-// === NON-DESTRUCTIVE PATCH (append at END of script.js) ===
-// Bold "Nhận xét tổng quan:" safely (no double-bolding, no layout change)
+
+// === PATCH: Prevent double file picker pop-up (non-destructive) ===
 (function(){
-  if (window.__BOLD_OVERVIEW_MIN_PATCH__) return;
-  window.__BOLD_OVERVIEW_MIN_PATCH__ = true;
-
-  function boldOnce(el){
-    if (!el) return;
-    if (el.innerHTML.indexOf('<strong>Nhận xét tổng quan:</strong>') !== -1) return;
-    const t = (el.textContent || '').trim();
-    const head = 'Nhận xét tổng quan:';
-    if (t.startsWith(head)){
-      const rest = t.slice(head.length).trimStart();
-      el.innerHTML = '<strong>'+head+'</strong> ' + rest;
-    }
+  var dz = document.getElementById('dropZone');
+  var fi = document.getElementById('fileInput');
+  if (!dz || !fi) return;
+  var opening = false;
+  function openOnce(){
+    if (opening) return;
+    opening = true;
+    try { fi.click(); } catch(e){}
+    setTimeout(function(){ opening = false; }, 800);
   }
-
-  function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
-  ready(function(){
-    const el = document.getElementById('overall') || document.querySelector('.overall');
-    if (!el) return;
-    boldOnce(el);
-    // if content changes later, keep the first words bold
-    new MutationObserver(function(){ boldOnce(el); }).observe(el, {childList:true, characterData:true, subtree:true});
-  });
+  // Intercept clicks at capture phase and stop bubbling to duplicate handlers
+  dz.addEventListener('click', function(e){
+    // if user actually clicked the hidden input, let default happen once
+    if (e && e.target && e.target.tagName === 'INPUT') return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    openOnce();
+  }, {capture:true});
 })();
