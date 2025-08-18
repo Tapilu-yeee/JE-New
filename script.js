@@ -1,36 +1,13 @@
-// === PATCH: Bold "Nhận xét tổng quan" (idempotent) ===
-(function(){
-  if (window.__BOLD_OVERVIEW_PATCH__) return;
-  window.__BOLD_OVERVIEW_PATCH__ = true;
-
-  function boldOverview(el){
-    if (!el) return;
-    if (el.innerHTML.indexOf('<strong>Nhận xét tổng quan:</strong>') !== -1) return;
-    const txt = (el.textContent || '').trim();
-    const head = 'Nhận xét tổng quan:';
-    if (txt.startsWith(head)){
-      const rest = txt.slice(head.length).trimStart();
-      el.innerHTML = '<strong>'+head+'</strong> ' + rest;
-    }
-  }
-  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
-  ready(function(){
-    const overall = document.getElementById('overall') || document.querySelector('.overall');
-    if (!overall) return;
-    boldOverview(overall);
-    const mo = new MutationObserver(function(){ boldOverview(overall); });
-    mo.observe(overall, {childList: true, characterData: true, subtree: true});
-  });
-})();
-
-// === PATCH: De-dup (prevent double init & double render) ===
+// === De-dup patch: prevent double init & double rendering (append-only) ===
 (function(){
   if (window.__APP_DEDUP_INSTALLED__) return;
   window.__APP_DEDUP_INSTALLED__ = true;
 
   function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+
   ready(function(){
-    // 1) Clear duplicate listeners by cloning key nodes
+
+    // 1) If script got executed twice, clear old listeners on key nodes by cloning them
     ['dropZone','btnEvaluate','btnClear'].forEach(function(id){
       var el = document.getElementById(id);
       if (el && !el.__dedup_cloned__) {
@@ -40,7 +17,7 @@
       }
     });
 
-    // 2) Make render functions idempotent by clearing tbody first
+    // 2) Ensure table bodies are cleared before (re)render
     function clearResultTable(){
       var tb = document.querySelector('#resultTable tbody');
       if (tb) tb.innerHTML = '';
@@ -50,6 +27,7 @@
       if (body) body.innerHTML = '';
     }
 
+    // 3) Monkey-patch known renderers to be idempotent
     if (typeof window.renderSgrade === 'function' && !window.renderSgrade.__dedup__){
       var _renderS = window.renderSgrade;
       window.renderSgrade = function(){
@@ -67,7 +45,7 @@
       window.renderResult.__dedup__ = true;
     }
 
-    // 3) Also clear once on tab switches
+    // 4) Also clear once on tab switches (defensive)
     var tabEval = document.getElementById('tab-eval');
     var tabSgrade = document.getElementById('tab-sgrade');
     if (tabEval && !tabEval.__dedup_bind__){
