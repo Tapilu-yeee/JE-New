@@ -73,7 +73,7 @@ dropZone.addEventListener("dragover",(e)=>{ e.preventDefault(); dropZone.style.b
 dropZone.addEventListener("dragleave",()=>{ dropZone.style.borderColor="var(--border)"; });
 dropZone.addEventListener("drop",(e)=>{
   e.preventDefault(); dropZone.style.borderColor="var(--border)";
-  if(e.dataTransfer.files?.length) fileInput.files = e.dataTransfer.files;
+  if(e.dataTransfer.files?.length){ window.__LAST_FILE = e.dataTransfer.files[0]; try{ const evt=new Event("change"); fileInput.dispatchEvent(evt);}catch(_){} }
 });
 
 // Read file (.txt, .docx)
@@ -180,7 +180,7 @@ on(btnEvaluate,"click", async ()=>{
     errorCard.hidden = true;
     resultCard.hidden = true;
     btnEvaluate.disabled = true; btnEvaluate.textContent = "Đang đánh giá...";
-    const file = fileInput.files?.[0];
+    const file = fileInput.files?.[0] || window.__LAST_FILE;
     if(!file) throw new Error("Vui lòng chọn tệp JD (.docx hoặc .txt)");
     const jdText = await readFileContent(file);
     const prompt = buildPrompt(jobTitleInput.value.trim(), jdText);
@@ -196,9 +196,15 @@ on(btnEvaluate,"click", async ()=>{
 
 // -------------------- S-GRADE --------------------
 async function loadSgrade(){
-  const res = await fetch("./sgrade.json");
-  const data = await res.json();
-  window.__S_GRADE = data || [];
+  try{
+    const res = await fetch("./sgrade.json", {cache:"no-store"});
+    if(!res.ok) throw new Error("Không đọc được sgrade.json");
+    const data = await res.json();
+    window.__S_GRADE = Array.isArray(data) ? data : [];
+  }catch(err){
+    console.error("[S-GRADE] load error:", err);
+    window.__S_GRADE = window.__S_GRADE || [];
+  }
   renderSgrade();
   fillRanks();
 }
