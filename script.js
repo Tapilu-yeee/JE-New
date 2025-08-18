@@ -282,3 +282,63 @@ async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '
     alert('Lỗi PwC/Gemini: ' + (e.message||e));
   }
 }
+
+
+// === Upload UX patch: show filename & gate Evaluate button ===
+(function(){
+  function findEvaluateButton(){
+    let el = document.querySelector('#btnEvaluate');
+    if (el) return el;
+    // try to find by text content
+    const buttons = Array.from(document.querySelectorAll('button'));
+    return buttons.find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
+  }
+  function findClearButton(){
+    let el = document.querySelector('#btnClear');
+    if (el) return el;
+    const buttons = Array.from(document.querySelectorAll('button'));
+    return buttons.find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
+  }
+  function ensureLabel(container){
+    let label = document.querySelector('#uploadFileName');
+    if (!label){
+      label = document.createElement('span');
+      label.id = 'uploadFileName';
+      label.textContent = '';
+      (container || document.body).appendChild(label);
+    }
+    return label;
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    const fileInput = document.querySelector('input[type="file"]');
+    if(!fileInput){ return; }
+    const evalBtn = findEvaluateButton();
+    const clearBtn = findClearButton();
+    // create filename label near the input (prefer parent container)
+    const label = ensureLabel(fileInput.closest('.upload-box') || fileInput.parentElement || document.body);
+
+    // default disable evaluate until file chosen
+    if (evalBtn){ evalBtn.disabled = true; }
+
+    function refresh(){
+      if (fileInput.files && fileInput.files.length){
+        const name = fileInput.files[0].name;
+        label.textContent = 'Đã chọn: ' + name;
+        if (evalBtn) evalBtn.disabled = false;
+      } else {
+        label.textContent = '';
+        if (evalBtn) evalBtn.disabled = true;
+      }
+    }
+    fileInput.addEventListener('change', refresh);
+
+    if (clearBtn){
+      clearBtn.addEventListener('click', function(){
+        try{ fileInput.value=''; }catch(e){}
+        refresh();
+      });
+    }
+    // initial
+    refresh();
+  });
+})();
