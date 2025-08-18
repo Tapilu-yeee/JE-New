@@ -105,3 +105,9 @@ h1,h2,h3,h4,h5,h6 {
 
 /* 3) Slightly smaller base font (affects rem-sizes only) */
 html { font-size: 15px; } /* set 14px if you want even smaller */
+
+/* === SAFE APPEND: Montserrat + wider container + slightly smaller base font === */
+@media (min-width: 1280px){
+  .container { max-width: 1200px; }
+}
+html { font-size: 15px; } /* change to 14px if you prefer smaller */

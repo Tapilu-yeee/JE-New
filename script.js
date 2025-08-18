@@ -154,7 +154,7 @@ function renderResult(jobTitle, result){
     `;
     resultBody.appendChild(tr);
   });
-  overall.textContent = result.overallSummary ? ("Nhận xét tổng quan: " + result.overallSummary) : "";
+  overall.innerHTML = result.overallSummary ? ("<strong>Nhận xét tổng quan:</strong> " + escapeHTML(result.overallSummary)) : "";
   resultCard.hidden = false;
 }
 function escapeHTML(s){

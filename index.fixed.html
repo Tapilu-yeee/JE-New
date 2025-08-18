@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S-Grade SCOMMERCE</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <!-- Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+  
+<!-- Mammoth for .docx parsing -->
+  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+<script>
+  // TODO: Paste your restricted Gemini API key here OR replace via build vars
+  window.__GEMINI_API_KEY__ = "YOUR_GEMINI_API_KEY";
+</script>
+<script type="module" src="./gemini-pwc.js"></script>
+<style>
+#uploadFileName{margin-top:8px;display:block;opacity:.9}
+#btnEvaluate:disabled{opacity:.5;cursor:not-allowed}
+</style>
+</head>
+<body>
+  <header class="container header">
+    <h1 class="app-title">S-Grade SCOMMERCE</h1>
+    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố</p>
+  </header>
+
+  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
+    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
+    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
+  </nav>
+
+  <!-- Evaluation Panel -->
+  <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
+    <section class="card">
+      <div class="section-title">
+        <span class="emoji">📋</span>
+        <div>
+          <h2>Đánh giá mô tả công việc theo 12 yếu tố PwC</h2>
+          <p class="muted">Hãy tải lên file mô tả công việc để được hệ thống đánh giá tự động.</p>
+        </div>
+      </div>
+
+      <label class="label">Nhập tên vị trí công việc</label>
+      <input id="jobTitle" type="text" class="input" placeholder="e.g., Deputy Sorting Centers Manager" />
+
+      <label class="label">Tải lên JD (.docx, .txt)</label>
+      <div id="dropZone" class="dropzone" tabindex="0">
+        <div class="dz-icon">📄</div>
+        <div>
+          <b>Click to upload</b> or drag and drop
+          <div class="muted small">DOCX or TXT (max 200MB)</div>
+        </div>
+        <input id="fileInput" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" hidden />
+      </div>
+
+      <div class="actions">
+        <button id="btnEvaluate" class="btn primary">Đánh giá JD</button>
+        <button id="btnClear" class="btn">Xóa nội dung</button>
+      </div>
+    </section>
+
+    <section class="card" id="resultCard" hidden>
+      <div id="resultHeader" class="result-header"></div>
+      <div class="table-wrap">
+        <table class="table" id="resultTable">
+          <thead>
+            <tr>
+              <th>Yếu tố</th>
+              <th>Lý do</th>
+              <th>Dẫn chứng</th>
+              <th class="w-min">Mức</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+      <div id="overall" class="overall"></div>
+    </section>
+
+    <section class="card error" id="errorCard" hidden>
+      <div id="errorText"></div>
+    </section>
+  </main>
+
+  <!-- S-Grade Panel -->
+  <main class="container panel" id="panel-sgrade" role="tabpanel" aria-labelledby="tab-sgrade" hidden>
+    <section class="card">
+      <div class="row">
+        <input id="searchTerm" class="input" placeholder="Nhập mã/tên vị trí..." />
+        <select id="rankFilter" class="input">
+          <option value="all">Tất cả</option>
+        </select>
+        <div class="spacer"></div>
+        <button id="btnTemplate" class="btn">Tải file mẫu</button>
+        <button id="btnImport" class="btn primary">Nhập Excel</button>
+        <button id="btnExport" class="btn">Xuất Excel</button>
+        <input id="excelInput" type="file" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Tên vị trí</th>
+              <th>Tên Tiếng Việt</th>
+              <th>Loại vị trí</th>
+              <th>Cấp bậc</th>
+            </tr>
+          </thead>
+          <tbody id="sgradeBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer">© 2025 JD Evaluation AI. All rights reserved.</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="./script.js"></script>
+
+</body>
+</html>

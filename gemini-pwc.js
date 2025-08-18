@@ -3,7 +3,7 @@ const GEMINI_API_KEY = window.__GEMINI_API_KEY__;
 const GENERATE_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/generateContent?key=" + GEMINI_API_KEY;
 const CACHED_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/cachedContents?key=" + GEMINI_API_KEY;
 const PWC_VERSION = "pwc.v1";
-const PWC_PROMPT_URL = "/prompts/pwc_prompt.txt";
+const PWC_PROMPT_URL = "./prompts/pwc_prompt.txt";
 const LS_HASH = `PWC_HASH_${PWC_VERSION}`;
 const LS_CACHE_NAME = `PWC_CACHE_${PWC_VERSION}`;
 
