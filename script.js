@@ -73,7 +73,7 @@ dropZone.addEventListener("dragover",(e)=>{ e.preventDefault(); dropZone.style.b
 dropZone.addEventListener("dragleave",()=>{ dropZone.style.borderColor="var(--border)"; });
 dropZone.addEventListener("drop",(e)=>{
   e.preventDefault(); dropZone.style.borderColor="var(--border)";
-  if(e.dataTransfer.files?.length){ window.__LAST_FILE = e.dataTransfer.files[0]; try{ const evt=new Event("change"); fileInput.dispatchEvent(evt);}catch(_){} }
+  if(e.dataTransfer.files?.length) fileInput.files = e.dataTransfer.files;
 });
 
 // Read file (.txt, .docx)
@@ -131,7 +131,7 @@ async function callGemini(prompt){
 
 // Render
 const resultCard = $("#resultCard");
-const resultBody = document.querySelector('#resultBody') || document.querySelector('#resultTable tbody');
+const resultBody = $("#resultBody");
 const resultHeader = $("#resultHeader");
 const overall = $("#overall");
 function renderResult(jobTitle, result){
@@ -180,7 +180,7 @@ on(btnEvaluate,"click", async ()=>{
     errorCard.hidden = true;
     resultCard.hidden = true;
     btnEvaluate.disabled = true; btnEvaluate.textContent = "Đang đánh giá...";
-    const file = fileInput.files?.[0] || window.__LAST_FILE;
+    const file = fileInput.files?.[0];
     if(!file) throw new Error("Vui lòng chọn tệp JD (.docx hoặc .txt)");
     const jdText = await readFileContent(file);
     const prompt = buildPrompt(jobTitleInput.value.trim(), jdText);
@@ -196,37 +196,11 @@ on(btnEvaluate,"click", async ()=>{
 
 // -------------------- S-GRADE --------------------
 async function loadSgrade(){
-  const urls = [
-    "./sgrade.json",
-    "sgrade.json",
-    new URL("sgrade.json", location.href).toString()
-  ];
-  let data = [];
-  for (const u of urls){
-    try{
-      const res = await fetch(u, {cache:"no-store"});
-      if(res.ok){
-        const j = await res.json();
-        if (Array.isArray(j)) { data = j; break; }
-      }
-    }catch(err){
-      console.warn("[S-GRADE] try", u, "failed:", err);
-    }
-  }
-  if (!Array.isArray(data)) data = [];
-  window.__S_GRADE = data;
+  const res = await fetch("./sgrade.json");
+  const data = await res.json();
+  window.__S_GRADE = data || [];
   renderSgrade();
   fillRanks();
-  const hintEl = document.getElementById("sgradeBody");
-  if (hintEl && (!data || data.length === 0)){
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = 4;
-    td.className = "muted";
-    td.textContent = "Không tải được dữ liệu S-Grade. Hãy chắc chắn có file sgrade.json ở cùng thư mục với index.html (và commit lên GitHub Pages).";
-    tr.appendChild(td);
-    hintEl.appendChild(tr);
-  }
 }
 function fillRanks(){
   const data = window.__S_GRADE||[];
@@ -294,96 +268,77 @@ on($("#btnExport"),"click",()=>{
 setTab("eval");
 loadSgrade();
 
-// === Upload UX consolidated (filename, click, dragdrop, enable button) ===
-(function(){
-  function ready(fn){
-    if (document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
+
+// === PwC Gemini integration helper ===
+async function pwcEvaluateFromTextarea(inputSelector = '#jd', outputSelector = '#result'){
+  try {
+    const jd = document.querySelector(inputSelector)?.value || '';
+    const res = await window.__PWC_EVAL__.evaluateJDWithPwC(jd);
+    const out = document.querySelector(outputSelector);
+    if (out) out.textContent = JSON.stringify(res, null, 2);
+    return res;
+  } catch(e){
+    console.error(e);
+    alert('Lỗi PwC/Gemini: ' + (e.message||e));
   }
-  ready(function(){
-    const dropZone = document.getElementById('dropZone') || document.querySelector('.dropzone');
-    const fileInput = document.getElementById('fileInput') || (dropZone && dropZone.querySelector('input[type="file"]'));
-    if(!dropZone || !fileInput) return;
+}
 
-    // ensure label exists
-    let fileNameEl = document.getElementById('dzFilename');
-    if (!fileNameEl){
-      fileNameEl = document.createElement('span');
-      fileNameEl.id = 'dzFilename';
-      fileNameEl.className = 'dz-filename';
-      fileNameEl.setAttribute('aria-live','polite');
-      dropZone.appendChild(fileNameEl);
+
+// === Upload UX patch: show filename & gate Evaluate button ===
+(function(){
+  function findEvaluateButton(){
+    let el = document.querySelector('#btnEvaluate');
+    if (el) return el;
+    // try to find by text content
+    const buttons = Array.from(document.querySelectorAll('button'));
+    return buttons.find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
+  }
+  function findClearButton(){
+    let el = document.querySelector('#btnClear');
+    if (el) return el;
+    const buttons = Array.from(document.querySelectorAll('button'));
+    return buttons.find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
+  }
+  function ensureLabel(container){
+    let label = document.querySelector('#uploadFileName');
+    if (!label){
+      label = document.createElement('span');
+      label.id = 'uploadFileName';
+      label.textContent = '';
+      (container || document.body).appendChild(label);
     }
+    return label;
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    const fileInput = document.querySelector('input[type="file"]');
+    if(!fileInput){ return; }
+    const evalBtn = findEvaluateButton();
+    const clearBtn = findClearButton();
+    // create filename label near the input (prefer parent container)
+    const label = ensureLabel(fileInput.closest('.upload-box') || fileInput.parentElement || document.body);
 
-    // cache default children (except input & filename)
-    const defaultChildren = Array.from(dropZone.children).filter(el => el !== fileNameEl && el !== fileInput);
+    // default disable evaluate until file chosen
+    if (evalBtn){ evalBtn.disabled = true; }
 
-    const evalBtn = document.getElementById('btnEvaluate') || Array.from(document.querySelectorAll('button')).find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
-    const clearBtn = document.getElementById('btnClear') || Array.from(document.querySelectorAll('button')).find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
-
-    function setEnabled(on){ if (evalBtn) evalBtn.disabled = !on; }
-    function showDefault(){
-      fileNameEl.textContent = '';
-      defaultChildren.forEach(el => { el.style.display = ''; });
-      dropZone.classList.remove('has-file');
-      setEnabled(false);
-    }
-    function showFilename(name){
-      fileNameEl.textContent = 'Đã chọn: ' + name;
-      defaultChildren.forEach(el => { el.style.display = 'none'; });
-      dropZone.classList.add('has-file');
-      setEnabled(true);
-    }
-    function refreshFromFiles(files){
-      if (files && files.length){
-        showFilename(files[0].name);
+    function refresh(){
+      if (fileInput.files && fileInput.files.length){
+        const name = fileInput.files[0].name;
+        label.textContent = 'Đã chọn: ' + name;
+        if (evalBtn) evalBtn.disabled = false;
       } else {
-        showDefault();
+        label.textContent = '';
+        if (evalBtn) evalBtn.disabled = true;
       }
     }
+    fileInput.addEventListener('change', refresh);
 
-    // click anywhere in dropzone to open file picker
-    dropZone.addEventListener('click', function(e){
-      if (e.target && e.target.tagName === 'INPUT') return;
-      fileInput.click();
-    });
-
-    // keyboard accessibility
-    dropZone.setAttribute('role','button');
-    if (!dropZone.getAttribute('tabindex')) dropZone.setAttribute('tabindex','0');
-    dropZone.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        fileInput.click();
-      }
-    });
-
-    // drag & drop feedback + file capture
-    dropZone.addEventListener('dragover', function(e){ e.preventDefault(); dropZone.classList.add('dragover'); });
-    dropZone.addEventListener('dragleave', function(){ dropZone.classList.remove('dragover'); });
-    dropZone.addEventListener('drop', function(e){
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      const files = e.dataTransfer && e.dataTransfer.files;
-      if (files && files.length) { window.__LAST_FILE = files[0]; }
-      refreshFromFiles(files && files.length ? files : fileInput.files);
-    });
-
-    // input change
-    fileInput.addEventListener('change', function(){
-      if (fileInput.files && fileInput.files[0]) { window.__LAST_FILE = fileInput.files[0]; }
-      refreshFromFiles(fileInput.files);
-    });
-
-    // clear
     if (clearBtn){
       clearBtn.addEventListener('click', function(){
         try{ fileInput.value=''; }catch(e){}
-        showDefault();
+        refresh();
       });
     }
-
-    // init
-    showDefault();
+    // initial
+    refresh();
   });
 })();
