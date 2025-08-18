@@ -365,11 +365,15 @@ loadSgrade();
       e.preventDefault();
       dropZone.classList.remove('dragover');
       const files = e.dataTransfer && e.dataTransfer.files;
+      if (files && files.length) { window.__LAST_FILE = files[0]; }
       refreshFromFiles(files && files.length ? files : fileInput.files);
     });
 
     // input change
-    fileInput.addEventListener('change', function(){ refreshFromFiles(fileInput.files); });
+    fileInput.addEventListener('change', function(){
+      if (fileInput.files && fileInput.files[0]) { window.__LAST_FILE = fileInput.files[0]; }
+      refreshFromFiles(fileInput.files);
+    });
 
     // clear
     if (clearBtn){
