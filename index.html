@@ -1,79 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PwC JD Evaluator – GitHub Pages</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=2" />
-  <style>
-:root{--bg:#0b0d10;--card:#12161b;--muted:#9fb0c3;--text:#eaf2fb;--accent:#3aaed8}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);background:linear-gradient(180deg,#0b0d10,#0f141a)}
-.container{max-width:1100px;margin:40px auto;padding:0 20px}
-.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-h1{font-weight:700;font-size:26px;margin:0}
-.row{display:flex;align-items:center}.gap>*{margin-left:8px}
-.btn{background:var(--accent);color:#081018;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-.btn-alt{background:#233241;color:#eaf2fb}
-.card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.25);margin-bottom:16px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.lbl{display:block;font-weight:600;margin:6px 0 6px 2px}
-input,textarea,select{width:100%;border:1px solid rgba(255,255,255,.08);background:#0e1319;color:var(--text);padding:10px 12px;border-radius:10px;outline:none}
-textarea{resize:vertical}.muted{color:var(--muted)}.small{font-size:12px}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-.hide{display:none}.scroll{overflow:auto;max-height:520px;border:1px dashed rgba(255,255,255,.08);border-radius:10px}
-#tbl{width:100%;border-collapse:collapse}#tbl th,#tbl td{border-bottom:1px solid rgba(255,255,255,.06);padding:10px;vertical-align:top}
-#tbl th{position:sticky;top:0;background:#0e1319;z-index:1}.chip{display:inline-block;padding:4px 10px;border-radius:999px;background:#1b2836}
-.w-min{white-space:nowrap}.b{font-weight:700}
-  </style>
+  <meta charset="UTF-8" />
+  <title>PwC JD Evaluator</title>
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>PwC JD Evaluator</h1>
-      <div class="row gap">
-        <input id="apiKey" type="password" placeholder="Nhập GEMINI_API_KEY" />
-        <select id="model">
-          <option value="gemini-1.5-pro">gemini-1.5-pro</option>
-          <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-        </select>
-        <button id="runBtn" class="btn">Đánh giá JD</button>
-      </div>
-    </header>
+  <h1>PwC JD Evaluator</h1>
 
-    <section class="card grid2">
-      <div>
-        <label class="lbl">Chức danh (tuỳ chọn)</label>
-        <input id="jobTitle" placeholder="Ví dụ: Backend Lead Engineer" />
-        <label class="lbl">Mô tả công việc (JD)</label>
-        <textarea id="jd" rows="18" placeholder="Dán NGUYÊN VĂN JD (không cắt)"></textarea>
-      </div>
-      <div>
-        <label class="lbl">Phương pháp PwC</label>
-        <textarea id="pwcPreview" rows="22" class="mono" readonly></textarea>
-        <div class="muted">Nội dung này được nạp từ <b>pwc_prompt.txt</b> (cùng thư mục).</div>
-      </div>
-    </section>
-
-    <section id="resultWrap" class="card hide">
-      <div class="row between center">
-        <h2>Kết quả đánh giá theo 12 yếu tố</h2>
-        <button id="downloadJson" class="btn btn-alt">Tải JSON</button>
-      </div>
-      <div id="jobOut" class="muted"></div>
-      <div class="scroll">
-        <table id="tbl">
-          <thead><tr><th>Yếu tố (mã hợp lệ)</th><th>Lý do</th><th>Trích dẫn (nếu có)</th><th>Mức</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-
-    <footer class="muted small">© PwC JD Evaluator – Frontend only. Lưu ý: gọi API trực tiếp từ trình duyệt sẽ lộ API key cho người dùng cuối.</footer>
+  <div class="input-block">
+    <label>Chức danh (tùy chọn)</label>
+    <input type="text" id="jobTitle" placeholder="Ví dụ: Backend Lead Engineer" />
   </div>
-  <script src="./script.js?v=2"></script>
+
+  <div class="input-block">
+    <label>Mô tả công việc (JD)</label>
+    <textarea id="jd" placeholder="Dán NGUYÊN VĂN JD (không cắt)"></textarea>
+  </div>
+
+  <div class="input-block">
+    <label>Phương pháp PwC</label>
+    <textarea id="pwcPreview" readonly></textarea>
+    <div class="note">Nội dung này được nạp từ <b>pwc_prompt.txt</b> (cùng thư mục).</div>
+  </div>
+
+  <div class="input-block">
+    <label>API Key</label>
+    <input type="password" id="apiKey" placeholder="Nhập GEMINI_API_KEY" />
+    <select id="model">
+      <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+      <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+    </select>
+    <button id="runBtn">Đánh giá JD</button>
+  </div>
+
+  <div id="resultWrap" class="hide">
+    <h2 id="jobOut"></h2>
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th>Yếu tố</th><th>Lý do</th><th>Dẫn chứng</th><th>Mức</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="downloadJson">Tải JSON</button>
+  </div>
+
+  <footer>
+    © PwC JD Evaluator – Frontend only. Lưu ý: gọi API trực tiếp từ trình duyệt sẽ lộ API key cho người dùng cuối.
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
