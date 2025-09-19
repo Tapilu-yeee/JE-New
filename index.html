@@ -1,128 +1,79 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>S-Grade SCOMMERCE</title>
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-  <!-- Montserrat -->
+  <title>PwC JD Evaluator – GitHub Pages</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css" />
-  
-<!-- Mammoth for .docx parsing -->
-  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
-<script>
-  // TODO: Paste your restricted Gemini API key here OR replace via build vars
-  window.__GEMINI_API_KEY__ = "YOUR_GEMINI_API_KEY";
-</script>
-<script type="module" src="./gemini-pwc.js"></script>
-<style>
-#uploadFileName{margin-top:8px;display:block;opacity:.9}
-#btnEvaluate:disabled{opacity:.5;cursor:not-allowed}
-</style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=2" />
+  <style>
+:root{--bg:#0b0d10;--card:#12161b;--muted:#9fb0c3;--text:#eaf2fb;--accent:#3aaed8}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);background:linear-gradient(180deg,#0b0d10,#0f141a)}
+.container{max-width:1100px;margin:40px auto;padding:0 20px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+h1{font-weight:700;font-size:26px;margin:0}
+.row{display:flex;align-items:center}.gap>*{margin-left:8px}
+.btn{background:var(--accent);color:#081018;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+.btn-alt{background:#233241;color:#eaf2fb}
+.card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.25);margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lbl{display:block;font-weight:600;margin:6px 0 6px 2px}
+input,textarea,select{width:100%;border:1px solid rgba(255,255,255,.08);background:#0e1319;color:var(--text);padding:10px 12px;border-radius:10px;outline:none}
+textarea{resize:vertical}.muted{color:var(--muted)}.small{font-size:12px}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+.hide{display:none}.scroll{overflow:auto;max-height:520px;border:1px dashed rgba(255,255,255,.08);border-radius:10px}
+#tbl{width:100%;border-collapse:collapse}#tbl th,#tbl td{border-bottom:1px solid rgba(255,255,255,.06);padding:10px;vertical-align:top}
+#tbl th{position:sticky;top:0;background:#0e1319;z-index:1}.chip{display:inline-block;padding:4px 10px;border-radius:999px;background:#1b2836}
+.w-min{white-space:nowrap}.b{font-weight:700}
+  </style>
 </head>
 <body>
-  <header class="container header">
-    <h1 class="app-title">S-Grade SCOMMERCE</h1>
-    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố</p>
-  </header>
-
-  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
-    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
-    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
-  </nav>
-
-  <!-- Evaluation Panel -->
-  <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
-    <section class="card">
-      <div class="section-title">
-        <span class="emoji">📋</span>
-        <div>
-          <h2>Đánh giá mô tả công việc theo 12 yếu tố PwC</h2>
-          <p class="muted">Hãy tải lên file mô tả công việc để được hệ thống đánh giá tự động.</p>
-        </div>
-      </div>
-
-      <label class="label">Nhập tên vị trí công việc</label>
-      <input id="jobTitle" type="text" class="input" placeholder="e.g., Deputy Sorting Centers Manager" />
-
-      <label class="label">Tải lên JD (.docx, .txt)</label>
-      <div id="dropZone" class="dropzone" tabindex="0">
-        <div class="dz-icon">📄</div>
-        <div>
-          <b>Click to upload</b> or drag and drop
-          <div class="muted small">DOCX or TXT (max 200MB)</div>
-        </div>
-        <input id="fileInput" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" hidden />
-      </div>
-
-      <div class="actions">
-        <button id="btnEvaluate" class="btn primary">Đánh giá JD</button>
-        <button id="btnClear" class="btn">Xóa nội dung</button>
-      </div>
-    </section>
-
-    <section class="card" id="resultCard" hidden>
-      <div id="resultHeader" class="result-header"></div>
-      <div class="table-wrap">
-        <table class="table" id="resultTable">
-          <thead>
-            <tr>
-              <th>Yếu tố</th>
-              <th>Lý do</th>
-              <th>Dẫn chứng</th>
-              <th class="w-min">Mức</th>
-            </tr>
-          </thead>
-          <tbody id="resultBody"></tbody>
-        </table>
-      </div>
-      <div id="overall" class="overall"></div>
-    </section>
-
-    <section class="card error" id="errorCard" hidden>
-      <div id="errorText"></div>
-    </section>
-  </main>
-
-  <!-- S-Grade Panel -->
-  <main class="container panel" id="panel-sgrade" role="tabpanel" aria-labelledby="tab-sgrade" hidden>
-    <section class="card">
-      <div class="row">
-        <input id="searchTerm" class="input" placeholder="Nhập mã/tên vị trí..." />
-        <select id="rankFilter" class="input">
-          <option value="all">Tất cả</option>
+  <div class="container">
+    <header class="header">
+      <h1>PwC JD Evaluator</h1>
+      <div class="row gap">
+        <input id="apiKey" type="password" placeholder="Nhập GEMINI_API_KEY" />
+        <select id="model">
+          <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+          <option value="gemini-1.5-flash">gemini-1.5-flash</option>
         </select>
-        <div class="spacer"></div>
-        <button id="btnTemplate" class="btn">Tải file mẫu</button>
-        <button id="btnImport" class="btn primary">Nhập Excel</button>
-        <button id="btnExport" class="btn">Xuất Excel</button>
-        <input id="excelInput" type="file" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
+        <button id="runBtn" class="btn">Đánh giá JD</button>
       </div>
+    </header>
 
-      <div class="table-wrap">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Tên vị trí</th>
-              <th>Tên Tiếng Việt</th>
-              <th>Loại vị trí</th>
-              <th>Cấp bậc</th>
-            </tr>
-          </thead>
-          <tbody id="sgradeBody"></tbody>
+    <section class="card grid2">
+      <div>
+        <label class="lbl">Chức danh (tuỳ chọn)</label>
+        <input id="jobTitle" placeholder="Ví dụ: Backend Lead Engineer" />
+        <label class="lbl">Mô tả công việc (JD)</label>
+        <textarea id="jd" rows="18" placeholder="Dán NGUYÊN VĂN JD (không cắt)"></textarea>
+      </div>
+      <div>
+        <label class="lbl">Phương pháp PwC</label>
+        <textarea id="pwcPreview" rows="22" class="mono" readonly></textarea>
+        <div class="muted">Nội dung này được nạp từ <b>pwc_prompt.txt</b> (cùng thư mục).</div>
+      </div>
+    </section>
+
+    <section id="resultWrap" class="card hide">
+      <div class="row between center">
+        <h2>Kết quả đánh giá theo 12 yếu tố</h2>
+        <button id="downloadJson" class="btn btn-alt">Tải JSON</button>
+      </div>
+      <div id="jobOut" class="muted"></div>
+      <div class="scroll">
+        <table id="tbl">
+          <thead><tr><th>Yếu tố (mã hợp lệ)</th><th>Lý do</th><th>Trích dẫn (nếu có)</th><th>Mức</th></tr></thead>
+          <tbody></tbody>
         </table>
       </div>
     </section>
-  </main>
 
-  <footer class="container footer">© 2025 JD Evaluation AI. All rights reserved.</footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="./script.js"></script>
-
+    <footer class="muted small">© PwC JD Evaluator – Frontend only. Lưu ý: gọi API trực tiếp từ trình duyệt sẽ lộ API key cho người dùng cuối.</footer>
+  </div>
+  <script src="./script.js?v=2"></script>
 </body>
 </html>

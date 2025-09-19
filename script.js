@@ -1,21 +1,86 @@
-
-/* =============================
-   S-Grade SCOMMERCE (GitHub Pages)
-   Cấu hình API Gemini: CHỈ SỬA 1 DÒNG DƯỚI ĐÂY
-   ============================= */
-// === CẤU HÌNH API GEMINI Ở ĐÂY (thay YOUR_API_LINK_HERE bằng link đầy đủ ở Google AI Studio) ===
-const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD9fDIYcMI_juMCXsoz8StSTOSvPUPid1w";
-
-// ----------------- UI helpers -----------------
-const $ = (s) => document.querySelector(s);
-const on = (el, ev, fn) => el.addEventListener(ev, fn);
-
+// ====== Danh sách yếu tố ======
 const FACTORS = [
-  "Trình độ học vấn",
-  "Kinh nghiệm",
+  "Trình độ học vấn","Kinh nghiệm","Mức độ phức tạp của công việc","Phạm vi công việc",
+  "Mức độ giải quyết vấn đề","Mức độ cần được chỉ dẫn/giám sát",
+  "Mức độ liên lạc khi thực hiện công việc","Trách nhiệm giám sát & quản lý",
+  "Ảnh hưởng của các quyết định","Quyền hạn","Môi trường làm việc","Yêu cầu thể chất"
+];
+
+// ====== Schema & Allowed codes ======
+const PWC_JSON_SCHEMA = {
+  type: "object",
+  properties: {
+    jobTitle: { type: "string" },
+    factors: {
+      type: "array",
+      minItems: 12,
+      items: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          grade: { type: "string" },
+          reason: { type: "string" },
+          evidence: { type: "string" }
+        },
+        required: ["name","grade","reason"]
+      }
+    },
+    overallSummary: { type: "string" }
+  },
+  required: ["factors"]
+};
+
+// Danh mục mã hợp lệ theo từng yếu tố (có thể chỉnh theo handbook nội bộ)
+const ALLOWED_BY_FACTOR = {
+  "Trình độ học vấn": [
+    "A","B","C","D","E","F1","F2","G1","G2","H1","H2","I1","I2","I3","J"
+  ],
+  "Kinh nghiệm": [
+    "A","B","C","D","E","F","G1","G2","G3","H1","H2","H3","I1","I2","I3","J","K","L"
+  ],
+  "Mức độ phức tạp của công việc": [
+    "A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3","F1","F2","F3"
+  ],
+  "Phạm vi công việc": ["A","B","C","D","E","F","G","H"],
+  "Mức độ giải quyết vấn đề": [
+    "A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3","F1","F2","F3","G1","G2","G3","H1","H2","H3"
+  ],
+  "Mức độ cần được chỉ dẫn/giám sát": [
+    "A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3","F1","F2","F3","G1","G2","G3","H1","H2","H3"
+  ],
+  "Mức độ liên lạc khi thực hiện công việc": [
+    "A1","A2","A3","A4","A5",
+    "B1","B2","B3","B4","B5",
+    "C1","C2","C3","C4","C5",
+    "D11","D12","D13","D14","D15",
+    "D21","D22","D23","D24","D25",
+    "D31","D32","D33","D34","D35",
+    "E1","E2","E3","E4","E5",
+    "F1","F2","F3","F4","F5"
+  ],
+  "Trách nhiệm giám sát & quản lý": [
+    "A",
+    "B1","B2","B3",
+    "C11","C12","C13","C21","C22","C23","C31","C32","C33",
+    "D11","D12","D13","D21","D22","D23","D31","D32","D33",
+    "E11","E12","E13","E21","E22","E23","E31","E32","E33",
+    "F11","F12","F13","F21","F22","F23","F31","F32","F33",
+    "G11","G12","G13","G21","G22","G23","G31","G32","G33",
+    "H11","H12","H13","H21","H22","H23","H31","H32","H33"
+  ],
+  "Ảnh hưởng của các quyết định": [
+    "A1","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3","F1","F2","F3","NA"
+  ],
+  "Quyền hạn": [
+    "A0","A1","A2","A3","B0","B1","B2","B3","C0","C1","C2","C3","D0","D1","D2","D3","E0","E1","E2","E3","NA"
+  ],
+  "Môi trường làm việc": ["A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3","NA"],
+  "Yêu cầu thể chất": ["A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3"]
+};
+
+// Những yếu tố yêu cầu mã chi tiết (chữ + số), không chấp nhận chỉ mỗi chữ cái
+const FINE_GRAINED_FACTORS = new Set([
   "Mức độ phức tạp của công việc",
-  "Phạm vi công việc",
   "Mức độ giải quyết vấn đề",
   "Mức độ cần được chỉ dẫn/giám sát",
   "Mức độ liên lạc khi thực hiện công việc",
@@ -24,386 +89,174 @@ const FACTORS = [
   "Quyền hạn",
   "Môi trường làm việc",
   "Yêu cầu thể chất"
-];
+]);
 
-const SYSTEM_PROMPT = `Bạn là chuyên gia đánh giá giá trị công việc theo khung PwC đã được chuẩn hoá nội bộ.
-YÊU CẦU BẮT BUỘC:
-1) Đọc JD (văn bản) và đánh giá ĐỦ 12 yếu tố sau: ${FACTORS.join(", ")}.
-2) Mỗi yếu tố chỉ chọn MỘT mức (ví dụ: A, B, C, D, E..., hoặc A1, B1... theo mô tả trong tài liệu).
-3) Mỗi yếu tố phải có: "reason" (lý do) và "evidence" (trích dẫn nguyên văn ngắn từ JD).
-4) CHỈ TRẢ VỀ JSON DUY NHẤT theo schema sau, không giải thích thêm:
-{
-  "jobTitle": "<tên vị trí trích xuất được từ JD, nếu có>",
-  "factors": [
-    { "name": "<tên yếu tố>", "grade": "<mức>", "reason": "<lý do>", "evidence": "<dẫn chứng ngắn>" }
-  ],
-  "overallSummary": "<nhận xét tổng quan ngắn gọn>"
-}`;
+// ====== Tiện ích ======
+const $ = sel => document.querySelector(sel);
+const escapeHTML = s => String(s||"").replace(/[&<>"]+/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+function normalizeGrade(s){ return String(s||"").trim().toUpperCase().replace(/\s+/g,"").replace(/-/g,""); }
 
-// Tabs
-const tabEval = $("#tab-eval");
-const tabSgrade = $("#tab-sgrade");
-const panelEval = $("#panel-eval");
-const panelSgrade = $("#panel-sgrade");
-function setTab(which){
-  if(which==="eval"){
-    tabEval.classList.add("active");
-    tabSgrade.classList.remove("active");
-    panelEval.classList.add("show");
-    panelSgrade.classList.remove("show");
-    panelSgrade.hidden = true;
-    panelEval.hidden = false;
-  } else {
-    tabSgrade.classList.add("active");
-    tabEval.classList.remove("active");
-    panelSgrade.classList.add("show");
-    panelEval.classList.remove("show");
-    panelEval.hidden = true;
-    panelSgrade.hidden = false;
+function coerceGrade(factorName, raw){
+  const allowed = ALLOWED_BY_FACTOR[factorName] || [];
+  let g = normalizeGrade(raw);
+
+  // Nếu là yếu tố fine-grained và model trả 'B' -> chuyển về median 'B2' (nếu có)
+  if (FINE_GRAINED_FACTORS.has(factorName) && /^[A-Z]$/.test(g)){
+    const fam = allowed.filter(x => x.startsWith(g));
+    if (fam.length) g = fam[Math.floor(fam.length/2)];
   }
-}
-on(tabEval,"click",()=>setTab("eval"));
-on(tabSgrade,"click",()=>setTab("sgrade"));
 
-// Upload zone
-const dropZone = $("#dropZone");
-const fileInput = $("#fileInput");
-dropZone.addEventListener("click",()=>fileInput.click());
-dropZone.addEventListener("dragover",(e)=>{ e.preventDefault(); dropZone.style.borderColor="#10b981"; });
-dropZone.addEventListener("dragleave",()=>{ dropZone.style.borderColor="var(--border)"; });
-dropZone.addEventListener("drop",(e)=>{
-  e.preventDefault(); dropZone.style.borderColor="var(--border)";
-  if(e.dataTransfer.files?.length){ window.__LAST_FILE = e.dataTransfer.files[0]; try{ const evt=new Event("change"); fileInput.dispatchEvent(evt);}catch(_){} }
-});
+  if (allowed.includes(g)) return g;
 
-// Read file (.txt, .docx)
-async function readFileContent(file){
-  if(!file) return "";
-  if(file.type === "text/plain"){
-    return await file.text();
+  // 'C' chung -> median
+  if (/^[A-Z]$/.test(g)){
+    const fam = allowed.filter(x => x.startsWith(g));
+    if (fam.length) return fam[Math.floor(fam.length/2)];
   }
-  // docx
-  if(file.name.toLowerCase().endsWith(".docx")){
-    const arrayBuffer = await file.arrayBuffer();
-    const res = await window.mammoth.extractRawText({arrayBuffer});
-    return res.value || "";
+
+  // 'C2' không có -> thử C1/C3...
+  if (/^[A-Z]\d+$/.test(g)){
+    const head = g[0];
+    const fam = allowed.filter(x => x.startsWith(head));
+    for (const p of ["2","1","3","0"]) {
+      const cand = head + p;
+      if (fam.includes(cand)) return cand;
+    }
   }
-  throw new Error("Định dạng không hỗ trợ. Vui lòng dùng .docx hoặc .txt");
+
+  // 'D11' dạng 2 số -> nếu không khớp, thử họ hàng gần nhất theo thứ tự tăng
+  if (/^[A-Z]\d{2}$/.test(g)){
+    const head = g[0];
+    const fam = allowed.filter(x => x.startsWith(head));
+    if (fam.length) return fam[0];
+  }
+
+  // fallback
+  return allowed[0] || g;
 }
 
-// Build prompt
-function buildPrompt(jobTitle, jdText){
-  return `Vị trí cần đánh giá: "${jobTitle || "(chưa nhập)"}"\n\nJD:\n${jdText}`;
+async function loadPwCPrompt(){
+  try { const res = await fetch("./pwc_prompt.txt", { cache: "no-store" }); return res.ok ? await res.text() : ""; }
+  catch { return ""; }
 }
 
-// Call Gemini
-async function callGemini(prompt){
+async function getSystemInstruction(){
+  const pwc = await loadPwCPrompt();
+  return `Bạn là chuyên gia đánh giá công việc theo phương pháp PwC.
+BẮT BUỘC:
+- Đánh giá ĐỦ 12 yếu tố: ${FACTORS.join(", ")}.
+- Mỗi yếu tố chỉ chọn MỘT mã trong danh mục hợp lệ. Riêng các yếu tố sau BẮT BUỘC dùng mã chi tiết (chữ+số): ${Array.from(FINE_GRAINED_FACTORS).join(", ")}.
+- Trả JSON đúng schema, không có text ngoài JSON.
+- Với mỗi yếu tố: reason (≤60 từ), evidence (trích JD; nếu không có thì trống, KHÔNG BỊA).
+
+— Phương pháp PwC:
+${pwc}
+
+— Danh mục mã hợp lệ:
+${JSON.stringify(ALLOWED_BY_FACTOR,null,2)}
+
+— JSON Schema:
+${JSON.stringify(PWC_JSON_SCHEMA,null,2)}
+`;}
+
+function buildPrompt(jobTitle, jd){
+  return `Vị trí: "${jobTitle||"(chưa nhập)"}"\n\nJD (nguyên văn, không rút gọn):\n${jd}`;
+}
+
+// ====== Gọi Gemini ======
+async function callGemini(apiKey, model, userPrompt){
+  const sys = await getSystemInstruction();
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
   const body = {
-    contents: [{ role: "user", parts: [{ text: prompt }]}],
-    systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }]},
-    generationConfig: { temperature: 0.2, responseMimeType: "application/json" }
+    contents: [{ role: "user", parts: [{ text: userPrompt }]}],
+    systemInstruction: { role: "system", parts: [{ text: sys }]},
+    generationConfig: {
+      temperature: 0.2,
+      topP: 0.9,
+      topK: 40,
+      responseMimeType: "application/json"
+    }
   };
-  const res = await fetch(GEMINI_API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-  if(!res.ok){
-    const t = await res.text();
-    throw new Error(`Gemini API lỗi ${res.status}: ${t.slice(0,200)}`);
-  }
-  const data = await res.json();
-  // Lấy text trả về (tuỳ API)
-  let text =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data ||
-    data?.candidates?.[0]?.content?.parts?.[0]?.executableCode ||
-    data?.candidates?.[0]?.content?.parts?.[0]?.functionCall ||
-    data?.candidates?.[0]?.content?.parts?.[0]?.stringValue ||
-    "";
-  if (typeof text !== "string") text = JSON.stringify(text);
 
-  // Tìm JSON trong chuỗi (phòng khi model thêm backticks)
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if(!jsonMatch) throw new Error("Phản hồi không chứa JSON hợp lệ.");
-  return JSON.parse(jsonMatch[0]);
+  const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if(!res.ok){ throw new Error(`Gemini lỗi ${res.status}: ${await res.text()}`); }
+  const data = await res.json();
+  let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+  // Lấy JSON
+  let out;
+  try { out = JSON.parse(text); }
+  catch {
+    const m = (text||"").match(/\{[\s\S]*\}$/);
+    if (!m) throw new Error("Không parse được JSON từ model.");
+    out = JSON.parse(m[0]);
+  }
+
+  // Hậu xử lý & ép đúng mã
+  const fixed = (out.factors || []).map(it => {
+    const name = (it?.name || "").trim();
+    const grade = coerceGrade(name, it?.grade);
+    return {
+      name,
+      grade,
+      reason: it?.reason || "",
+      evidence: it?.evidence || ""
+    };
+  });
+
+  return { jobTitle: out.jobTitle || "", factors: fixed, overallSummary: out.overallSummary || "" };
 }
 
-// Render
-const resultCard = $("#resultCard");
-const resultBody = document.querySelector('#resultBody') || document.querySelector('#resultTable tbody');
-const resultHeader = $("#resultHeader");
-const overall = $("#overall");
-function renderResult(jobTitle, result){
-  const title = result.jobTitle || jobTitle || "Không rõ chức danh";
-  resultHeader.textContent = `Kết quả đánh giá: ${title}`;
-
-  // Map theo 12 yếu tố (đảm bảo đủ dòng)
-  const map = {};
-  (result.factors||[]).forEach(f=>{ map[(f.name||"").trim()] = f; });
-
-  resultBody.innerHTML = "";
-  FACTORS.forEach((name, idx)=>{
-    const row = map[name] || { name, grade:"-", reason:"(Không có dữ liệu)", evidence:"" };
+// ====== Render ======
+function renderResult(res){
+  document.querySelector("#resultWrap").classList.remove("hide");
+  document.querySelector("#jobOut").textContent = res.jobTitle ? `Chức danh: ${res.jobTitle}` : "";
+  const tb = document.querySelector("#tbl tbody");
+  tb.innerHTML = "";
+  res.factors.forEach((row, idx) => {
     const tr = document.createElement("tr");
+    const allowed = (ALLOWED_BY_FACTOR[row.name]||[]).join(", ");
     tr.innerHTML = `
-      <td><b>${idx+1}. ${name}</b></td>
+      <td><b>${idx+1}. ${escapeHTML(row.name)}</b><div class="muted small">Mã hợp lệ: ${escapeHTML(allowed)}</div></td>
       <td>${escapeHTML(row.reason||"")}</td>
       <td><i>${escapeHTML(row.evidence||"")}</i></td>
       <td class="w-min"><span class="chip">${escapeHTML(row.grade||"-")}</span></td>
     `;
-    resultBody.appendChild(tr);
+    tb.appendChild(tr);
   });
-  overall.textContent = result.overallSummary ? ("Nhận xét tổng quan: " + result.overallSummary) : "";
-  resultCard.hidden = false;
-}
-function escapeHTML(s){
-  return (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
-}
-
-// Actions
-const btnEvaluate = $("#btnEvaluate");
-const btnClear = $("#btnClear");
-const jobTitleInput = $("#jobTitle");
-const errorCard = $("#errorCard");
-const errorText = $("#errorText");
-
-on(btnClear,"click",()=>{
-  jobTitleInput.value = "";
-  fileInput.value = "";
-  resultCard.hidden = true;
-  errorCard.hidden = true;
-});
-
-on(btnEvaluate,"click", async ()=>{
-  try{
-    errorCard.hidden = true;
-    resultCard.hidden = true;
-    btnEvaluate.disabled = true; btnEvaluate.textContent = "Đang đánh giá...";
-    const file = fileInput.files?.[0] || window.__LAST_FILE;
-    if(!file) throw new Error("Vui lòng chọn tệp JD (.docx hoặc .txt)");
-    const jdText = await readFileContent(file);
-    const prompt = buildPrompt(jobTitleInput.value.trim(), jdText);
-    const result = await callGemini(prompt);
-    renderResult(jobTitleInput.value.trim(), result);
-  }catch(err){
-    errorText.textContent = err.message || String(err);
-    errorCard.hidden = false;
-  }finally{
-    btnEvaluate.disabled = false; btnEvaluate.textContent = "Đánh giá JD";
-  }
-});
-
-// -------------------- S-GRADE --------------------
-async function loadSgrade(){
-  const urls = [
-    "./sgrade.json",
-    "sgrade.json",
-    new URL("sgrade.json", location.href).toString()
-  ];
-  let data = [];
-  for (const u of urls){
-    try{
-      const res = await fetch(u, {cache:"no-store"});
-      if(res.ok){
-        const j = await res.json();
-        if (Array.isArray(j)) { data = j; break; }
-      }
-    }catch(err){
-      console.warn("[S-GRADE] try", u, "failed:", err);
-    }
-  }
-  if (!Array.isArray(data)) data = [];
-  window.__S_GRADE = data;
-  renderSgrade();
-  fillRanks();
-  const hintEl = document.getElementById("sgradeBody");
-  if (hintEl && (!data || data.length === 0)){
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = 4;
-    td.className = "muted";
-    td.textContent = "Không tải được dữ liệu S-Grade. Hãy chắc chắn có file sgrade.json ở cùng thư mục với index.html (và commit lên GitHub Pages).";
-    tr.appendChild(td);
-    hintEl.appendChild(tr);
-  }
-}
-function fillRanks(){
-  const data = window.__S_GRADE||[];
-  const set = new Set(data.map(x=>x.rank));
-  const select = $("#rankFilter");
-  select.innerHTML = `<option value="all">Tất cả</option>`+ Array.from(set).sort().map(r=>`<option value="${r}">${r}</option>`).join("");
-}
-function renderSgrade(){
-  const body = $("#sgradeBody");
-  const q = ($("#searchTerm").value||"").toLowerCase();
-  const rank = $("#rankFilter").value||"all";
-  const data = (window.__S_GRADE||[]).filter(x=>{
-    const okRank = rank==="all" || (x.rank===rank);
-    const okQ = !q || (x.positionName||"").toLowerCase().includes(q) || (x.vietnameseName||"").toLowerCase().includes(q);
-    return okRank && okQ;
-  });
-  body.innerHTML = data.map(x=>`
-    <tr>
-      <td>${escapeHTML(x.positionName||"")}</td>
-      <td>${escapeHTML(x.vietnameseName||"")}</td>
-      <td>${escapeHTML(x.positionType||"")}</td>
-      <td>${escapeHTML(x.rank||"")}</td>
-    </tr>
-  `).join("");
-}
-on($("#searchTerm"),"input",renderSgrade);
-on($("#rankFilter"),"change",renderSgrade);
-
-// Template / Import / Export (client-only)
-on($("#btnTemplate"),"click",()=>{
-  const header = ["positionName","vietnameseName","positionType","rank"];
-  const example = ["Sample Position","Vị Trí Mẫu","Indirect","S7"];
-  const ws=XLSX.utils.aoa_to_sheet([header, example]);
-  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Template");
-  XLSX.writeFile(wb, "s_grade_template.xlsx");
-});
-on($("#btnImport"),"click",()=>$("#excelInput").click());
-on($("#excelInput"),"change",e=>{
-  const f = e.target.files?.[0]; if(!f) return;
-  const fr = new FileReader();
-  fr.onload = (evt)=>{
-    const data = new Uint8Array(evt.target.result);
-    const wb = XLSX.read(data, {type:'array'});
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(ws);
-    const cleaned = rows.map(r=>({
-      positionName: String(r.positionName||"").trim(),
-      vietnameseName: String(r.vietnameseName||"").trim(),
-      positionType: String(r.positionType||"").trim(),
-      rank: String(r.rank||"").trim()
-    })).filter(r=>r.positionName && r.rank);
-    window.__S_GRADE = (window.__S_GRADE||[]).concat(cleaned);
-    fillRanks(); renderSgrade();
+  document.querySelector("#downloadJson").onclick = () => {
+    const blob = new Blob([JSON.stringify(res, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "pwc_jd_eval.json"; a.click();
+    URL.revokeObjectURL(url);
   };
-  fr.readAsArrayBuffer(f);
-});
-on($("#btnExport"),"click",()=>{
-  const data = window.__S_GRADE||[];
-  const ws = XLSX.utils.json_to_sheet(data);
-  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "SGrade");
-  XLSX.writeFile(wb, "sgrade_export.xlsx");
-});
+}
 
-// Init
-setTab("eval");
-loadSgrade();
+// ====== Init ======
+(async function init(){
+  const res = await fetch("./pwc_prompt.txt", { cache: "no-store" });
+  const pwc = res.ok ? await res.text() : "";
+  document.querySelector("#pwcPreview").value = pwc || "(Không tải được pwc_prompt.txt)";
 
-// === Upload UX consolidated (filename, click, dragdrop, enable button) ===
-(function(){
-  function ready(fn){
-    if (document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
-  }
-  ready(function(){
-    const dropZone = document.getElementById('dropZone') || document.querySelector('.dropzone');
-    const fileInput = document.getElementById('fileInput') || (dropZone && dropZone.querySelector('input[type="file"]'));
-    if(!dropZone || !fileInput) return;
-
-    // ensure label exists
-    let fileNameEl = document.getElementById('dzFilename');
-    if (!fileNameEl){
-      fileNameEl = document.createElement('span');
-      fileNameEl.id = 'dzFilename';
-      fileNameEl.className = 'dz-filename';
-      fileNameEl.setAttribute('aria-live','polite');
-      dropZone.appendChild(fileNameEl);
+  document.querySelector("#runBtn").onclick = async () => {
+    const apiKey = document.querySelector("#apiKey").value.trim();
+    const model = document.querySelector("#model").value;
+    const jobTitle = document.querySelector("#jobTitle").value.trim();
+    const jd = document.querySelector("#jd").value.trim();
+    if(!apiKey){ alert("Nhập GEMINI_API_KEY"); return; }
+    if(!jd){ alert("Vui lòng dán JD đầy đủ"); return; }
+    document.querySelector("#runBtn").disabled = true;
+    document.querySelector("#runBtn").textContent = "Đang chạy…";
+    try{
+      const prompt = buildPrompt(jobTitle, jd);
+      const out = await callGemini(apiKey, model, prompt);
+      renderResult(out);
+    }catch(err){
+      alert(err.message || String(err));
+    }finally{
+      document.querySelector("#runBtn").disabled = false;
+      document.querySelector("#runBtn").textContent = "Đánh giá JD";
     }
-
-    // cache default children (except input & filename)
-    const defaultChildren = Array.from(dropZone.children).filter(el => el !== fileNameEl && el !== fileInput);
-
-    const evalBtn = document.getElementById('btnEvaluate') || Array.from(document.querySelectorAll('button')).find(b => /đánh\s*g(i|í)a\s*jd/i.test((b.textContent||'').toLowerCase()));
-    const clearBtn = document.getElementById('btnClear') || Array.from(document.querySelectorAll('button')).find(b => /xóa\s*nội\s*dung/i.test((b.textContent||'').toLowerCase()));
-
-    function setEnabled(on){ if (evalBtn) evalBtn.disabled = !on; }
-    function showDefault(){
-      fileNameEl.textContent = '';
-      defaultChildren.forEach(el => { el.style.display = ''; });
-      dropZone.classList.remove('has-file');
-      setEnabled(false);
-    }
-    function showFilename(name){
-      fileNameEl.textContent = 'Đã chọn: ' + name;
-      defaultChildren.forEach(el => { el.style.display = 'none'; });
-      dropZone.classList.add('has-file');
-      setEnabled(true);
-    }
-    function refreshFromFiles(files){
-      if (files && files.length){
-        showFilename(files[0].name);
-      } else {
-        showDefault();
-      }
-    }
-
-    // click anywhere in dropzone to open file picker
-    dropZone.addEventListener('click', function(e){
-      if (e.target && e.target.tagName === 'INPUT') return;
-      fileInput.click();
-    });
-
-    // keyboard accessibility
-    dropZone.setAttribute('role','button');
-    if (!dropZone.getAttribute('tabindex')) dropZone.setAttribute('tabindex','0');
-    dropZone.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        fileInput.click();
-      }
-    });
-
-    // drag & drop feedback + file capture
-    dropZone.addEventListener('dragover', function(e){ e.preventDefault(); dropZone.classList.add('dragover'); });
-    dropZone.addEventListener('dragleave', function(){ dropZone.classList.remove('dragover'); });
-    dropZone.addEventListener('drop', function(e){
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      const files = e.dataTransfer && e.dataTransfer.files;
-      refreshFromFiles(files && files.length ? files : fileInput.files);
-    });
-
-    // input change
-    fileInput.addEventListener('change', function(){ refreshFromFiles(fileInput.files); });
-
-    // clear
-    if (clearBtn){
-      clearBtn.addEventListener('click', function(){
-        try{ fileInput.value=''; }catch(e){}
-        showDefault();
-      });
-    }
-
-    // init
-    showDefault();
-  });
-})();
-
-
-// === PATCH: Prevent double file picker pop-up (non-destructive) ===
-(function(){
-  var dz = document.getElementById('dropZone');
-  var fi = document.getElementById('fileInput');
-  if (!dz || !fi) return;
-  var opening = false;
-  function openOnce(){
-    if (opening) return;
-    opening = true;
-    try { fi.click(); } catch(e){}
-    setTimeout(function(){ opening = false; }, 800);
-  }
-  // Intercept clicks at capture phase and stop bubbling to duplicate handlers
-  dz.addEventListener('click', function(e){
-    // if user actually clicked the hidden input, let default happen once
-    if (e && e.target && e.target.tagName === 'INPUT') return;
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-    openOnce();
-  }, {capture:true});
+  };
 })();
