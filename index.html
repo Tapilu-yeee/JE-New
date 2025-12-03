@@ -9,21 +9,35 @@
   <!-- Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
   <!-- Mammoth for .docx parsing -->
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 </head>
 <body>
-  <header class="container header">
-    <h1 class="app-title">S-Grade SCOMMERCE</h1>
-    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố</p>
-  </header>
+    <header class="container header">
+    <div class="topbar">
+      <div class="brand brand--logo">
+        <img class="brand-logo" src="./logo-scommerce.png" alt="SCOMMERCE" />
+        <div class="brand-text">
+          <div class="brand-sub">S-Grade SCOMMERCE</div>
+        </div>
+      </div>
 
-  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
-    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
-    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
-  </nav>
+      <div class="top-tabs" role="tablist" aria-label="Chọn tính năng">
+        <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
+        <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="hero-kicker">CHÀO MỪNG BẠN ĐẾN VỚI</div>
+        <div class="hero-title">S-GRADE<br/>SCOMMERCE</div>
+        <div class="hero-subtitle">ĐÁNH GIÁ MÔ TẢ CÔNG VIỆC THEO 12 YẾU TỐ</div>
+      </div>
+    </div>
+  </header>
 
   <!-- Evaluation Panel -->
   <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
