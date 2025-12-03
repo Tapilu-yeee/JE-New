@@ -9,35 +9,21 @@
   <!-- Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
   <!-- Mammoth for .docx parsing -->
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 </head>
 <body>
-    <header class="container header">
-    <div class="topbar">
-      <div class="brand brand--logo">
-        <img class="brand-logo" src="./logo-scommerce.png" alt="SCOMMERCE" />
-        <div class="brand-text">
-          <div class="brand-sub">S-Grade SCOMMERCE</div>
-        </div>
-      </div>
-
-      <div class="top-tabs" role="tablist" aria-label="Chọn tính năng">
-        <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
-        <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
-      </div>
-    </div>
-
-    <div class="hero">
-      <div class="hero-copy">
-        <div class="hero-kicker">CHÀO MỪNG BẠN ĐẾN VỚI</div>
-        <div class="hero-title">S-GRADE<br/>SCOMMERCE</div>
-        <div class="hero-subtitle">ĐÁNH GIÁ MÔ TẢ CÔNG VIỆC THEO 12 YẾU TỐ</div>
-      </div>
-    </div>
+  <header class="container header">
+    <h1 class="app-title">S-Grade SCOMMERCE</h1>
+    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố</p>
   </header>
+
+  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
+    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
+    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
+  </nav>
 
   <!-- Evaluation Panel -->
   <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
@@ -95,26 +81,76 @@
   <!-- S-Grade Panel -->
   <main class="container panel" id="panel-sgrade" role="tabpanel" aria-labelledby="tab-sgrade" hidden>
     <section class="card">
-      <div class="row">
-        <input id="searchTerm" class="input" placeholder="Nhập mã/tên vị trí..." />
-        <select id="rankFilter" class="input">
-          <option value="all">Tất cả</option>
-        </select>
+
+      <div class="controls-row">
+        <div class="btn-group">
+          <button id="btnTemplate" class="btn">Tải file mẫu</button>
+          <button id="btnImport" class="btn primary">Nhập Excel</button>
+          <button id="btnExport" class="btn">Xuất Excel</button>
+        </div>
+
         <div class="spacer"></div>
-        <button id="btnTemplate" class="btn">Tải file mẫu</button>
-        <button id="btnImport" class="btn primary">Nhập Excel</button>
-        <button id="btnExport" class="btn">Xuất Excel</button>
+
+        <div class="filter-wrap">
+          <button id="btnFilter" class="btn filter-btn" aria-haspopup="dialog" aria-expanded="false">
+            Lọc hiển thị <span class="caret">▾</span>
+          </button>
+
+          <div id="filterPopover" class="filter-popover" role="dialog" aria-label="Bộ lọc hiển thị" hidden>
+            <div class="filter-head">
+              <div class="filter-title">Bộ lọc</div>
+              <button id="btnCloseFilter" class="icon-btn" aria-label="Đóng">✕</button>
+            </div>
+
+            <div class="filter-body">
+              <label class="filter-label" for="filterQuery">Tìm (mã/tên vị trí)</label>
+              <input id="filterQuery" class="input" placeholder="Nhập mã/tên vị trí" />
+
+              <label class="filter-label" for="filterRank">Cấp bậc</label>
+              <select id="filterRank" class="input">
+                <option value="all">Tất cả</option>
+              </select>
+
+              <label class="filter-label" for="filterCompany">Công ty</label>
+              <select id="filterCompany" class="input">
+                <option value="all">Tất cả</option>
+                <option value="SCOMMERCE">SCOMMERCE</option>
+                <option value="Giao Hàng Nhanh">Giao Hàng Nhanh</option>
+                <option value="Giao Hàng Nặng">Giao Hàng Nặng</option>
+                <option value="Ahamove">Ahamove</option>
+              </select>
+
+              <label class="filter-label" for="filterBlock">Khối</label>
+              <select id="filterBlock" class="input">
+                <option value="all">Tất cả</option>
+              </select>
+
+              <label class="filter-label" for="filterDepartment">Phòng ban</label>
+              <select id="filterDepartment" class="input">
+                <option value="all">Tất cả</option>
+              </select>
+            </div>
+
+            <div class="filter-actions">
+              <button id="btnClearFilters" class="btn">Xóa bộ lọc</button>
+              <button id="btnApplyFilters" class="btn primary">Áp dụng</button>
+            </div>
+          </div>
+        </div>
+
         <input id="excelInput" type="file" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
       </div>
 
-      <div class="table-wrap">
+<div class="table-wrap">
         <table class="table">
           <thead>
             <tr>
               <th>Tên vị trí</th>
-              <th>Tên Tiếng Việt</th>
-              <th>Loại vị trí</th>
-              <th>Cấp bậc</th>
+              <th>Tên tiếng Việt</th>
+              <th class="w-min">Cấp bậc</th>
+              <th>Khối</th>
+              <th>Phòng ban</th>
+              <th class="w-min">Loại vị trí</th>
             </tr>
           </thead>
           <tbody id="sgradeBody"></tbody>

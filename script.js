@@ -199,40 +199,123 @@ async function loadSgrade(){
   const res = await fetch("./sgrade.json");
   const data = await res.json();
   window.__S_GRADE = data || [];
-  renderSgrade();
   fillRanks();
+  renderSgrade();
 }
 function fillRanks(){
   const data = window.__S_GRADE||[];
-  const set = new Set(data.map(x=>x.rank));
-  const select = $("#rankFilter");
-  select.innerHTML = `<option value="all">Tất cả</option>`+ Array.from(set).sort().map(r=>`<option value="${r}">${r}</option>`).join("");
+  const ranks = Array.from(new Set(data.map(x=>x.rank).filter(Boolean))).sort((a,b)=>String(a).localeCompare(String(b), undefined, {numeric:true}));
+  const blocks = Array.from(new Set(data.map(x=>x.block||x.khoi).filter(Boolean))).sort();
+  const depts  = Array.from(new Set(data.map(x=>x.department||x.phongBan).filter(Boolean))).sort();
+
+  const rankSel = $("#filterRank");
+  if(rankSel){
+    rankSel.innerHTML = `<option value="all">Tất cả</option>` + ranks.map(r=>`<option value="${escapeHTML(r)}">${escapeHTML(r)}</option>`).join("");
+  }
+  const blockSel = $("#filterBlock");
+  if(blockSel){
+    blockSel.innerHTML = `<option value="all">Tất cả</option>` + blocks.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
+  }
+  const deptSel = $("#filterDepartment");
+  if(deptSel){
+    deptSel.innerHTML = `<option value="all">Tất cả</option>` + depts.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
+  }
 }
 function renderSgrade(){
   const body = $("#sgradeBody");
-  const q = ($("#searchTerm").value||"").toLowerCase();
-  const rank = $("#rankFilter").value||"all";
+  const q = (window.__S_GRADE_FILTERS?.q || "").toLowerCase().trim();
+  const rank = window.__S_GRADE_FILTERS?.rank || "all";
+  const company = window.__S_GRADE_FILTERS?.company || "all";
+  const block = window.__S_GRADE_FILTERS?.block || "all";
+  const dept = window.__S_GRADE_FILTERS?.dept || "all";
+
   const data = (window.__S_GRADE||[]).filter(x=>{
-    const okRank = rank==="all" || (x.rank===rank);
+    const xRank = x.rank || "";
+    const xCompany = x.company || x.congTy || "";
+    const xBlock = x.block || x.khoi || "";
+    const xDept = x.department || x.phongBan || "";
+    const okRank = (rank==="all") || (xRank===rank);
+    const okCompany = (company==="all") || (String(xCompany).trim()===company);
+    const okBlock = (block==="all") || (String(xBlock).trim()===block);
+    const okDept = (dept==="all") || (String(xDept).trim()===dept);
     const okQ = !q || (x.positionName||"").toLowerCase().includes(q) || (x.vietnameseName||"").toLowerCase().includes(q);
-    return okRank && okQ;
+    return okRank && okCompany && okBlock && okDept && okQ;
   });
-  body.innerHTML = data.map(x=>`
-    <tr>
-      <td>${escapeHTML(x.positionName||"")}</td>
-      <td>${escapeHTML(x.vietnameseName||"")}</td>
-      <td>${escapeHTML(x.positionType||"")}</td>
-      <td>${escapeHTML(x.rank||"")}</td>
-    </tr>
-  `).join("");
+
+  body.innerHTML = data.map(x=>{
+    const xRank = x.rank || "";
+    const xBlock = x.block || x.khoi || "-";
+    const xDept = x.department || x.phongBan || "-";
+    return `
+      <tr>
+        <td>${escapeHTML(x.positionName||"")}</td>
+        <td>${escapeHTML(x.vietnameseName||"")}</td>
+        <td class="w-min">${escapeHTML(xRank||"")}</td>
+        <td>${escapeHTML(xBlock||"-")}</td>
+        <td>${escapeHTML(xDept||"-")}</td>
+        <td class="w-min">${escapeHTML(x.positionType||"")}</td>
+      </tr>
+    `;
+  }).join("");
 }
-on($("#searchTerm"),"input",renderSgrade);
-on($("#rankFilter"),"change",renderSgrade);
+
+// --- S-Grade filters (popover) ---
+window.__S_GRADE_FILTERS = { q:"", rank:"all", company:"all", block:"all", dept:"all" };
+
+function openFilterPopover(){
+  const pop = $("#filterPopover"); if(!pop) return;
+  pop.hidden = false;
+  $("#btnFilter")?.setAttribute("aria-expanded","true");
+}
+function closeFilterPopover(){
+  const pop = $("#filterPopover"); if(!pop) return;
+  pop.hidden = true;
+  $("#btnFilter")?.setAttribute("aria-expanded","false");
+}
+function syncFilterUI(){
+  $("#filterQuery").value = window.__S_GRADE_FILTERS.q || "";
+  $("#filterRank").value = window.__S_GRADE_FILTERS.rank || "all";
+  $("#filterCompany").value = window.__S_GRADE_FILTERS.company || "all";
+  $("#filterBlock").value = window.__S_GRADE_FILTERS.block || "all";
+  $("#filterDepartment").value = window.__S_GRADE_FILTERS.dept || "all";
+}
+
+on($("#btnFilter"), "click", (e)=>{
+  e.preventDefault();
+  const pop = $("#filterPopover");
+  if(!pop) return;
+  const willOpen = pop.hidden === true;
+  if(willOpen){ syncFilterUI(); openFilterPopover(); }
+  else closeFilterPopover();
+});
+on($("#btnCloseFilter"), "click", (e)=>{ e.preventDefault(); closeFilterPopover(); });
+
+document.addEventListener("click",(e)=>{
+  const pop = $("#filterPopover"); const btn = $("#btnFilter");
+  if(!pop || pop.hidden) return;
+  if(pop.contains(e.target) || btn.contains(e.target)) return;
+  closeFilterPopover();
+});
+
+on($("#btnClearFilters"),"click",()=>{
+  window.__S_GRADE_FILTERS = { q:"", rank:"all", company:"all", block:"all", dept:"all" };
+  syncFilterUI();
+  renderSgrade();
+});
+on($("#btnApplyFilters"),"click",()=>{
+  window.__S_GRADE_FILTERS.q = $("#filterQuery").value || "";
+  window.__S_GRADE_FILTERS.rank = $("#filterRank").value || "all";
+  window.__S_GRADE_FILTERS.company = $("#filterCompany").value || "all";
+  window.__S_GRADE_FILTERS.block = $("#filterBlock").value || "all";
+  window.__S_GRADE_FILTERS.dept = $("#filterDepartment").value || "all";
+  closeFilterPopover();
+  renderSgrade();
+});
 
 // Template / Import / Export (client-only)
 on($("#btnTemplate"),"click",()=>{
-  const header = ["positionName","vietnameseName","positionType","rank"];
-  const example = ["Sample Position","Vị Trí Mẫu","Indirect","S7"];
+  const header = ["positionName","vietnameseName","rank","block","department","positionType","company"];
+  const example = ["Sample Position","Vị Trí Mẫu","S7","Khối mẫu","Phòng ban mẫu","Indirect","SCOMMERCE"];
   const ws=XLSX.utils.aoa_to_sheet([header, example]);
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Template");
   XLSX.writeFile(wb, "s_grade_template.xlsx");
@@ -259,7 +342,7 @@ on($("#excelInput"),"change",e=>{
 });
 on($("#btnExport"),"click",()=>{
   const data = window.__S_GRADE||[];
-  const ws = XLSX.utils.json_to_sheet(data);
+  const ws = XLSX.utils.json_to_sheet(data, {header:["positionName","vietnameseName","rank","block","department","positionType","company"]});
   const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "SGrade");
   XLSX.writeFile(wb, "sgrade_export.xlsx");
 });
