@@ -17,21 +17,18 @@
 <body>
   <header class="container header">
   <div class="topbar">
-    <div class="brand">
-      <div class="brand-mark">GHN</div>
+    <div class="brand brand--logo">
+      <img class="brand-logo" src="./logo-scommerce.png" alt="SCOMMERCE" />
       <div class="brand-text">
-        <div class="brand-name">GiaoHangNhanh</div>
         <div class="brand-sub">S-Grade SCOMMERCE</div>
       </div>
     </div>
 
-    <div class="topnav" aria-label="Liên kết nhanh">
-      <a href="#" class="topnav-link">Bảo hiểm</a>
-      <a href="#" class="topnav-link">Chế độ</a>
-      <a href="#" class="topnav-link">Môi trường</a>
-      <a href="#" class="topnav-link">Thăng tiến</a>
+    <div class="top-tabs" role="tablist" aria-label="Chọn tính năng">
+      <button class="top-tab tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
+      <button class="top-tab tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
     </div>
-  </div>
+</div>
 
   <div class="hero">
     <div class="hero-copy">
@@ -41,12 +38,6 @@
     </div>
   </div>
 </header>
-
-  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
-    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
-    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
-  </nav>
-
   <!-- Evaluation Panel -->
   <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
     <section class="card">
