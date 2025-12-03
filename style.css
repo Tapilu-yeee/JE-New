@@ -287,8 +287,9 @@ a{color:inherit;text-decoration:none}
 /* ===== Custom: topbar uses the same tab buttons ===== */
 .brand--logo{gap:14px}
 .brand-logo{
-  height:38px;
+  height:44px;
   width:auto;
+  max-width:220px;
   display:block;
   object-fit:contain;
 }
@@ -317,3 +318,5 @@ a{color:inherit;text-decoration:none}
   .topbar{flex-direction:column;align-items:flex-start}
   .top-tabs{width:100%;justify-content:flex-start}
 }
+
+img{max-width:100%;height:auto}
