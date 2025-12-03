@@ -1,29 +1,54 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>S-Grade SCOMMERCE</title>
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-  <!-- Montserrat -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="./style.css" />
-  <!-- Mammoth for .docx parsing -->
-  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 </head>
+
 <body>
-  <header class="container header">
-    <h1 class="app-title">S-Grade SCOMMERCE</h1>
-    <p class="app-subtitle">Đánh giá mô tả công việc theo 12 yếu tố</p>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <img class="brand-logo" src="./logo-scommerce.png" alt="SCOMMERCE" />
+        <div class="brand-text">
+          <div class="brand-name">S-Grade SCOMMERCE</div>
+          <div class="brand-sub">Đánh giá mô tả công việc theo 12 yếu tố</div>
+        </div>
+      </div>
+
+      <nav class="top-tabs" role="tablist" aria-label="Chọn tính năng">
+        <button class="top-tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">
+          Đánh giá giá trị công việc
+        </button>
+        <button class="top-tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">
+          Tra cứu S-Grade
+        </button>
+      </nav>
+    </div>
   </header>
 
-  <nav class="container tabs" role="tablist" aria-label="Chọn tính năng">
-    <button class="tab active" id="tab-eval" aria-controls="panel-eval" aria-selected="true">Đánh giá giá trị công việc</button>
-    <button class="tab" id="tab-sgrade" aria-controls="panel-sgrade" aria-selected="false">Tra cứu S-Grade</button>
-  </nav>
+  <!-- Hero -->
+  <section class="container hero">
+    <div class="hero-card">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-kicker">CHÀO MỪNG BẠN ĐẾN VỚI</div>
+        <div class="hero-title">
+          <span class="hero-title__accent">S-GRADE</span><br/>
+          <span class="hero-title__accent">SCOMMERCE</span>
+        </div>
+        <div class="hero-subtitle">ĐÁNH GIÁ MÔ TẢ CÔNG VIỆC THEO 12 YẾU TỐ</div>
+      </div>
+    </div>
+  </section>
 
   <!-- Evaluation Panel -->
   <main class="container panel show" id="panel-eval" role="tabpanel" aria-labelledby="tab-eval">
@@ -36,22 +61,37 @@
         </div>
       </div>
 
-      <label class="label">Nhập tên vị trí công việc</label>
-      <input id="jobTitle" type="text" class="input" placeholder="e.g., Deputy Sorting Centers Manager" />
+      <div class="form-row">
+        <label class="label" for="jobTitle">Nhập tên vị trí công việc</label>
+        <input id="jobTitle" class="input" placeholder="e.g., Deputy Sorting Centers Manager" />
+      </div>
 
-      <label class="label">Tải lên JD (.docx, .txt)</label>
-      <div id="dropZone" class="dropzone" tabindex="0">
-        <div class="dz-icon">📄</div>
-        <div>
-          <b>Click to upload</b> or drag and drop
-          <div class="muted small">DOCX or TXT (max 200MB)</div>
+      <div class="form-row">
+        <label class="label">Tải lên JD (.docx, .txt)</label>
+        <div id="dropZone" class="dropzone" tabindex="0">
+          <div class="dz-left">
+            <div class="dz-icon">📄</div>
+            <div>
+              <div class="dz-title">Click to upload <span class="muted">or drag and drop</span></div>
+              <div class="dz-help muted">DOCX or TXT (max 200MB)</div>
+            </div>
+          </div>
+          <div class="dz-right muted" id="fileChosen">Chưa chọn file</div>
+
+          <input id="fileInput" type="file" accept=".docx,.txt" hidden />
         </div>
-        <input id="fileInput" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt" hidden />
       </div>
 
       <div class="actions">
         <button id="btnEvaluate" class="btn primary">Đánh giá JD</button>
         <button id="btnClear" class="btn">Xóa nội dung</button>
+      </div>
+    </section>
+
+    <section class="card" id="errorCard" hidden>
+      <div class="error">
+        <strong>⚠️ Có lỗi xảy ra</strong>
+        <div id="errorText" class="muted"></div>
       </div>
     </section>
 
@@ -61,27 +101,22 @@
         <table class="table" id="resultTable">
           <thead>
             <tr>
-              <th>Yếu tố</th>
-              <th>Lý do</th>
-              <th>Dẫn chứng</th>
-              <th class="w-min">Mức</th>
+              <th style="width: 280px;">Yếu tố</th>
+              <th>Giải thích</th>
+              <th>Minh chứng trong JD</th>
+              <th style="width: 120px;">Mức</th>
             </tr>
           </thead>
           <tbody id="resultBody"></tbody>
         </table>
       </div>
-      <div id="overall" class="overall"></div>
-    </section>
-
-    <section class="card error" id="errorCard" hidden>
-      <div id="errorText"></div>
+      <div class="overall" id="overall"></div>
     </section>
   </main>
 
   <!-- S-Grade Panel -->
   <main class="container panel" id="panel-sgrade" role="tabpanel" aria-labelledby="tab-sgrade" hidden>
     <section class="card">
-
       <div class="controls-row">
         <div class="btn-group">
           <button id="btnTemplate" class="btn">Tải file mẫu</button>
@@ -96,19 +131,23 @@
             Lọc hiển thị <span class="caret">▾</span>
           </button>
 
-          <div id="filterPopover" class="filter-popover" role="dialog" aria-label="Bộ lọc hiển thị" hidden>
-            <div class="filter-head">
-              <div class="filter-title">Bộ lọc</div>
+          <div id="filterPopover" class="popover" role="dialog" aria-modal="false" hidden>
+            <div class="popover__head">
+              <div class="popover__title">Lọc hiển thị</div>
               <button id="btnCloseFilter" class="icon-btn" aria-label="Đóng">✕</button>
             </div>
 
-            <div class="filter-body">
-              <label class="filter-label" for="filterQuery">Tìm (mã/tên vị trí)</label>
+            <div class="filter-grid">
+              <label class="filter-label" for="filterQuery">Mã/tên vị trí</label>
               <input id="filterQuery" class="input" placeholder="Nhập mã/tên vị trí" />
 
               <label class="filter-label" for="filterRank">Cấp bậc</label>
               <select id="filterRank" class="input">
                 <option value="all">Tất cả</option>
+                <option value="S1">S1</option><option value="S2">S2</option><option value="S3">S3</option>
+                <option value="S4">S4</option><option value="S5">S5</option><option value="S6">S6</option>
+                <option value="S7">S7</option><option value="S8">S8</option><option value="S9">S9</option>
+                <option value="S10">S10</option><option value="S11">S11</option><option value="S12">S12</option><option value="S13">S13</option>
               </select>
 
               <label class="filter-label" for="filterCompany">Công ty</label>
@@ -137,12 +176,12 @@
             </div>
           </div>
         </div>
-
-        <input id="excelInput" type="file" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
       </div>
 
-<div class="table-wrap">
-        <table class="table">
+      <input id="excelInput" type="file" accept=".xlsx,.xls" hidden />
+
+      <div class="table-wrap">
+        <table class="table table--sgrade">
           <thead>
             <tr>
               <th>Tên vị trí</th>
