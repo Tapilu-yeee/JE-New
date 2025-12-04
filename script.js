@@ -40,33 +40,30 @@ YÊU CẦU BẮT BUỘC:
   "overallSummary": "<nhận xét tổng quan ngắn gọn>"
 }`;
 
-// Tabs (robust: support duplicated buttons in header + below)
-const tabEvalEls = Array.from(document.querySelectorAll("#tab-eval"));
-const tabSgradeEls = Array.from(document.querySelectorAll("#tab-sgrade"));
+// Tabs
+const tabEval = $("#tab-eval");
+const tabSgrade = $("#tab-sgrade");
 const panelEval = $("#panel-eval");
 const panelSgrade = $("#panel-sgrade");
-
 function setTab(which){
-  const isEval = which === "eval";
-  // update all tab buttons (in case there are duplicates)
-  tabEvalEls.forEach(el=>{
-    el.classList.toggle("active", isEval);
-    el.setAttribute("aria-selected", String(isEval));
-  });
-  tabSgradeEls.forEach(el=>{
-    el.classList.toggle("active", !isEval);
-    el.setAttribute("aria-selected", String(!isEval));
-  });
-
-  // panels
-  panelEval.classList.toggle("show", isEval);
-  panelSgrade.classList.toggle("show", !isEval);
-  panelEval.hidden = !isEval;
-  panelSgrade.hidden = isEval;
+  if(which==="eval"){
+    tabEval.classList.add("active");
+    tabSgrade.classList.remove("active");
+    panelEval.classList.add("show");
+    panelSgrade.classList.remove("show");
+    panelSgrade.hidden = true;
+    panelEval.hidden = false;
+  } else {
+    tabSgrade.classList.add("active");
+    tabEval.classList.remove("active");
+    panelSgrade.classList.add("show");
+    panelEval.classList.remove("show");
+    panelEval.hidden = true;
+    panelSgrade.hidden = false;
+  }
 }
-
-tabEvalEls.forEach(el=> on(el,"click",()=>setTab("eval")));
-tabSgradeEls.forEach(el=> on(el,"click",()=>setTab("sgrade")));
+on(tabEval,"click",()=>setTab("eval"));
+on(tabSgrade,"click",()=>setTab("sgrade"));
 
 // Upload zone
 const dropZone = $("#dropZone");
@@ -270,3 +267,57 @@ on($("#btnExport"),"click",()=>{
 // Init
 setTab("eval");
 loadSgrade();
+
+
+// === Robust click handling for Template / Import / Export (works even if layout changes) ===
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("#btnTemplate, #btnImport, #btnExport");
+  if(!t) return;
+
+  // Make sure XLSX is available for template/export/import parsing
+  if((t.id === "btnTemplate" || t.id === "btnExport" || t.id === "btnImport") && typeof XLSX === "undefined"){
+    alert("Thiếu thư viện XLSX (xlsx.full.min.js). Hãy kiểm tra index.html có dòng include XLSX.");
+    return;
+  }
+
+  if(t.id === "btnTemplate"){
+    try{
+      const template = [{
+        positionName:"Marketing Manager",
+        vietnameseName:"Trưởng Phòng Tiếp Thị",
+        rank:"S7",
+        block:"Marketing",
+        department:"Brand",
+        positionType:"Indirect",
+        company:"SCOMMERCE"
+      }];
+      const ws = XLSX.utils.json_to_sheet(template);
+      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Template");
+      XLSX.writeFile(wb, "s_grade_template.xlsx");
+    }catch(err){
+      console.error(err);
+      alert("Không tạo được file mẫu. Mở console để xem lỗi.");
+    }
+  }
+
+  if(t.id === "btnImport"){
+    const input = document.querySelector("#excelInput");
+    if(!input){
+      alert("Không tìm thấy input #excelInput");
+      return;
+    }
+    input.click();
+  }
+
+  if(t.id === "btnExport"){
+    try{
+      const data = window.__S_GRADE || [];
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "SGrade");
+      XLSX.writeFile(wb, "sgrade_export.xlsx");
+    }catch(err){
+      console.error(err);
+      alert("Không xuất được Excel. Mở console để xem lỗi.");
+    }
+  }
+}, true);
