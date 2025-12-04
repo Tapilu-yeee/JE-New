@@ -199,134 +199,108 @@ async function loadSgrade(){
   const res = await fetch("./sgrade.json");
   const data = await res.json();
   window.__S_GRADE = data || [];
-  fillRanks();
   renderSgrade();
+  fillRanks();
 }
 function fillRanks(){
   const data = window.__S_GRADE||[];
-  const ranks = Array.from(new Set(data.map(x=>x.rank).filter(Boolean))).sort((a,b)=>String(a).localeCompare(String(b), undefined, {numeric:true}));
-  const blocks = Array.from(new Set(data.map(x=>x.block||x.khoi).filter(Boolean))).sort();
-  const depts  = Array.from(new Set(data.map(x=>x.department||x.phongBan).filter(Boolean))).sort();
-
-  const rankSel = $("#filterRank");
-  if(rankSel){
-    rankSel.innerHTML = `<option value="all">Tất cả</option>` + ranks.map(r=>`<option value="${escapeHTML(r)}">${escapeHTML(r)}</option>`).join("");
-  }
-  const blockSel = $("#filterBlock");
-  if(blockSel){
-    blockSel.innerHTML = `<option value="all">Tất cả</option>` + blocks.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
-  }
-  const deptSel = $("#filterDepartment");
-  if(deptSel){
-    deptSel.innerHTML = `<option value="all">Tất cả</option>` + depts.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
-  }
+  const set = new Set(data.map(x=>x.rank));
+  const select = $("#rankFilter");
+  select.innerHTML = `<option value="all">Tất cả</option>`+ Array.from(set).sort().map(r=>`<option value="${r}">${r}</option>`).join("");
 }
 function renderSgrade(){
   const body = $("#sgradeBody");
-  const q = (window.__S_GRADE_FILTERS?.q || "").toLowerCase().trim();
-  const rank = window.__S_GRADE_FILTERS?.rank || "all";
-  const company = window.__S_GRADE_FILTERS?.company || "all";
-  const block = window.__S_GRADE_FILTERS?.block || "all";
-  const dept = window.__S_GRADE_FILTERS?.dept || "all";
-
+  const q = ($("#searchTerm").value||"").toLowerCase();
+  const rank = $("#rankFilter").value||"all";
   const data = (window.__S_GRADE||[]).filter(x=>{
-    const xRank = x.rank || "";
-    const xCompany = x.company || x.congTy || "";
-    const xBlock = x.block || x.khoi || "";
-    const xDept = x.department || x.phongBan || "";
-    const okRank = (rank==="all") || (xRank===rank);
-    const okCompany = (company==="all") || (String(xCompany).trim()===company);
-    const okBlock = (block==="all") || (String(xBlock).trim()===block);
-    const okDept = (dept==="all") || (String(xDept).trim()===dept);
+    const okRank = rank==="all" || (x.rank===rank);
     const okQ = !q || (x.positionName||"").toLowerCase().includes(q) || (x.vietnameseName||"").toLowerCase().includes(q);
-    return okRank && okCompany && okBlock && okDept && okQ;
+    return okRank && okQ;
   });
-
-  body.innerHTML = data.map(x=>{
-    const xRank = x.rank || "";
-    const xBlock = x.block || x.khoi || "-";
-    const xDept = x.department || x.phongBan || "-";
-    return `
-      <tr>
-        <td>${escapeHTML(x.positionName||"")}</td>
-        <td>${escapeHTML(x.vietnameseName||"")}</td>
-        <td class="w-min">${escapeHTML(xRank||"")}</td>
-        <td>${escapeHTML(xBlock||"-")}</td>
-        <td>${escapeHTML(xDept||"-")}</td>
-        <td class="w-min">${escapeHTML(x.positionType||"")}</td>
-      </tr>
-    `;
-  }).join("");
+  body.innerHTML = data.map(x=>`
+    <tr>
+      <td>${escapeHTML(x.positionName||"")}</td>
+      <td>${escapeHTML(x.vietnameseName||"")}</td>
+      <td>${escapeHTML(x.positionType||"")}</td>
+      <td>${escapeHTML(x.rank||"")}</td>
+    </tr>
+  `).join("");
 }
-
-// --- S-Grade filters (popover) ---
-window.__S_GRADE_FILTERS = { q:"", rank:"all", company:"all", block:"all", dept:"all" };
-
-function openFilterPopover(){
-  const pop = $("#filterPopover"); if(!pop) return;
-  pop.hidden = false;
-  $("#btnFilter")?.setAttribute("aria-expanded","true");
-}
-function closeFilterPopover(){
-  const pop = $("#filterPopover"); if(!pop) return;
-  pop.hidden = true;
-  $("#btnFilter")?.setAttribute("aria-expanded","false");
-}
-function syncFilterUI(){
-  $("#filterQuery").value = window.__S_GRADE_FILTERS.q || "";
-  $("#filterRank").value = window.__S_GRADE_FILTERS.rank || "all";
-  $("#filterCompany").value = window.__S_GRADE_FILTERS.company || "all";
-  $("#filterBlock").value = window.__S_GRADE_FILTERS.block || "all";
-  $("#filterDepartment").value = window.__S_GRADE_FILTERS.dept || "all";
-}
-
-on($("#btnFilter"), "click", (e)=>{
-  e.preventDefault();
-  const pop = $("#filterPopover");
-  if(!pop) return;
-  const willOpen = pop.hidden === true;
-  if(willOpen){ syncFilterUI(); openFilterPopover(); }
-  else closeFilterPopover();
-});
-on($("#btnCloseFilter"), "click", (e)=>{ e.preventDefault(); closeFilterPopover(); });
-
-document.addEventListener("click",(e)=>{
-  const pop = $("#filterPopover"); const btn = $("#btnFilter");
-  if(!pop || pop.hidden) return;
-  if(pop.contains(e.target) || btn.contains(e.target)) return;
-  closeFilterPopover();
-});
-
-on($("#btnClearFilters"),"click",()=>{
-  window.__S_GRADE_FILTERS = { q:"", rank:"all", company:"all", block:"all", dept:"all" };
-  syncFilterUI();
-  renderSgrade();
-});
-on($("#btnApplyFilters"),"click",()=>{
-  window.__S_GRADE_FILTERS.q = $("#filterQuery").value || "";
-  window.__S_GRADE_FILTERS.rank = $("#filterRank").value || "all";
-  window.__S_GRADE_FILTERS.company = $("#filterCompany").value || "all";
-  window.__S_GRADE_FILTERS.block = $("#filterBlock").value || "all";
-  window.__S_GRADE_FILTERS.dept = $("#filterDepartment").value || "all";
-  closeFilterPopover();
-  renderSgrade();
-});
+on($("#searchTerm"),"input",renderSgrade);
+on($("#rankFilter"),"change",renderSgrade);
 
 // Template / Import / Export (client-only)
 on($("#btnTemplate"),"click",()=>{
-  const header = ["positionName","vietnameseName","rank","block","department","positionType","company"];
-  const example = ["Sample Position","Vị Trí Mẫu","S7","Khối mẫu","Phòng ban mẫu","Indirect","SCOMMERCE"];
+  const header = ["positionName","vietnameseName","positionType","rank"];
+  const example = ["Sample Position","Vị Trí Mẫu","Indirect","S7"];
   const ws=XLSX.utils.aoa_to_sheet([header, example]);
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Template");
   XLSX.writeFile(wb, "s_grade_template.xlsx");
 });
 on($("#btnImport"),"click",()=>$("#excelInput").click());
-on($("#excelInput"),"change",e=>{
-  const f = e.target.files?.[0]; if(!f) return;
+on($("#excelInput"),"change",(e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+
   const fr = new FileReader();
   fr.onload = (evt)=>{
-    const data = new Uint8Array(evt.target.result);
-    const wb = XLSX.read(data, {type:'array'});
+    try{
+      if(typeof XLSX === "undefined"){
+        throw new Error("Thiếu thư viện XLSX. Kiểm tra <script src=\"xlsx.full.min.js\"> trong index.html.");
+      }
+
+      const data = new Uint8Array(evt.target.result);
+      const wb = XLSX.read(data, { type: "array" });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: "" });
+
+      // Tự map header (template có thể dùng EN/VN)
+      const get = (obj, keys)=>{
+        const map = {};
+        Object.keys(obj||{}).forEach(k=> map[String(k).trim().toLowerCase()] = obj[k]);
+        for(const key of keys){
+          const v = map[String(key).trim().toLowerCase()];
+          if(v !== undefined && String(v).trim() !== "") return v;
+        }
+        return "";
+      };
+
+      const cleaned = rows.map((r)=>({
+        positionName: String(get(r, ["positionName","Tên vị trí","Ten vi tri","Position name"])).trim(),
+        vietnameseName: String(get(r, ["vietnameseName","Tên tiếng Việt","Ten tieng Viet","Vietnamese name"])).trim(),
+        rank: String(get(r, ["rank","Cấp bậc","Cap bac","Grade"])).trim(),
+        block: String(get(r, ["block","Khối","Khoi","Block"])).trim(),
+        department: String(get(r, ["department","Phòng ban","Phong ban","Department"])).trim(),
+        positionType: String(get(r, ["positionType","Loại vị trí","Loai vi tri","Position type"])).trim(),
+        company: String(get(r, ["company","Công ty","Cong ty","Company"])).trim(),
+      })).filter(x => x.positionName && x.rank);
+
+      if(cleaned.length === 0){
+        // Gợi ý debug: show first row keys
+        const first = rows?.[0] ? Object.keys(rows[0]).join(", ") : "(không có dòng dữ liệu)";
+        throw new Error("Không tìm thấy dòng hợp lệ. Kiểm tra template và đảm bảo có cột positionName & rank (S1..S13). Header hiện có: " + first);
+      }
+
+      window.__S_GRADE = (window.__S_GRADE || []).concat(cleaned);
+
+      // refresh UI if functions exist
+      if(typeof fillRanks === "function") fillRanks();
+      if(typeof fillCompanies === "function") fillCompanies();
+      if(typeof fillBlocks === "function") fillBlocks();
+      if(typeof fillDepartments === "function") fillDepartments();
+      if(typeof renderSgrade === "function") renderSgrade();
+
+      alert(`Đã nhập ${cleaned.length} dòng từ Excel.`);
+    }catch(err){
+      console.error(err);
+      alert("Import Excel thất bại: " + (err?.message || err));
+    }finally{
+      // để chọn lại cùng 1 file vẫn trigger change
+      e.target.value = "";
+    }
+  };
+  fr.readAsArrayBuffer(f);
+});
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws);
     const cleaned = rows.map(r=>({
@@ -342,7 +316,7 @@ on($("#excelInput"),"change",e=>{
 });
 on($("#btnExport"),"click",()=>{
   const data = window.__S_GRADE||[];
-  const ws = XLSX.utils.json_to_sheet(data, {header:["positionName","vietnameseName","rank","block","department","positionType","company"]});
+  const ws = XLSX.utils.json_to_sheet(data);
   const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "SGrade");
   XLSX.writeFile(wb, "sgrade_export.xlsx");
 });
