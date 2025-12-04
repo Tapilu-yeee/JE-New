@@ -40,30 +40,33 @@ YÊU CẦU BẮT BUỘC:
   "overallSummary": "<nhận xét tổng quan ngắn gọn>"
 }`;
 
-// Tabs
-const tabEval = $("#tab-eval");
-const tabSgrade = $("#tab-sgrade");
+// Tabs (robust: support duplicated buttons in header + below)
+const tabEvalEls = Array.from(document.querySelectorAll("#tab-eval"));
+const tabSgradeEls = Array.from(document.querySelectorAll("#tab-sgrade"));
 const panelEval = $("#panel-eval");
 const panelSgrade = $("#panel-sgrade");
+
 function setTab(which){
-  if(which==="eval"){
-    tabEval.classList.add("active");
-    tabSgrade.classList.remove("active");
-    panelEval.classList.add("show");
-    panelSgrade.classList.remove("show");
-    panelSgrade.hidden = true;
-    panelEval.hidden = false;
-  } else {
-    tabSgrade.classList.add("active");
-    tabEval.classList.remove("active");
-    panelSgrade.classList.add("show");
-    panelEval.classList.remove("show");
-    panelEval.hidden = true;
-    panelSgrade.hidden = false;
-  }
+  const isEval = which === "eval";
+  // update all tab buttons (in case there are duplicates)
+  tabEvalEls.forEach(el=>{
+    el.classList.toggle("active", isEval);
+    el.setAttribute("aria-selected", String(isEval));
+  });
+  tabSgradeEls.forEach(el=>{
+    el.classList.toggle("active", !isEval);
+    el.setAttribute("aria-selected", String(!isEval));
+  });
+
+  // panels
+  panelEval.classList.toggle("show", isEval);
+  panelSgrade.classList.toggle("show", !isEval);
+  panelEval.hidden = !isEval;
+  panelSgrade.hidden = isEval;
 }
-on(tabEval,"click",()=>setTab("eval"));
-on(tabSgrade,"click",()=>setTab("sgrade"));
+
+tabEvalEls.forEach(el=> on(el,"click",()=>setTab("eval")));
+tabSgradeEls.forEach(el=> on(el,"click",()=>setTab("sgrade")));
 
 // Upload zone
 const dropZone = $("#dropZone");
@@ -238,69 +241,12 @@ on($("#btnTemplate"),"click",()=>{
   XLSX.writeFile(wb, "s_grade_template.xlsx");
 });
 on($("#btnImport"),"click",()=>$("#excelInput").click());
-on($("#excelInput"),"change",(e)=>{
-  const f = e.target.files?.[0];
-  if(!f) return;
-
+on($("#excelInput"),"change",e=>{
+  const f = e.target.files?.[0]; if(!f) return;
   const fr = new FileReader();
   fr.onload = (evt)=>{
-    try{
-      if(typeof XLSX === "undefined"){
-        throw new Error("Thiếu thư viện XLSX. Kiểm tra <script src=\"xlsx.full.min.js\"> trong index.html.");
-      }
-
-      const data = new Uint8Array(evt.target.result);
-      const wb = XLSX.read(data, { type: "array" });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { defval: "" });
-
-      // Tự map header (template có thể dùng EN/VN)
-      const get = (obj, keys)=>{
-        const map = {};
-        Object.keys(obj||{}).forEach(k=> map[String(k).trim().toLowerCase()] = obj[k]);
-        for(const key of keys){
-          const v = map[String(key).trim().toLowerCase()];
-          if(v !== undefined && String(v).trim() !== "") return v;
-        }
-        return "";
-      };
-
-      const cleaned = rows.map((r)=>({
-        positionName: String(get(r, ["positionName","Tên vị trí","Ten vi tri","Position name"])).trim(),
-        vietnameseName: String(get(r, ["vietnameseName","Tên tiếng Việt","Ten tieng Viet","Vietnamese name"])).trim(),
-        rank: String(get(r, ["rank","Cấp bậc","Cap bac","Grade"])).trim(),
-        block: String(get(r, ["block","Khối","Khoi","Block"])).trim(),
-        department: String(get(r, ["department","Phòng ban","Phong ban","Department"])).trim(),
-        positionType: String(get(r, ["positionType","Loại vị trí","Loai vi tri","Position type"])).trim(),
-        company: String(get(r, ["company","Công ty","Cong ty","Company"])).trim(),
-      })).filter(x => x.positionName && x.rank);
-
-      if(cleaned.length === 0){
-        // Gợi ý debug: show first row keys
-        const first = rows?.[0] ? Object.keys(rows[0]).join(", ") : "(không có dòng dữ liệu)";
-        throw new Error("Không tìm thấy dòng hợp lệ. Kiểm tra template và đảm bảo có cột positionName & rank (S1..S13). Header hiện có: " + first);
-      }
-
-      window.__S_GRADE = (window.__S_GRADE || []).concat(cleaned);
-
-      // refresh UI if functions exist
-      if(typeof fillRanks === "function") fillRanks();
-      if(typeof fillCompanies === "function") fillCompanies();
-      if(typeof fillBlocks === "function") fillBlocks();
-      if(typeof fillDepartments === "function") fillDepartments();
-      if(typeof renderSgrade === "function") renderSgrade();
-
-      alert(`Đã nhập ${cleaned.length} dòng từ Excel.`);
-    }catch(err){
-      console.error(err);
-      alert("Import Excel thất bại: " + (err?.message || err));
-    }finally{
-      // để chọn lại cùng 1 file vẫn trigger change
-      e.target.value = "";
-    }
-  };
-  fr.readAsArrayBuffer(f);
-});
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws);
     const cleaned = rows.map(r=>({
