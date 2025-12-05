@@ -50,29 +50,6 @@ document.addEventListener("click", (e)=>{
 
 let S_DATA = [];
 let FILTERS = { search:"", rank:"", company:"", block:"", dept:"" };
-
-const STORAGE_KEY = "sgrade_data_v1";
-
-function saveToStorage(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now(), data: S_DATA}));
-  }catch(e){
-    console.warn("Không lưu được dữ liệu vào trình duyệt (localStorage).", e);
-  }
-}
-
-function loadFromStorage(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return null;
-    const parsed = JSON.parse(raw);
-    if(Array.isArray(parsed?.data)) return parsed.data;
-  }catch(e){
-    console.warn("Không đọc được dữ liệu từ localStorage.", e);
-  }
-  return null;
-}
-
 const normalize = (s)=>String(s??"").trim();
 const uniq = (arr)=>Array.from(new Set(arr.map(v=>normalize(v)).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"vi",{numeric:true}));
 
@@ -137,64 +114,35 @@ function renderTable(){
   }
 }
 
-function fillFilterOptions(opts = {}){
-  const uiCompany = opts.company ?? $("#fCompany")?.value ?? FILTERS.company ?? "";
-  const uiBlock = opts.block ?? $("#fBlock")?.value ?? FILTERS.block ?? "";
-
-  const baseCompanies = ["SCOMMERCE","Giao Hàng Nhanh","GHN Logistics","Giao Hàng Nặng","Ahamove","Gido"];
-  const companies = uniq([...baseCompanies, ...S_DATA.map(x=>x.company)]);
+function fillFilterOptions(){
   const ranks = uniq(S_DATA.map(x=>x.rank));
-
-  const scopedForCompany = uiCompany ? S_DATA.filter(x=>x.company === uiCompany) : S_DATA;
-  const blocks = uniq(scopedForCompany.map(x=>x.block));
-  const scopedForDept = (uiCompany || uiBlock)
-    ? scopedForCompany.filter(x=> !uiBlock || x.block === uiBlock)
-    : S_DATA;
-  const depts = uniq(scopedForDept.map(x=>x.department));
+  const blocks = uniq(S_DATA.map(x=>x.block));
+  const depts = uniq(S_DATA.map(x=>x.department));
 
   const fRank = $("#fRank");
-  const fCompany = $("#fCompany");
   const fBlock = $("#fBlock");
   const fDept = $("#fDept");
 
   if(fRank){
     fRank.innerHTML = `<option value="">Tất cả</option>` + ranks.map(v=>`<option>${escapeHtml(v)}</option>`).join("");
-    fRank.value = (opts.keepValues ? (fRank.value||"") : (FILTERS.rank||""));
+    fRank.value = FILTERS.rank || "";
   }
-
-  if(fCompany){
-    // Build companies list dynamically so it works for imported Excel too
-    fCompany.innerHTML = `<option value="">Tất cả</option>` + companies.map(v=>`<option>${escapeHtml(v)}</option>`).join("");
-    fCompany.value = uiCompany || "";
-  }
-
   if(fBlock){
     fBlock.innerHTML = `<option value="">Tất cả</option>` + blocks.map(v=>`<option>${escapeHtml(v)}</option>`).join("");
-    // Keep current selection if still valid; otherwise reset to all
-    const want = (opts.keepValues ? uiBlock : (FILTERS.block||""));
-    fBlock.value = blocks.includes(want) ? want : "";
+    fBlock.value = FILTERS.block || "";
   }
-
   if(fDept){
     fDept.innerHTML = `<option value="">Tất cả</option>` + depts.map(v=>`<option>${escapeHtml(v)}</option>`).join("");
-    const want = (opts.keepValues ? (fDept.value||"") : (FILTERS.dept||""));
-    fDept.value = depts.includes(want) ? want : "";
+    fDept.value = FILTERS.dept || "";
   }
 }
 
 function openFilter(){
   $("#filterBackdrop")?.removeAttribute("hidden");
   $("#filterPopover")?.removeAttribute("hidden");
-
-  // Set current values into UI
   $("#fSearch").value = FILTERS.search || "";
-  $("#fRank").value = FILTERS.rank || "";
   $("#fCompany").value = FILTERS.company || "";
-  $("#fBlock").value = FILTERS.block || "";
-  $("#fDept").value = FILTERS.dept || "";
-
-  // Rebuild options with cascading logic
-  fillFilterOptions({company: FILTERS.company || "", block: FILTERS.block || "", keepValues:true});
+  fillFilterOptions();
 }
 function closeFilter(){
   $("#filterBackdrop")?.setAttribute("hidden","");
@@ -206,30 +154,11 @@ function setupFiltersUI(){
   $("#btnCloseFilter")?.addEventListener("click", closeFilter);
   $("#filterBackdrop")?.addEventListener("click", closeFilter);
 
-
-  // Cascade: chọn Công ty -> lọc lại Khối/Phòng ban theo Công ty
-  $("#fCompany")?.addEventListener("change", ()=>{
-    // reset selections downstream when company changes
-    const company = $("#fCompany").value.trim();
-    $("#fBlock").value = "";
-    $("#fDept").value = "";
-    fillFilterOptions({company, block:"", keepValues:true});
-  });
-
-  // Cascade: chọn Khối -> lọc lại Phòng ban theo Công ty + Khối
-  $("#fBlock")?.addEventListener("change", ()=>{
-    const company = $("#fCompany").value.trim();
-    const block = $("#fBlock").value.trim();
-    $("#fDept").value = "";
-    fillFilterOptions({company, block, keepValues:true});
-  });
   $("#btnResetFilter")?.addEventListener("click", ()=>{
     FILTERS = { search:"", rank:"", company:"", block:"", dept:"" };
     $("#fSearch").value = "";
     $("#fCompany").value = "";
-    $("#fBlock").value = "";
-    $("#fDept").value = "";
-    fillFilterOptions({company:"", block:"", keepValues:true});
+    fillFilterOptions();
   });
 
   $("#btnApplyFilter")?.addEventListener("click", ()=>{
@@ -293,7 +222,6 @@ function setupExcelActions(){
         }).filter(x=>x.positionName || x.vietnameseName);
 
         S_DATA = mapped;
-        saveToStorage();
         fillFilterOptions();
         renderTable();
         alert(`Đã nhập ${mapped.length} dòng từ Excel.`);
@@ -335,15 +263,6 @@ function setupExcelActions(){
 }
 
 async function loadSgrade(){
-  // Ưu tiên dữ liệu đã import (Excel) để refresh không bị mất Khối/Phòng ban
-  const cached = loadFromStorage();
-  if(cached && Array.isArray(cached) && cached.length){
-    S_DATA = cached.map(toRow);
-    fillFilterOptions();
-    renderTable();
-    return;
-  }
-
   try{
     const res = await fetch("./sgrade.json", {cache:"no-store"});
     const raw = await res.json();
