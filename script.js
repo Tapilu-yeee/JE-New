@@ -50,6 +50,29 @@ document.addEventListener("click", (e)=>{
 
 let S_DATA = [];
 let FILTERS = { search:"", rank:"", company:"", block:"", dept:"" };
+
+const STORAGE_KEY = "sgrade_data_v1";
+
+function saveToStorage(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now(), data: S_DATA}));
+  }catch(e){
+    console.warn("Không lưu được dữ liệu vào trình duyệt (localStorage).", e);
+  }
+}
+
+function loadFromStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    const parsed = JSON.parse(raw);
+    if(Array.isArray(parsed?.data)) return parsed.data;
+  }catch(e){
+    console.warn("Không đọc được dữ liệu từ localStorage.", e);
+  }
+  return null;
+}
+
 const normalize = (s)=>String(s??"").trim();
 const uniq = (arr)=>Array.from(new Set(arr.map(v=>normalize(v)).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"vi",{numeric:true}));
 
@@ -222,6 +245,7 @@ function setupExcelActions(){
         }).filter(x=>x.positionName || x.vietnameseName);
 
         S_DATA = mapped;
+        saveToStorage();
         fillFilterOptions();
         renderTable();
         alert(`Đã nhập ${mapped.length} dòng từ Excel.`);
@@ -263,6 +287,15 @@ function setupExcelActions(){
 }
 
 async function loadSgrade(){
+  // Ưu tiên dữ liệu đã import (Excel) để refresh không bị mất Khối/Phòng ban
+  const cached = loadFromStorage();
+  if(cached && Array.isArray(cached) && cached.length){
+    S_DATA = cached.map(toRow);
+    fillFilterOptions();
+    renderTable();
+    return;
+  }
+
   try{
     const res = await fetch("./sgrade.json", {cache:"no-store"});
     const raw = await res.json();
