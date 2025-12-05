@@ -178,3 +178,5 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.55}
 .table-wrap{ max-height: 70vh; }
 /* Smaller font for 'Tên vị trí' column */
 .table tbody td:first-child{ font-size: 14px; }
+
+.table tbody td{ font-size: 14px; }
