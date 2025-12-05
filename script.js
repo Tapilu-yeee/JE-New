@@ -1,14 +1,10 @@
 const $ = (q, root=document) => root.querySelector(q);
 const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
 
-const STORAGE_KEY = "sgrade_data_v1";
-
 function setTab(which){
   const showEval = which === "eval";
-  const tEval = $("#tab-eval");
-  const tS = $("#tab-sgrade");
-  if(tEval){ tEval.classList.toggle("active", showEval); tEval.setAttribute("aria-selected", showEval?"true":"false"); }
-  if(tS){ tS.classList.toggle("active", !showEval); tS.setAttribute("aria-selected", showEval?"false":"true"); }
+  $$("#tab-eval").forEach(el=>{ el.classList.toggle("active", showEval); el.setAttribute("aria-selected", showEval?"true":"false"); });
+  $$("#tab-sgrade").forEach(el=>{ el.classList.toggle("active", !showEval); el.setAttribute("aria-selected", showEval?"false":"true"); });
 
   const pEval = $("#panel-eval");
   const pS = $("#panel-sgrade");
@@ -23,7 +19,6 @@ document.addEventListener("click", (e)=>{
   if(t.id === "tab-sgrade") setTab("sgrade");
 });
 
-// ---------------------- TAB 1: JD UI ----------------------
 (function setupJD(){
   const dz = $("#dropZone");
   const fi = $("#fileInput");
@@ -53,10 +48,8 @@ document.addEventListener("click", (e)=>{
   });
 })();
 
-// ---------------------- TAB 2: S-GRADE ----------------------
 let S_DATA = [];
 let FILTERS = { search:"", rank:"", company:"", block:"", dept:"" };
-
 const normalize = (s)=>String(s??"").trim();
 const uniq = (arr)=>Array.from(new Set(arr.map(v=>normalize(v)).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"vi",{numeric:true}));
 
@@ -78,26 +71,6 @@ function toRow(o){
     positionType: normalize(readObj(o, ["positionType","Loại vị trí","Loai vi tri","Position type","type"])),
     company: normalize(readObj(o, ["company","Công ty","Cong ty","Company"]))
   };
-}
-
-function saveToStorage(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ts: Date.now(), data: S_DATA }));
-  }catch(e){
-    console.warn("Không lưu được localStorage", e);
-  }
-}
-
-function loadFromStorage(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return null;
-    const parsed = JSON.parse(raw);
-    if(Array.isArray(parsed?.data)) return parsed.data;
-  }catch(e){
-    console.warn("Không đọc được localStorage", e);
-  }
-  return null;
 }
 
 function applyFilters(data){
@@ -241,7 +214,7 @@ function setupExcelActions(){
             positionName: pick(["positionname","tên vị trí","ten vi tri","position name"]),
             vietnameseName: pick(["vietnamesename","tên tiếng việt","ten tieng viet","vietnamese name"]),
             rank: pick(["rank","cấp bậc","cap bac","grade"]),
-            block: pick(["block","khối","khoi","division","bu"]),
+            block: pick(["block","khối","khoi"]),
             department: pick(["department","phòng ban","phong ban","dept"]),
             positionType: pick(["positiontype","loại vị trí","loai vi tri","position type"]),
             company: pick(["company","công ty","cong ty"])
@@ -249,10 +222,9 @@ function setupExcelActions(){
         }).filter(x=>x.positionName || x.vietnameseName);
 
         S_DATA = mapped;
-        saveToStorage(); // refresh không mất Khối/Phòng ban
         fillFilterOptions();
         renderTable();
-        alert(`Đã nhập ${mapped.length} dòng từ Excel. (Refresh không mất dữ liệu)`);
+        alert(`Đã nhập ${mapped.length} dòng từ Excel.`);
       }catch(err){
         console.error(err);
         alert("Không đọc được file Excel. Hãy dùng đúng template .xlsx.");
@@ -266,13 +238,13 @@ function setupExcelActions(){
   $("#btnExportExcel")?.addEventListener("click", ()=>{
     if(!ensureXLSX()) return;
     const rows = applyFilters(S_DATA).map(r=>({
-      "Tên vị trí": r.positionName,
-      "Tên tiếng Việt": r.vietnameseName,
-      "Cấp bậc": r.rank,
-      "Khối": r.block,
-      "Phòng ban": r.department,
-      "Loại vị trí": r.positionType,
-      "Công ty": r.company
+      positionName:r.positionName,
+      vietnameseName:r.vietnameseName,
+      rank:r.rank,
+      block:r.block,
+      department:r.department,
+      positionType:r.positionType,
+      company:r.company
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
@@ -291,16 +263,6 @@ function setupExcelActions(){
 }
 
 async function loadSgrade(){
-  // Ưu tiên localStorage để refresh vẫn giữ Khối/Phòng ban đã import từ Excel
-  const cached = loadFromStorage();
-  if(cached && cached.length){
-    S_DATA = cached.map(toRow);
-    fillFilterOptions();
-    renderTable();
-    return;
-  }
-
-  // Chưa có import -> dùng sgrade.json
   try{
     const res = await fetch("./sgrade.json", {cache:"no-store"});
     const raw = await res.json();
