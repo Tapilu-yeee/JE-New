@@ -122,24 +122,11 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.55}
 .table thead th{
   background:linear-gradient(90deg,var(--orange-1),var(--orange-2));
   color:#fff;font-weight:900;
-}
-/* Sticky header row (orange) when scrolling inside table */
-.table thead th{
+
   position: sticky;
   top: 0;
   z-index: 3;
 }
-
-/* Make the table area scrollable so header stays visible */
-.table-wrap{
-  max-height: 70vh;
-}
-
-/* Make "Tên vị trí" content a bit smaller (2 sizes) */
-.table tbody td:first-child{
-  font-size: 14px;
-}
-
 .table thead th:first-child{border-top-left-radius:16px}
 .table thead th:last-child{border-top-right-radius:16px}
 .table tbody tr:hover{background:rgba(0,181,244,.06)}
@@ -186,3 +173,8 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.55}
   .hero-subtitle{font-size:18px}
   .popover{right:16px;top:120px}
 }
+
+/* Sticky header row & scroll area */
+.table-wrap{ max-height: 70vh; }
+/* Smaller font for 'Tên vị trí' column */
+.table tbody td:first-child{ font-size: 14px; }
