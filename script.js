@@ -1,3 +1,5 @@
+import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
 const $ = (q, root=document) => root.querySelector(q);
 const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
 
@@ -43,8 +45,90 @@ document.addEventListener("click", (e)=>{
     if(fc) fc.textContent = "Chưa chọn file";
   });
 
-  $("#btnEvaluate")?.addEventListener("click", ()=>{
-    alert("Demo UI: phần đánh giá JD đang ở chế độ giao diện.");
+    const showError = (msg)=>{
+    const card = $("#errorCard");
+    const txt = $("#errorText");
+    if(txt) txt.textContent = msg || "";
+    if(card) card.hidden = !msg;
+  };
+  const showResult = (text)=>{
+    const card = $("#resultCard");
+    const box = $("#resultBox");
+    if(box) box.textContent = text || "";
+    if(card) card.hidden = !text;
+  };
+
+  async function loadPwCPrompt(){
+    const res = await fetch("./pwc_prompt.txt", { cache: "no-store" });
+    if(!res.ok) throw new Error("Không tải được pwc_prompt.txt. Hãy đảm bảo file nằm cùng thư mục và GitHub Pages đã publish.");
+    return await res.text();
+  }
+
+  async function readJDFile(file){
+    const name = (file?.name || "").toLowerCase();
+    if(name.endsWith(".txt")){
+      return await file.text();
+    }
+    const ab = await file.arrayBuffer();
+    const out = await window.mammoth.extractRawText({ arrayBuffer: ab });
+    return out.value || "";
+  }
+
+  async function evaluateWithGemini({apiKey, jobTitle, jdText}){
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    const pwcPrompt = await loadPwCPrompt();
+
+    const fullPrompt = `
+${pwcPrompt}
+
+---
+Tên vị trí: ${jobTitle}
+
+JD mới:
+${jdText}
+
+Yêu cầu bắt buộc:
+- Đánh giá theo đúng 12 yếu tố PwC.
+- Mỗi yếu tố có: Mức (A–J), Lý do, Dẫn chứng từ JD.
+- Trả kết quả ở dạng bảng (12 dòng tương ứng 12 yếu tố).
+- Nếu JD thiếu thông tin ở yếu tố nào, ghi "Thiếu dữ liệu" và nêu giả định tối thiểu.
+`.trim();
+
+    const resp = await model.generateContent(fullPrompt);
+    return resp?.response?.text?.() || "";
+  }
+
+  $("#btnEvaluate")?.addEventListener("click", async ()=>{
+    const btn = $("#btnEvaluate");
+    try{
+      showError("");
+      showResult("");
+
+      const jobTitle = $("#jobTitle")?.value?.trim();
+      const apiKey = $("#apiKey")?.value?.trim();
+      const file = $("#fileInput")?.files?.[0];
+
+      if(!jobTitle) throw new Error("Vui lòng nhập tên vị trí công việc.");
+      if(!apiKey) throw new Error("Vui lòng nhập Google API Key (Gemini).");
+      if(!file) throw new Error("Vui lòng tải lên file JD (.docx hoặc .txt).");
+
+      if(btn) { btn.disabled = true; btn.textContent = "Đang đánh giá..."; }
+
+      const jdText = (await readJDFile(file)).trim();
+      if(!jdText) throw new Error("JD rỗng hoặc không đọc được nội dung từ file.");
+
+      const result = await evaluateWithGemini({ apiKey, jobTitle, jdText });
+      if(!result) throw new Error("Không nhận được kết quả từ Gemini.");
+
+      showResult(result);
+    }catch(err){
+      console.error(err);
+      showError(err?.message || String(err));
+    }finally{
+      if(btn) { btn.disabled = false; btn.textContent = "Đánh giá JD"; }
+    }
   });
 })();
 

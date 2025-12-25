@@ -55,7 +55,10 @@
       <label class="label">Nhập tên vị trí công việc</label>
       <input id="jobTitle" type="text" class="input pill" placeholder="e.g., Deputy Sorting Centers Manager"/>
 
-      <label class="label">Tải lên JD (.docx, .txt)</label>
+      <label class="label">Google API Key (Gemini) <span class="muted small">(Nhập key của bạn — chạy client-side nên key sẽ lộ nếu trang public)</span></label>
+<input id="apiKey" type="password" class="input pill" placeholder="AIzaSy..." autocomplete="off"/>
+
+<label class="label">Tải lên JD (.docx, .txt)</label>
       <div id="dropZone" class="dropzone" tabindex="0" role="button" aria-label="Tải lên JD">
         <div class="dz-left">
           <div class="dz-icon">📄</div>
@@ -73,6 +76,17 @@
         <button type="button" id="btnClear" class="btn">Xóa nội dung</button>
       </div>
     </section>
+
+<section class="card" id="resultCard" hidden>
+  <div class="section-title">
+    <span class="emoji">✅</span>
+    <div>
+      <h2>Kết quả đánh giá</h2>
+      <p class="muted">Kết quả trả về từ Gemini theo rubric PwC (12 yếu tố).</p>
+    </div>
+  </div>
+  <pre id="resultBox" class="result-pre"></pre>
+</section>
 
     <section class="card error" id="errorCard" hidden>
       <div id="errorText"></div>
@@ -149,6 +163,6 @@
   </main>
 
   <footer class="footer">© 2025 JD Evaluation AI. All rights reserved.</footer>
-  <script src="./script.js"></script>
+  <script type="module" src="./script.js"></script>
 </body>
 </html>
