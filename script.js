@@ -12,7 +12,7 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
 /* ====== CHỈNH API KEY Ở ĐÂY (1 dòng duy nhất) ====== */
-const GOOGLE_API_KEY = "AIzaSy_ĐIỀN_API_KEY_MỚI_VÀO_ĐÂY";
+const GOOGLE_API_KEY = "AIzaSyDOgZXvaZgeho4aLaeN1w58TYWrwIrco48";
 /* ==================================================== */
 
 const $ = (sel) => document.querySelector(sel);
