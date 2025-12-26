@@ -1,5 +1,9 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
+/* ====== CHỈNH API KEY Ở ĐÂY ====== */
+const GOOGLE_API_KEY = "AIzaSyBIO0tEWq8IdMzO1XrKBpcxRVK6337RQ5c";
+/* ================================= */
+
 const $ = (q, root=document) => root.querySelector(q);
 const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
 
@@ -45,7 +49,8 @@ document.addEventListener("click", (e)=>{
     if(fc) fc.textContent = "Chưa chọn file";
   });
 
-    const showError = (msg)=>{
+
+  const showError = (msg)=>{
     const card = $("#errorCard");
     const txt = $("#errorText");
     if(txt) txt.textContent = msg || "";
@@ -60,7 +65,7 @@ document.addEventListener("click", (e)=>{
 
   async function loadPwCPrompt(){
     const res = await fetch("./pwc_prompt.txt", { cache: "no-store" });
-    if(!res.ok) throw new Error("Không tải được pwc_prompt.txt. Hãy đảm bảo file nằm cùng thư mục và GitHub Pages đã publish.");
+    if(!res.ok) throw new Error("Không tải được pwc_prompt.txt. Đảm bảo file nằm cùng thư mục và GitHub Pages đã publish.");
     return await res.text();
   }
 
@@ -74,8 +79,26 @@ document.addEventListener("click", (e)=>{
     return out.value || "";
   }
 
-  async function evaluateWithGemini({apiKey, jobTitle, jdText}){
-    const genAI = new GoogleGenerativeAI(apiKey);
+  function friendlyGeminiError(err){
+    const msg = String(err?.message || err || "");
+    if(/reported as leaked/i.test(msg) || /leaked/i.test(msg)){
+      return "API key đã bị Google đánh dấu bị lộ (leaked) và bị chặn. Hãy tạo API key mới trong project mới hoặc rotate key.";
+    }
+    if(/SERVICE_DISABLED/i.test(msg) || /has not been used in project/i.test(msg)){
+      return "Project chưa bật Generative Language API (Gemini). Vào Google Cloud Console > APIs & Services và bật Generative Language API.";
+    }
+    if(/quota/i.test(msg) || /429/.test(msg) || /Quota exceeded/i.test(msg)){
+      return "Bạn đã vượt quota hoặc quota của project = 0. Hãy dùng project/key khác hoặc bật Billing để có quota.";
+    }
+    return msg;
+  }
+
+  async function evaluateWithGemini({jobTitle, jdText}){
+    if(!GOOGLE_API_KEY || GOOGLE_API_KEY.includes("ĐIỀN_API_KEY")){
+      throw new Error("Chưa cấu hình GOOGLE_API_KEY trong script.js (dòng const GOOGLE_API_KEY = ...).");
+    }
+
+    const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const pwcPrompt = await loadPwCPrompt();
@@ -107,27 +130,25 @@ Yêu cầu bắt buộc:
       showResult("");
 
       const jobTitle = $("#jobTitle")?.value?.trim();
-      const apiKey = $("#apiKey")?.value?.trim();
       const file = $("#fileInput")?.files?.[0];
 
       if(!jobTitle) throw new Error("Vui lòng nhập tên vị trí công việc.");
-      if(!apiKey) throw new Error("Vui lòng nhập Google API Key (Gemini).");
       if(!file) throw new Error("Vui lòng tải lên file JD (.docx hoặc .txt).");
 
-      if(btn) { btn.disabled = true; btn.textContent = "Đang đánh giá..."; }
+      if(btn){ btn.disabled = true; btn.textContent = "Đang đánh giá..."; }
 
       const jdText = (await readJDFile(file)).trim();
       if(!jdText) throw new Error("JD rỗng hoặc không đọc được nội dung từ file.");
 
-      const result = await evaluateWithGemini({ apiKey, jobTitle, jdText });
+      const result = await evaluateWithGemini({ jobTitle, jdText });
       if(!result) throw new Error("Không nhận được kết quả từ Gemini.");
 
       showResult(result);
     }catch(err){
       console.error(err);
-      showError(err?.message || String(err));
+      showError(friendlyGeminiError(err));
     }finally{
-      if(btn) { btn.disabled = false; btn.textContent = "Đánh giá JD"; }
+      if(btn){ btn.disabled = false; btn.textContent = "Đánh giá JD"; }
     }
   });
 })();
